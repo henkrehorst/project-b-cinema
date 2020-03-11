@@ -1,0 +1,32 @@
+﻿{
+  "appName": "hoi",
+  "startUrl": {
+    "url": "local://frontend/index.html",
+    "loadType": "localResource"
+  },
+  "loadCefBinariesIfNotFound": true,
+  "silentCefBinariesLoading": false,
+  "windowLeft": 0,
+  "windowTop": 0,
+  "windowWidth": 1000,
+  "windowHeight": 800,
+  "windowNoResize": false,
+  "windowNoMinMaxBoxes": false,
+  "windowCenterScreen": true,
+  "windowKioskMode": false,
+  "windowState": "normal",
+  "windowTitle": "Bioscoop app",
+  "debuggingMode": true,
+  "windowCustomCreation": {
+    "windowStyles": 0,
+    "windowExStyles": 0,
+    "useCustomtyle": false
+  },
+  "controllerAssemblies": [
+    "Chromely.External.Controllers.dll"
+  ],
+  "commandLineArgs": [
+  ],
+  "commandLineOptions": [
+  ]
+}

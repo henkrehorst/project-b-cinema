@@ -1,4 +1,5 @@
 ﻿using System;
+using Chromely.Core;
 
 namespace bioscoop_app
 {
@@ -6,7 +7,12 @@ namespace bioscoop_app
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            // Create Chromely app
+            AppBuilder
+                .Create()
+                .UseApp<ChromelyUi>()
+                .Build()
+                .Run(args);
         }
     }
 }

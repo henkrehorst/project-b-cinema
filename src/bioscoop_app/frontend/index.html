@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bioscoop app</title>
+</head>
+<body>
+    <h1>Sample page chromely</h1>
+    <h2></h2>
+    <script>
+        function getDemo() {
+            let request = {
+                "method": "GET",
+                "url": "/demo",
+                "parameters": null,
+                "postData": null
+            };
+            
+            window.cefQuery({
+                request: JSON.stringify(request),
+                onsuccess: function (response) {
+                    document.querySelector("body > h2").innerHTML = JSON.parse(response).data
+                }
+            })
+        }
+        
+    </script>
+</body>
+</html>
