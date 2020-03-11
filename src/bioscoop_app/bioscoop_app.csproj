@@ -5,4 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Chromely" Version="5.0.77.1" />
+  </ItemGroup>
+
 </Project>
