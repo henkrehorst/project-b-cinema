@@ -5,22 +5,19 @@ namespace Logic
 {
 	public class Movie
 	{
-		private int id;
+		private int id { get; }
 
-		private string title;
+		private string title { get; set; }
 
-		private Array<Kijkwijzer> kijkwijzers;
+		private Array<Kijkwijzer> kijkwijzers { get; }
 
-		private Enum dimension;
+		private Enum dimension { get; set; }
 
-		private string genre;
+		private string genre { get; set; }
 
-		private float rating;
+		private float rating { get; }
 
-		private int duration;
-
-		private Kijkwijzer kijkwijzer;
-
+		private int duration { get; set; }
 	}
 
 }

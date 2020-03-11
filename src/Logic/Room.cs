@@ -4,19 +4,15 @@ namespace Logic
 {
 	public class Room
 	{
-		private int id;
+		private int id { get; }
 
-		private Array<Seat> layout;
+		private Array<Seat> layout { get; }
 
-		private int seats;
+		private int seats { get; }
 
-		private bool auro;
+		private bool auro { get; }
 
-		private bool imax;
-
-		private Seat[] seat;
-
-		private Seat[] seat;
+		private bool imax { get; }
 
 	}
 

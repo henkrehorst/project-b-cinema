@@ -4,19 +4,15 @@ namespace Logic
 {
 	public class Order
 	{
-		private int id;
+		private int id { get; }
 
-		private ArrayList<Product> items;
+		private ArrayList<Product> items { get; }
 
-		private string code;
+		private string code { get; }
 
-		private string cust_name;
+		private string cust_name { get; set; }
 
-		private string cust_email;
-
-		private Product[] product;
-
-		private Customer customer;
+		private string cust_email { get; set; }
 
 	}
 

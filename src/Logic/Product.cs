@@ -2,11 +2,11 @@ namespace Logic
 {
 	public class Product
 	{
-		private int id;
+		private int id { get; }
 
-		private float price;
+		private float price { get; set; }
 
-		private string name;
+		private string name { get; set; }
 
 	}
 

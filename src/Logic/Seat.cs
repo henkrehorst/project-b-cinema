@@ -2,13 +2,13 @@ namespace Logic
 {
 	public class Seat
 	{
-		private int id;
+		private int id { get; }
 
-		private double price_modifier;
+		private double price_modifier { get; set; }
 
-		private int row;
+		private int row { get; set; }
 
-		private int seatnr;
+		private int seatnr { get; set; }
 
 	}
 

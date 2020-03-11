@@ -2,11 +2,11 @@ namespace Logic
 {
 	public class Kijkwijzer
 	{
-		private int id;
+		private int id { get; }
 
-		private string symbool;
+		private string symbool { get; set; }
 
-		private string name;
+		private string name { get; set; }
 
 	}
 

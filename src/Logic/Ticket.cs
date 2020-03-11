@@ -4,19 +4,11 @@ namespace Logic
 {
 	public class Ticket : Product
 	{
-		private Seat seat;
+		private Seat seat { get; set; }
 
-		private ScreenTime screenTime;
+		private ScreenTime screenTime { get; }
 
-		private int visitor_age;
-
-		private ScreenTime screenTime;
-
-		private Seat seat;
-
-		private ScreenTime screenTime;
-
-		private Seat seat;
+		private int visitor_age { get; set; }
 
 	}
 
