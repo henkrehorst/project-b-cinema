@@ -17,4 +17,13 @@
     <PackageReference Include="Chromely" Version="5.0.77.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="chromelyconfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

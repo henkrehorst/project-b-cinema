@@ -1,7 +1,6 @@
-using System;
 using Microsoft.EntityFrameworkCore;
 
-namespace Model
+namespace bioscoop_app.Model
 {
     public class CinemaContext : DbContext
     {
