@@ -1,7 +1,6 @@
-using Model;
 using System;
 
-namespace Model
+namespace bioscoop_app.Model
 {
 	public class ScreenTime
 	{

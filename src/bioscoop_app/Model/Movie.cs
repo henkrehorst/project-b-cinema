@@ -1,7 +1,6 @@
 using System;
-using Model;
 
-namespace Model
+namespace bioscoop_app.Model
 {
 	public class Movie
 	{

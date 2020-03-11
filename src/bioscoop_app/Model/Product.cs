@@ -1,4 +1,4 @@
-namespace Model
+namespace bioscoop_app.Model
 {
 	public class Product
 	{
