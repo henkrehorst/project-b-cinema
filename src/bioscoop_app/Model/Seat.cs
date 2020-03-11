@@ -2,7 +2,7 @@ namespace bioscoop_app.Model
 {
 	public class Seat
 	{
-		private int id { get; }
+		public int id { get; set; }
 
 		private double price_modifier { get; set; }
 

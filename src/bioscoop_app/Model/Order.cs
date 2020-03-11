@@ -2,11 +2,10 @@ namespace bioscoop_app.Model
 {
 	public class Order
 	{
-		private int id { get; }
+		public int id { get; set; }
+		private Product[] items { get; set; }
 
-		private Product[] items { get; }
-
-		private string code { get; }
+		private string code { get; set; }
 
 		private string cust_name { get; set; }
 

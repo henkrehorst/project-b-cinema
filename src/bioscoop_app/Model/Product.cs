@@ -2,7 +2,7 @@ namespace bioscoop_app.Model
 {
 	public class Product
 	{
-		private int id { get; }
+		public int id { get; set; }
 
 		private float price { get; set; }
 

@@ -2,7 +2,7 @@ namespace bioscoop_app.Model
 {
 	public class Kijkwijzer
 	{
-		private int id { get; }
+		public int id { get; set; }
 
 		private string symbool { get; set; }
 

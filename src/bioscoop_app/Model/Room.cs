@@ -2,15 +2,15 @@ namespace bioscoop_app.Model
 {
 	public class Room
 	{
-		private int id { get; }
+		public int id { get; set; }
 
-		private Seat[] layout { get; }
+		private Seat[] layout { get; set; }
 
-		private int seats { get; }
+		private int seats { get; set; }
 
-		private bool auro { get; }
+		private bool auro { get; set; }
 
-		private bool imax { get; }
+		private bool imax { get; set; }
 
 	}
 

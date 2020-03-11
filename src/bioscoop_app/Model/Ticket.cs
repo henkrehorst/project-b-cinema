@@ -2,9 +2,9 @@ namespace bioscoop_app.Model
 {
 	public class Ticket : Product
 	{
-		private Seat seat { get; set; }
+		public Seat seat { get; set; }
 
-		private ScreenTime screenTime { get; }
+		private ScreenTime screenTime { get; set; }
 
 		private int visitor_age { get; set; }
 

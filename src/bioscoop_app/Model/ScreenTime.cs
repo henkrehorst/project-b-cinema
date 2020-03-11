@@ -4,7 +4,7 @@ namespace bioscoop_app.Model
 {
 	public class ScreenTime
 	{
-		private int id { get; }
+		public int id { get; set; }
 
 		private Movie movie { get; set; }
 
