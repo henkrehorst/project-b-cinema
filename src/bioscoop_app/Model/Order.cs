@@ -1,12 +1,12 @@
-using Logic;
+using Model;
 
-namespace Logic
+namespace Model
 {
 	public class Order
 	{
 		private int id { get; }
 
-		private ArrayList<Product> items { get; }
+		private Product[] items { get; }
 
 		private string code { get; }
 

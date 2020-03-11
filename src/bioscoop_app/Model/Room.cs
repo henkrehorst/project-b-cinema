@@ -1,12 +1,12 @@
-using Logic;
+using Model;
 
-namespace Logic
+namespace Model
 {
 	public class Room
 	{
 		private int id { get; }
 
-		private Array<Seat> layout { get; }
+		private Seat[] layout { get; }
 
 		private int seats { get; }
 

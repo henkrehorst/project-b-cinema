@@ -1,6 +1,6 @@
-using Logic;
+using Model;
 
-namespace Logic
+namespace Model
 {
 	public class Ticket : Product
 	{

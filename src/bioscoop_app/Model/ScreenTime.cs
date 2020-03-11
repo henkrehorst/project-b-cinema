@@ -1,7 +1,7 @@
-using Logic;
+using Model;
 using System;
 
-namespace Logic
+namespace Model
 {
 	public class ScreenTime
 	{

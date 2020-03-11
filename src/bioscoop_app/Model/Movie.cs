@@ -1,7 +1,7 @@
 using System;
-using Logic;
+using Model;
 
-namespace Logic
+namespace Model
 {
 	public class Movie
 	{
@@ -9,7 +9,7 @@ namespace Logic
 
 		private string title { get; set; }
 
-		private Array<Kijkwijzer> kijkwijzers { get; }
+		private Kijkwijzer[] kijkwijzers { get; }
 
 		private Enum dimension { get; set; }
 
