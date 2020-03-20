@@ -1,4 +1,4 @@
-# Project B - Cinema
+# Project B - Cinema - groep 2
 
 ## Branch structure
 ![See link below for the image if it doesn't load.](./git_model.png "Git Model")
