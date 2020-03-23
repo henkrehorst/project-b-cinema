@@ -11,7 +11,7 @@ namespace bioscoop_app.Controller
         {
             return new ChromelyResponse(request.Id)
             {
-                Data = "Dit is watch test!"
+                Data = "Dit is een bericht van de backend!"
             };
         }
 
