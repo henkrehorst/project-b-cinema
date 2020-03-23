@@ -24,6 +24,9 @@
     <None Update="chromelyconfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="cinema.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="frontend\demo.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
