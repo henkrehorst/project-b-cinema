@@ -1,4 +1,6 @@
 ﻿using Chromely.Core.Network;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace bioscoop_app.Controller
 {
@@ -20,6 +22,18 @@ namespace bioscoop_app.Controller
             return new ChromelyResponse(request.Id)
             {
                 Data = "Dit is een test met upload"
+            };
+        }
+        
+        [HttpPost(Route = "/demo/post")]
+        public ChromelyResponse GetDemoPost(ChromelyRequest request)
+        {
+            var data = (JObject)JsonConvert.DeserializeObject(request.PostData.ToJson());
+            string message = data["message"].Value<string>();
+
+            return new ChromelyResponse(request.Id)
+            {
+                Data = message
             };
         }
     }
