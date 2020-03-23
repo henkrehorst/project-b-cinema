@@ -2,22 +2,20 @@ using System;
 
 namespace bioscoop_app.Model
 {
-	public class Movie
-	{
-		public int id { get; set; }
+    public class Movie
+    {
+        public int id { get; set; }
 
-		private string title { get; set; }
+        public string title { get; set; }
+        //TODO: make properties later available 
+        // private Kijkwijzer[] kijkwijzers { get; set; }
 
-		private Kijkwijzer[] kijkwijzers { get; set; }
+        // public Enum dimension { get; set; }
 
-		private Enum dimension { get; set; }
+        public string genre { get; set; }
 
-		private string genre { get; set; }
+        public float rating { get; set; }
 
-		private float rating { get; set; }
-
-		private int duration { get; set; }
-	}
-
+        public int duration { get; set; }
+    }
 }
-
