@@ -2,9 +2,11 @@
   <AdminLayout>
     <h2>Dit is de admin layout</h2>
     <p>Chromely backend data: {{ chromelyBackendData }}</p>
+    <br/>
     <router-link to="/">Ga terug naar de home page</router-link>
+    <router-link to="/admin/movie/add">Voeg film toe</router-link>
     <div class="form">
-      <input v-model="fieldData" placeholder="message">
+      <input v-model="fieldData" placeholder="message"/>
       <button v-on:click="postField">Verstuur</button>
       <p>{{ postOutput }}</p>
     </div>

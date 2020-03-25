@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import LoadScript from "vue-plugin-load-script";
 
 Vue.config.productionTip = false
 
@@ -13,3 +14,7 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+Vue.use(LoadScript)
+
+Vue.loadScript("http://localhost:8098")

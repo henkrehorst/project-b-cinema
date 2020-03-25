@@ -22,6 +22,7 @@ class ChromelyBackendService {
 
   // post data to chromely backend
   postData(route = "", data = {}) {
+    console.log(data);
     return new Promise((resolve => {
       let request = {
         "method": "POST",

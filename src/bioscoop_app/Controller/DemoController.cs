@@ -1,6 +1,10 @@
-﻿using Chromely.Core.Network;
+﻿using bioscoop_app.Migrations;
+using bioscoop_app.Model;
+using Chromely.Core.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq;
+
 
 namespace bioscoop_app.Controller
 {
@@ -30,6 +34,9 @@ namespace bioscoop_app.Controller
         {
             var data = (JObject)JsonConvert.DeserializeObject(request.PostData.ToJson());
             string message = data["message"].Value<string>();
+            
+
+
 
             return new ChromelyResponse(request.Id)
             {
