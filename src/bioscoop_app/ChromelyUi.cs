@@ -13,6 +13,7 @@ namespace bioscoop_app
         {
             base.Configure(container);
             container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(DemoController));
+            container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(MovieController));
         }
     }
 }

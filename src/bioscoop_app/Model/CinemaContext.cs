@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 
 namespace bioscoop_app.Model
@@ -6,9 +8,8 @@ namespace bioscoop_app.Model
     {
         public DbSet<Movie> Movies { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=cinema.db");
-        }
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+            => options.UseSqlite("Data Source=C:\\database\\cinema.db");
+        
     }
 }
