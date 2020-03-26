@@ -1,1 +1,1 @@
-﻿cd vue-app && npm run dev
+cd vue-app && npm i
