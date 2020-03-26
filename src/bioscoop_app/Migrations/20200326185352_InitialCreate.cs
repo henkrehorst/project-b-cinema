@@ -11,7 +11,7 @@ namespace bioscoop_app.Migrations
                 columns: table => new
                 {
                     id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("MySQL:AutoIncrement", true),
                     title = table.Column<string>(nullable: true),
                     genre = table.Column<string>(nullable: true),
                     rating = table.Column<float>(nullable: false),

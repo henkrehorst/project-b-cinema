@@ -1,5 +1,4 @@
-﻿using bioscoop_app.Migrations;
-using bioscoop_app.Model;
+﻿using bioscoop_app.Model;
 using Chromely.Core.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

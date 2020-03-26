@@ -8,32 +8,27 @@ using bioscoop_app.Model;
 namespace bioscoop_app.Migrations
 {
     [DbContext(typeof(CinemaContext))]
-    [Migration("20200320174603_InitialCreate")]
+    [Migration("20200326185352_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2");
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028");
 
             modelBuilder.Entity("bioscoop_app.Model.Movie", b =>
                 {
                     b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("duration")
-                        .HasColumnType("INTEGER");
+                    b.Property<int>("duration");
 
-                    b.Property<string>("genre")
-                        .HasColumnType("TEXT");
+                    b.Property<string>("genre");
 
-                    b.Property<float>("rating")
-                        .HasColumnType("REAL");
+                    b.Property<float>("rating");
 
-                    b.Property<string>("title")
-                        .HasColumnType("TEXT");
+                    b.Property<string>("title");
 
                     b.HasKey("id");
 
