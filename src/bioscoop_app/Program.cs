@@ -18,7 +18,6 @@ namespace bioscoop_app
             StorageService.SetupStorageFiles();
             MovieRepository movieRepository = new MovieRepository();
             
-            movieRepository.AddMovie(new Movie{title = "test test",duration = 120, genre = "humor", rating = 1.7f});
             // Create Chromely app
             AppBuilder
                 .Create()

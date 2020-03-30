@@ -40,16 +40,22 @@ namespace bioscoop_app.Repository
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 movie.id = 0;
             }
             
-            this.Movies.Add(movie.id, movie);
+            Movies.Add(movie.id, movie);
             
             File.WriteAllText(
                 StorageService.GetDataSourcePath() + FileName,
                 JsonConvert.SerializeObject(Movies)
             );
             
+        }
+
+        public Dictionary<int, Movie> GetMovies()
+        {
+            return Movies;
         }
         
     }
