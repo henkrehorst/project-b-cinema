@@ -16,16 +16,16 @@
     });
 }
 
-$(el = '') {
-    return document.querySelectorAll(el).length() > 1 ? document.querySelectorAll(el) : document.querySelector(el);
+function $(el = '') {
+    return document.querySelectorAll(el).length > 1 ? document.querySelectorAll(el) : document.querySelector(el);
 }
 
 document.querySelector('button.add-movie').addEventListener('click', () => {
     let data = {
-        "title": $('.movie-title'),
-        "duration": parseInt($('.movie-duration')),
-        "genre": $('.movie-genre'),
-        "rating": parseFloat($('.movie-rating')),
+        "title": $('[name="movie-title"]'),
+        "duration": parseInt($('[name=".movie-duration"]')),
+        "genre": $('[name=".movie-genre"]'),
+        "rating": parseFloat($('[name=".movie-rating"]')),
     };
 
     postMovie(data);
