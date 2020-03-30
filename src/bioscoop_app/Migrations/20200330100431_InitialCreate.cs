@@ -43,23 +43,23 @@ namespace bioscoop_app.Migrations
                     id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     visitor_age = table.Column<int>(nullable: false),
-                    Productid = table.Column<int>(nullable: true)
+                    ProductId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_tickets", x => x.id);
                     table.ForeignKey(
-                        name: "FK_tickets_products_Productid",
-                        column: x => x.Productid,
+                        name: "FK_tickets_products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "products",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_tickets_Productid",
+                name: "IX_tickets_ProductId",
                 table: "tickets",
-                column: "Productid");
+                column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

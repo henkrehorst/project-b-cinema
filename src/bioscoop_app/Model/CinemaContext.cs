@@ -11,6 +11,7 @@ namespace bioscoop_app.Model
         public DbSet<Ticket> tickets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseMySQL("server=bioscoop-makkers.henkrehorst.nl;database=develop-henk;user=henk;password=oLcD9ZBiFd4qLj1x");
+            => options.UseMySQL("server=bioscoop-makkers.henkrehorst.nl;database=development;user=henk;password=oLcD9ZBiFd4qLj1x");
+
     }
 }

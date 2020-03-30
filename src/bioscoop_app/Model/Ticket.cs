@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace bioscoop_app.Model
 {
 	public class Ticket
@@ -11,6 +13,9 @@ namespace bioscoop_app.Model
 
 		public int visitor_age { get; set; }
 
+		public int ProductId { get; set; }
+
+		[ForeignKey("ProductId")]
 		public Product Product { get; set; }
 	}
 
