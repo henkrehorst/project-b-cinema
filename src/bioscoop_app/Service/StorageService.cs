@@ -15,8 +15,7 @@ namespace bioscoop_app.Service
 
         public static string GetDataSourcePath()
         {
-            string projectPath =
-                Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
+            string projectPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\..\\"));
 
             return $"{projectPath}\\data\\";
         }
