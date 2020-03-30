@@ -1,1 +1,1 @@
-cd vue-app && npm run dev
+live-server frontend/ --port=8081

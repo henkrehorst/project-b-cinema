@@ -1,1 +1,0 @@
-cd vue-app && npm i
