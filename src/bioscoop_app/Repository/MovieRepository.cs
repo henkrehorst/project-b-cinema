@@ -12,7 +12,7 @@ namespace bioscoop_app.Repository
         
         public static void SetupDataSource()
         {
-            if (File.Exists(StorageService.GetDataSourcePath() + "movies.json"))
+            if (File.Exists(StorageService.GetDataSourcePath() + FileName))
             {
                 
             }
