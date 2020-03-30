@@ -105,6 +105,10 @@ namespace bioscoop_app.Repository
 
         public Dictionary<int, Movie> GetMovies()
         {
+            if (!IsOpen)
+            {
+                throw new InvalidOperationException();
+            }
             return Movies;
         }
         
