@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using bioscoop_app.Model;
+using bioscoop_app.Service;
 using Chromely.Core;
 using Newtonsoft.Json;
 
@@ -12,6 +13,9 @@ namespace bioscoop_app
     {
         static void Main(string[] args)
         {
+            StorageService.SetupStorageFiles();
+            Console.WriteLine(StorageService.GetDataSourcePath());
+            
             var directoryInfo = Directory.GetParent(Environment.CurrentDirectory).Parent;
             if (directoryInfo != null)
             {
