@@ -43,6 +43,7 @@ namespace bioscoop_app.Repository
             }
             if(Movies.Count() == 0)
             {
+                Console.WriteLine(e);
                 movie.id = 0;
             } else
             {
@@ -101,5 +102,11 @@ namespace bioscoop_app.Repository
             }
             return resultSet;
         }
+
+        public Dictionary<int, Movie> GetMovies()
+        {
+            return Movies;
+        }
+        
     }
 }
