@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using bioscoop_app.Model;
+using bioscoop_app.Repository;
 using bioscoop_app.Service;
 using Chromely.Core;
 using Newtonsoft.Json;
@@ -15,7 +16,9 @@ namespace bioscoop_app
         {
             //setup storages files modules
             StorageService.SetupStorageFiles();
+            MovieRepository movieRepository = new MovieRepository();
             
+            movieRepository.AddMovie(new Movie{title = "test test",duration = 120, genre = "humor", rating = 1.7f});
             // Create Chromely app
             AppBuilder
                 .Create()
