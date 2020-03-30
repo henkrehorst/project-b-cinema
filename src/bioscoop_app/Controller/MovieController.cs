@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using bioscoop_app.Model;
+using bioscoop_app.Repository;
 using Chromely.Core.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,13 +12,13 @@ namespace bioscoop_app.Controller
         [HttpGet(Route = "/movies")]
         public ChromelyResponse GetMovies(ChromelyRequest request)
         {
-            using var context = new CinemaContext();
+            var movieRepository = new MovieRepository();
 
-            var movies = context.Movies;
+            var movies = movieRepository.GetMovies();
 
             return new ChromelyResponse(request.Id)
             {
-                Data = movies.ToJson()
+                Data = JsonConvert.SerializeObject(movies)
             };
         }
 
@@ -25,25 +26,20 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/movies/add")]
         public ChromelyResponse AddMovie(ChromelyRequest request)
         {
-            var response = new Helper.Response { Status = 204, Data = "Hoi", StatusText = "OKOK" };
-            var data = (JObject)JsonConvert.DeserializeObject(request.PostData.ToJson());
+            var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
+            var movieRepository = new MovieRepository();
 
-            using (var context = new CinemaContext())
-            {
-                context.Add(new Movie {
-                    title = data["title"].Value<string>(),
-                    duration = data["duration"].Value<int>(),
-                    genre = data["genre"].Value<string>(), 
-                    rating = data["rating"].Value<float>(), 
-                });
-                context.SaveChanges();
-            }
+            movieRepository.AddMovie(new Movie(
+                data["title"].Value<string>(),
+                data["genre"].Value<string>(),
+                data["rating"].Value<float>(),
+                data["duration"].Value<int>()
+            ));
 
             return new ChromelyResponse(request.Id)
             {
-                Data = response
+                Data = "Movie added"
             };
-            
         }
     }
 }

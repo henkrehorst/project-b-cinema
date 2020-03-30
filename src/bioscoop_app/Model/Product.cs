@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace bioscoop_app.Model
 {
 	public class Product
@@ -8,6 +10,7 @@ namespace bioscoop_app.Model
 
 		public string name { get; set; }
 
+		public List<Ticket> Tickets { get; set; }
 	}
 
 }

@@ -1,1 +1,1 @@
-live-server frontend/ --port=8081
+live-server frontend/ --port=8081 --no-browser
