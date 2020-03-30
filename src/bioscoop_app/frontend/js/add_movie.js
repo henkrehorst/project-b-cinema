@@ -9,7 +9,6 @@
         request: JSON.stringify(request),
         onSuccess: function (response) {
             console.log(response);
-            resolve(JSON.parse(response))
         }, onFailure: function (err, msg) {
             console.log(err, msg);
         }
@@ -22,11 +21,13 @@ function $(el = '') {
 
 document.querySelector('button.add-movie').addEventListener('click', () => {
     let data = {
-        "title": $('[name="movie-title"]'),
-        "duration": parseInt($('[name=".movie-duration"]')),
-        "genre": $('[name=".movie-genre"]'),
-        "rating": parseFloat($('[name=".movie-rating"]')),
+        'title': $('input[name="movie-title"]').value,
+        'duration': parseInt($('input[name="movie-duration"]').value),
+        'genre': $('input[name="movie-genre"]').value,
+        'rating': parseFloat($('input[name="movie-rating"]').value),
     };
+
+    console.log(data);
 
     postMovie(data);
 });
