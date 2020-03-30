@@ -13,16 +13,11 @@ namespace bioscoop_app.Model
         public float rating { get; set; }
         public int duration { get; set; }
 
-        public Movie(string title, string genre, double rating, int duration) {
+        public Movie(string title, string genre, float rating, int duration) {
             this.title = title;
             this.genre = genre;
             this.rating = rating;
             this.duration = duration;
-        }
-
-        public Movie(int id, string title, string genre, double rating, int duration) {
-            this.id = id;
-            Movie(title, genre, rating, duration);
         }
     }
 }
