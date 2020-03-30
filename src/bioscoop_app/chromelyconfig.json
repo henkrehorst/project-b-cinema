@@ -1,7 +1,7 @@
 ﻿{
   "appName": "hoi",
   "startUrl": {
-    "url": "http://localhost:8080",
+    "url": /*"http://localhost:8080",*/ "http://localhost:8081",
     "loadType": "localResource"
   },
   "loadCefBinariesIfNotFound": true,
