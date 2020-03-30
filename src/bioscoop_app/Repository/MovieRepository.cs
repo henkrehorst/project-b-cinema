@@ -13,7 +13,7 @@ namespace bioscoop_app.Repository
     {
         private const string FileName = "movies.json";
         private Dictionary<int, Movie> Movies { get; }
-        private bool IsOpen { get; } = false;
+        private bool IsOpen { get; set; } = false;
 
         public MovieRepository()
         {
@@ -41,7 +41,7 @@ namespace bioscoop_app.Repository
             {
                 throw new System.InvalidOperationException();
             }
-            if(Movies.Count() == 0)
+            if(!Movies.Any())
             {
                 Console.WriteLine(e);
                 movie.id = 0;
