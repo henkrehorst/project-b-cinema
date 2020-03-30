@@ -9,6 +9,7 @@ namespace bioscoop_app.Repository
     public class MovieRepository
     {
         private const string FileName = "movies.json";
+        private bool Open = false;
         
         public static void SetupDataSource()
         {
@@ -16,6 +17,18 @@ namespace bioscoop_app.Repository
             {
                 File.Create(StorageService.GetDataSourcePath() + FileName);
             }
+        }
+
+        public MovieRepository()
+        {
+            //read data
+            Open = true;
+        }
+
+        public Close()
+        {
+            //Save changes to file
+            Open = false;
         }
     }
 }
