@@ -13,23 +13,15 @@ namespace bioscoop_app
     {
         static void Main(string[] args)
         {
+            //setup storages files modules
             StorageService.SetupStorageFiles();
-            Console.WriteLine(StorageService.GetDataSourcePath());
             
-            var directoryInfo = Directory.GetParent(Environment.CurrentDirectory).Parent;
-            if (directoryInfo != null)
-            {
-                string projectDirectory = directoryInfo.Name;
-                Console.WriteLine(projectDirectory);
-            }
-
-            Console.WriteLine(Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory())).Replace(@"\", @"\\"));
-            // // Create Chromely app
-            // AppBuilder
-            //     .Create()
-            //     .UseApp<ChromelyUi>()
-            //     .Build()
-            //     .Run(args);
+            // Create Chromely app
+            AppBuilder
+                .Create()
+                .UseApp<ChromelyUi>()
+                .Build()
+                .Run(args);
             
         }
     }
