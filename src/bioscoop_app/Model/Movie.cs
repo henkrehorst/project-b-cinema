@@ -10,7 +10,7 @@ namespace bioscoop_app.Model
         // private Kijkwijzer[] kijkwijzers { get; set; }
         // public Enum dimension { get; set; }
         public string genre { get; set; }
-        public float rating { get; set; }
+        public double rating { get; set; }
         public int duration { get; set; }
 
         public Movie(string title, string genre, double rating, int duration) {
@@ -18,11 +18,6 @@ namespace bioscoop_app.Model
             this.genre = genre;
             this.rating = rating;
             this.duration = duration;
-        }
-
-        public Movie(int id, string title, string genre, double rating, int duration) {
-            this.id = id;
-            Movie(title, genre, rating, duration);
         }
     }
 }
