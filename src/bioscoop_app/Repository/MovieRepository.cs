@@ -9,31 +9,11 @@ using Newtonsoft.Json;
 
 namespace bioscoop_app.Repository
 {
-    public class MovieRepository
+    public class MovieRepository : Repository<Movie>
     {
-        private const string FileName = "movies.json";
-        private Dictionary<int, Movie> Movies { get; }
-        private bool IsOpen { get; set; } = false;
+        protected const string FileName = "movies.json";
 
-        public MovieRepository()
-        {
-            Movies = JsonConvert.DeserializeObject<Dictionary<int, Movie>>(
-                File.ReadAllText(StorageService.GetDataSourcePath() + FileName)
-            );
-            IsOpen = true;
-        }
-
-        public static void SetupDataSource()
-        {
-            if (!File.Exists(StorageService.GetDataSourcePath() + FileName))
-            {
-                //File.Create(StorageService.GetDataSourcePath() + FileName);
-                File.WriteAllText(
-                    StorageService.GetDataSourcePath() + FileName,
-                    JsonConvert.SerializeObject(new Dictionary<int, Movie>())
-                );
-            }
-        }
+        public MovieRepository() : base() { }
 
         public void AddMovie(Movie movie)
         {
@@ -41,15 +21,14 @@ namespace bioscoop_app.Repository
             {
                 throw new System.InvalidOperationException();
             }
-            if(!Movies.Any())
+            if(!Data.Any())
             {
-                Console.WriteLine(e);
                 movie.id = 0;
             } else
             {
-                movie.id = Movies.Keys.Max() + 1;
+                movie.id = Data.Keys.Max() + 1;
             }
-            this.Movies.Add(movie.id, movie);
+            this.Data.Add(movie.id, movie);
         }
         
         public void Discard()
