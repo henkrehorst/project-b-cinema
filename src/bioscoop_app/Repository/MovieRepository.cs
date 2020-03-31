@@ -81,5 +81,15 @@ namespace bioscoop_app.Repository
             }
             return resultSet;
         }
+
+        public List<Movie> QueryFirst(string title, string genre, double rating, int duration)
+        {
+            return Query(title, genre, rating, duration, 1);
+        }
+
+        public List<Movie> UnlimitedQuery(string title, string genre, double rating, int duration)
+        {
+            return Query(title, genre, rating, duration, -1);
+        }
     }
 }
