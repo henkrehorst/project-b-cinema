@@ -11,8 +11,6 @@ namespace bioscoop_app.Repository
 {
     public class MovieRepository : Repository<Movie>
     {
-        protected new const string fileName = "movies.json";
-
         public MovieRepository() : base() { }
 
         public void AddMovie(Movie movie)
@@ -48,13 +46,7 @@ namespace bioscoop_app.Repository
             SaveChanges();
         }
 
-        public void SaveChanges()
-        {
-            File.WriteAllText(
-                StorageService.GetDataSourcePath() + fileName,
-                JsonConvert.SerializeObject(Data)
-            );
-        }
+        
 
         public List<Movie> Query(string title, string genre, double rating, int duration, int limit)
         {

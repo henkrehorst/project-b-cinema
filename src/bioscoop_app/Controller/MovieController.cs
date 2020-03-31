@@ -35,6 +35,8 @@ namespace bioscoop_app.Controller
                 data["rating"].Value<double>(),
                 data["duration"].Value<int>()
             ));
+            
+            movieRepository.SaveChanges();
 
             return new ChromelyResponse(request.Id)
             {

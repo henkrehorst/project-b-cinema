@@ -11,7 +11,7 @@ namespace bioscoop_app.Repository
 {
     public abstract class Repository<T> where T : DataType
     {
-        protected const string fileName = "";
+        protected const string FileExtension = ".json";
         protected Dictionary<int, T> data;
         protected bool isOpen = false;
 
@@ -31,16 +31,16 @@ namespace bioscoop_app.Repository
         protected Repository()
         {
             data = JsonConvert.DeserializeObject<Dictionary<int, T>>(
-                File.ReadAllText(StorageService.GetDataSourcePath() + fileName)
+                File.ReadAllText(StorageService.GetDataSourcePath() + typeof(T).Name + FileExtension)
             );
             isOpen = true;
         }
         public static void SetupDataSource()
         {
-            if (!File.Exists(StorageService.GetDataSourcePath() + fileName))
+            if (!File.Exists(StorageService.GetDataSourcePath() + typeof(T).Name + FileExtension ))
             {
                 File.WriteAllText(
-                    StorageService.GetDataSourcePath() + fileName,
+                    StorageService.GetDataSourcePath() + typeof(T).Name + FileExtension,
                     JsonConvert.SerializeObject(new Dictionary<int, T>())
                 );
             }
@@ -61,6 +61,14 @@ namespace bioscoop_app.Repository
                 entry.id = data.Keys.Max() + 1;
             }
             data.Add(entry.id, entry);
+        }
+        
+        public void SaveChanges()
+        {
+            File.WriteAllText(
+                StorageService.GetDataSourcePath() + typeof(T).Name + FileExtension,
+                JsonConvert.SerializeObject(Data)
+            );
         }
     }
 }
