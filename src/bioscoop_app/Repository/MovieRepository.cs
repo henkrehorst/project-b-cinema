@@ -11,7 +11,7 @@ namespace bioscoop_app.Repository
 {
     public class MovieRepository : Repository<Movie>
     {
-        protected new const string FileName = "movies.json";
+        protected new const string fileName = "movies.json";
 
         public MovieRepository() : base() { }
 
@@ -51,7 +51,7 @@ namespace bioscoop_app.Repository
         public void SaveChanges()
         {
             File.WriteAllText(
-                StorageService.GetDataSourcePath() + FileName,
+                StorageService.GetDataSourcePath() + fileName,
                 JsonConvert.SerializeObject(Data)
             );
         }
@@ -59,7 +59,7 @@ namespace bioscoop_app.Repository
         public List<Movie> Query(string title, string genre, double rating, int duration, int limit)
         {
             List<Movie> resultSet = new List<Movie>();
-            foreach(Movie movie in Data.Values)
+            foreach (Movie movie in Data.Values)
             {
                 if (title == null || movie.title.Equals(title))
                 {
@@ -81,15 +81,5 @@ namespace bioscoop_app.Repository
             }
             return resultSet;
         }
-
-        public Dictionary<int, Movie> GetMovies()
-        {
-            if (!IsOpen)
-            {
-                throw new InvalidOperationException();
-            }
-            return Data;
-        }
-        
     }
 }

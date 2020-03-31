@@ -11,22 +11,37 @@ namespace bioscoop_app.Repository
 {
     public abstract class Repository<T> where T : DataType
     {
-        protected Dictionary<int, T> Data { get { return this.Data; } set { throw new InvalidOperationException(); } }
-        protected bool IsOpen { get { return this.IsOpen; } set { throw new InvalidOperationException(); } }
-        protected const string FileName = "";
+        protected const string fileName = "";
+        protected Dictionary<int, T> data;
+        protected bool isOpen = false;
+
+        public Dictionary<int, T> Data
+        {
+            get
+            {
+                return IsOpen ? this.data : throw new InvalidOperationException();
+            }
+            set
+            {
+                throw new InvalidOperationException();
+            }
+        }
+        public bool IsOpen { get { return this.isOpen; } set { throw new InvalidOperationException(); } }
+
         protected Repository()
         {
-            Data = JsonConvert.DeserializeObject<Dictionary<int, T>>(
-                File.ReadAllText(StorageService.GetDataSourcePath() + FileName)
+            data = JsonConvert.DeserializeObject<Dictionary<int, T>>(
+                File.ReadAllText(StorageService.GetDataSourcePath() + fileName)
             );
-            IsOpen = true;
+            isOpen = true;
         }
+
         public void SetupDataSource()
         {
-            if (!File.Exists(StorageService.GetDataSourcePath() + FileName))
+            if (!File.Exists(StorageService.GetDataSourcePath() + fileName))
             {
                 File.WriteAllText(
-                    StorageService.GetDataSourcePath() + FileName,
+                    StorageService.GetDataSourcePath() + fileName,
                     JsonConvert.SerializeObject(new Dictionary<int, T>())
                 );
             }
@@ -34,19 +49,19 @@ namespace bioscoop_app.Repository
 
         public void Add(T entry)
         {
-            if (!IsOpen)
+            if (!isOpen)
             {
                 throw new System.InvalidOperationException();
             }
-            if (!Data.Any())
+            if (!data.Any())
             {
                 entry.id = 0;
             }
             else
             {
-                entry.id = Data.Keys.Max() + 1;
+                entry.id = data.Keys.Max() + 1;
             }
-            this.Data.Add(entry.id, entry);
+            data.Add(entry.id, entry);
         }
     }
 }
