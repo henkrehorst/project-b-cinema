@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
 {
@@ -19,6 +20,7 @@ namespace bioscoop_app.Model
             this.duration = duration;
         }
         
+        [JsonConstructor]
         public Movie(int id, string title, string genre, double rating, int duration) {
             this.id = id;
             this.title = title;
