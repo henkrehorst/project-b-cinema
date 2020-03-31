@@ -35,8 +35,7 @@ namespace bioscoop_app.Repository
             );
             isOpen = true;
         }
-
-        public void SetupDataSource()
+        public static void SetupDataSource()
         {
             if (!File.Exists(StorageService.GetDataSourcePath() + fileName))
             {
