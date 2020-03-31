@@ -32,7 +32,7 @@ namespace bioscoop_app.Controller
             movieRepository.AddMovie(new Movie(
                 data["title"].Value<string>(),
                 data["genre"].Value<string>(),
-                data["rating"].Value<float>(),
+                data["rating"].Value<double>(),
                 data["duration"].Value<int>()
             ));
 

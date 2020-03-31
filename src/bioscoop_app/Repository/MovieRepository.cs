@@ -13,7 +13,7 @@ namespace bioscoop_app.Repository
     {
         private const string FileName = "movies.json";
         private Dictionary<int, Movie> Movies { get; }
-        private bool IsOpen { get; set; } = false;
+        private bool IsOpen { get; } = false;
 
         public MovieRepository()
         {
