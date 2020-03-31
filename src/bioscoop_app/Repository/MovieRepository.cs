@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using bioscoop_app.Model;
@@ -13,7 +13,7 @@ namespace bioscoop_app.Repository
     {
         private const string FileName = "movies.json";
         private Dictionary<int, Movie> Movies { get; }
-        private bool IsOpen { get; } = false;
+        private bool IsOpen { get; set; } = false;
 
         public MovieRepository()
         {
@@ -79,8 +79,8 @@ namespace bioscoop_app.Repository
 
         public List<Movie> Query(string title, string genre, double rating, int duration, int limit)
         {
-            List<Movie> resultSet = new ArrayList<Movie>();
-            foreach(Movie movie in Movies)
+            List<Movie> resultSet = new List<Movie>();
+            foreach(Movie movie in Movies.Values)
             {
                 if (title == null || movie.title.Equals(title))
                 {
