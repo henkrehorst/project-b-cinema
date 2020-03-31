@@ -43,7 +43,6 @@ namespace bioscoop_app.Repository
             }
             if(!Movies.Any())
             {
-                Console.WriteLine(e);
                 movie.id = 0;
             } else
             {
