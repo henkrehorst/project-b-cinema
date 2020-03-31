@@ -12,42 +12,7 @@ namespace bioscoop_app.Repository
     public class MovieRepository : Repository<Movie>
     {
         public MovieRepository() : base() { }
-
-        public void AddMovie(Movie movie)
-        {
-            if (!IsOpen)
-            {
-                throw new System.InvalidOperationException();
-            }
-            if(!Data.Any())
-            {
-                movie.id = 0;
-            } else
-            {
-                movie.id = Data.Keys.Max() + 1;
-            }
-            this.Data.Add(movie.id, movie);
-        }
-        
-        public void Discard()
-        {
-            IsOpen = false;
-        }
-
-        public void SaveChangesAndDiscard()
-        {
-            SaveChanges();
-            Discard();
-        }
-
-        public void AddMovieAndWrite(Movie movie)
-        {
-            AddMovie(movie);
-            SaveChanges();
-        }
-
-        
-
+      
         public List<Movie> Query(string title, string genre, double rating, int duration, int limit)
         {
             List<Movie> resultSet = new List<Movie>();

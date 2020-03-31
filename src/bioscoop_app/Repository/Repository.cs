@@ -70,5 +70,22 @@ namespace bioscoop_app.Repository
                 JsonConvert.SerializeObject(Data)
             );
         }
+
+        public void Discard()
+        {
+            isOpen = false;
+        }
+
+        public void SaveChangesAndDiscard()
+        {
+            SaveChanges();
+            Discard();
+        }
+
+        public void AddAndWrite(T entry)
+        {
+            Add(entry);
+            SaveChanges();
+        }
     }
 }
