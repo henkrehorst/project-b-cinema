@@ -29,7 +29,7 @@ namespace bioscoop_app.Controller
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
             var movieRepository = new MovieRepository();
 
-            movieRepository.AddMovie(new Movie(
+            movieRepository.Add(new Movie(
                 data["title"].Value<string>(),
                 data["genre"].Value<string>(),
                 data["rating"].Value<double>(),
