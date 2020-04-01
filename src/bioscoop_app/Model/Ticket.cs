@@ -3,17 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace bioscoop_app.Model
 {
-	public class Ticket : DataType
+	public class Ticket : Product
 	{
-		//public Seat seat { get; set; }
+		public Seat seat;
 
-		//private ScreenTime screenTime { get; set; }
+		public ScreenTime screenTime;
 
-		public int visitorAge { get; set; }
-
-		public int productId { get; set; }
-		
-		public Product product { get; set; }
+		public int visitorAge;
 	}
 
 }
