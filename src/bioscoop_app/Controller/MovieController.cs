@@ -14,7 +14,7 @@ namespace bioscoop_app.Controller
         {
             var movieRepository = new MovieRepository();
 
-            var movies = movieRepository.GetMovies();
+            var movies = movieRepository.Data;
 
             return new ChromelyResponse(request.Id)
             {
@@ -35,6 +35,8 @@ namespace bioscoop_app.Controller
                 data["rating"].Value<double>(),
                 data["duration"].Value<int>()
             ));
+            
+            movieRepository.SaveChanges();
 
             return new ChromelyResponse(request.Id)
             {

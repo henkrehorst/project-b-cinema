@@ -9,77 +9,14 @@ using Newtonsoft.Json;
 
 namespace bioscoop_app.Repository
 {
-    public class MovieRepository
+    public class MovieRepository : Repository<Movie>
     {
-        private const string FileName = "movies.json";
-        private Dictionary<int, Movie> Movies { get; }
-        private bool IsOpen { get; set; } = false;
-
-        public MovieRepository()
-        {
-            Movies = JsonConvert.DeserializeObject<Dictionary<int, Movie>>(
-                File.ReadAllText(StorageService.GetDataSourcePath() + FileName)
-            );
-            IsOpen = true;
-        }
-
-        public static void SetupDataSource()
-        {
-            if (!File.Exists(StorageService.GetDataSourcePath() + FileName))
-            {
-                //File.Create(StorageService.GetDataSourcePath() + FileName);
-                File.WriteAllText(
-                    StorageService.GetDataSourcePath() + FileName,
-                    JsonConvert.SerializeObject(new Dictionary<int, Movie>())
-                );
-            }
-        }
-
-        public void AddMovie(Movie movie)
-        {
-            if (!IsOpen)
-            {
-                throw new System.InvalidOperationException();
-            }
-            if(!Movies.Any())
-            {
-                movie.id = 0;
-            } else
-            {
-                movie.id = Movies.Keys.Max() + 1;
-            }
-            this.Movies.Add(movie.id, movie);
-        }
-        
-        public void Discard()
-        {
-            IsOpen = false;
-        }
-
-        public void SaveChangesAndDiscard()
-        {
-            SaveChanges();
-            Discard();
-        }
-
-        public void AddMovieAndWrite(Movie movie)
-        {
-            AddMovie(movie);
-            SaveChanges();
-        }
-
-        public void SaveChanges()
-        {
-            File.WriteAllText(
-                StorageService.GetDataSourcePath() + FileName,
-                JsonConvert.SerializeObject(Movies)
-            );
-        }
-
+        public MovieRepository() : base() { }
+      
         public List<Movie> Query(string title, string genre, double rating, int duration, int limit)
         {
             List<Movie> resultSet = new List<Movie>();
-            foreach(Movie movie in Movies.Values)
+            foreach (Movie movie in Data.Values)
             {
                 if (title == null || movie.title.Equals(title))
                 {
@@ -102,14 +39,14 @@ namespace bioscoop_app.Repository
             return resultSet;
         }
 
-        public Dictionary<int, Movie> GetMovies()
+        public List<Movie> QueryFirst(string title, string genre, double rating, int duration)
         {
-            if (!IsOpen)
-            {
-                throw new InvalidOperationException();
-            }
-            return Movies;
+            return Query(title, genre, rating, duration, 1);
         }
-        
+
+        public List<Movie> UnlimitedQuery(string title, string genre, double rating, int duration)
+        {
+            return Query(title, genre, rating, duration, -1);
+        }
     }
 }
