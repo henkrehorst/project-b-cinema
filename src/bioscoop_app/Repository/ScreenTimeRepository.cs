@@ -11,6 +11,6 @@ namespace bioscoop_app.Repository
 {
     public class ScreenTimeRepository : Repository<ScreenTime>
     {
-        public 
+        
     }
 }
