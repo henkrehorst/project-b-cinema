@@ -28,17 +28,5 @@ namespace bioscoop_app.Model
             this.rating = rating;
             this.duration = duration;
         }
-
-        public override bool Equals(object other)
-        {
-            if (other == null) return false;
-            if (!other.GetType().Equals(typeof(Movie))) return false;
-            Movie that = (Movie) other;
-            if (!title.Equals(that.title)) return false;
-            if (!genre.Equals(that.genre)) return false;
-            if (rating != that.rating) return false;
-            if (duration != that.duration) return false;
-            return true;
-        }
     }
 }
