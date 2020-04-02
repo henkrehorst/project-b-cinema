@@ -1,15 +1,21 @@
 namespace bioscoop_app.Model
 {
-	public class Seat
+	public class Seat : DataType
 	{
-		public int id { get; set; }
+		public double price_modifier;
+		public int row;
+		public int seatnr;
 
-		private double price_modifier { get; set; }
-
-		private int row { get; set; }
-
-		private int seatnr { get; set; }
-
+		public override bool Equals(object other)
+		{
+			if (other == null) return false;
+			if (!other.GetType().Equals(typeof(Seat));
+			Seat that = (Seat)other;
+			if (price_modifier != that.price_modifier) return false;
+			if (row != that.row) return false;
+			if (seatnr != that.seatnr) return false;
+			return true;
+		}
 	}
 
 }

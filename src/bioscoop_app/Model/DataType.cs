@@ -7,5 +7,7 @@ namespace bioscoop_app.Model
     public abstract class DataType
     {
         public int id { get; set; }
+
+        public abstract override bool Equals(object other);
     }
 }

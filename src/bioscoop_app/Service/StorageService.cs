@@ -6,7 +6,7 @@ using bioscoop_app.Repository;
 
 namespace bioscoop_app.Service
 {
-    public class StorageService
+    public sealed class StorageService
     {
         public static void SetupStorageFiles()
         {

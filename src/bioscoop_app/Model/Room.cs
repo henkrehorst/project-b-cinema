@@ -1,17 +1,26 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace bioscoop_app.Model
 {
-	public class Room
+	public class Room : DataType
 	{
-		public int id { get; set; }
+		public List<Seat> layout;
+		public int seats;
+		public bool auro;
+		public bool imax;
 
-		private Seat[] layout { get; set; }
-
-		private int seats { get; set; }
-
-		private bool auro { get; set; }
-
-		private bool imax { get; set; }
-
+		public override bool Equals(object other)
+		{
+			if (other == null) return false;
+			if (!other.GetType().Equals(typeof(Room))) return false;
+			Room that = (Room)other;
+			if (!layout.SequenceEqual(that.layout)) return false;
+			if (seats != that.seats) return false;
+			if (auro != that.auro) return false;
+			if (imax != that.imax) return false;
+			return true;
+		}
 	}
 
 }
