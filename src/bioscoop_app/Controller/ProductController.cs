@@ -25,10 +25,34 @@ namespace bioscoop_app.Controller
         public ChromelyResponse AddProduct(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            Product prod;
+            new ProductRepository().AddAndWrite(ToProduct(data));
+            return new ChromelyResponse(req.Id)
+            {
+                Data = "Product added"
+            };
+        }
+
+        [HttpPost(Route = "/products/update")]
+        public ChromelyResponse UpdateProduct(ChromelyRequest req)
+        {
+            JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            int? id = data.Value<int>("id");
+            if (id is null) throw new ArgumentNullException();
+            int checkedId = (int) id;
+            Repository<Product> repository = new ProductRepository();
+            repository.Update(checkedId, ToProduct(data));
+            ChromelyResponse res = new ChromelyResponse(req.Id)
+            {
+                Data = "Updated succesfully"
+            };
+            return res;
+        }
+
+        private Product ToProduct(JObject data)
+        {
             if (data.ContainsKey("seat") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
             {
-                prod = new Ticket(
+                return new Ticket(
                     data["price"].Value<double>(),
                     data["name"].Value<string>(),
                     data["seat"].Value<Seat>(),
@@ -38,17 +62,11 @@ namespace bioscoop_app.Controller
             }
             else
             {
-                prod = new Product(
+                return new Product(
                     data["price"].Value<double>(),
                     data["name"].Value<string>()
                     );
             }
-            new ProductRepository().AddAndWrite(prod);
-            ChromelyResponse res = new ChromelyResponse(req.Id)
-            {
-                Data = "Product added"
-            };
-            return res;
         }
     }
 }
