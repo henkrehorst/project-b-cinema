@@ -48,5 +48,17 @@ namespace bioscoop_app
 				return hash;
 			}
 		}
+
+		public static bool operator ==(CustomObject a, CustomObject b)
+		{
+			if (ReferenceEquals(a, b)) return true;
+			if (a is null) return false;
+			return a.Equals(b);
+		}
+
+		public static bool operator !=(CustomObject a, CustomObject b)
+		{
+			return !(a == b);
+		}
 	}
 }
