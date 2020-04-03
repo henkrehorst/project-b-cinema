@@ -13,7 +13,7 @@ namespace bioscoop_app.Repository
     {
         public MovieRepository() : base() { }
       
-        public List<Movie> Query(string title, string genre, double rating, int duration, int limit)
+        public List<Movie> Query(string title, string genre, double? rating, int? duration, int limit)
         {
             List<Movie> resultSet = new List<Movie>();
             foreach (Movie movie in Data.Values)

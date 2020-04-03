@@ -12,16 +12,14 @@ namespace bioscoop_app.Controller
         [HttpGet(Route = "/products")]
         public ChromelyResponse GetProducts(ChromelyRequest req)
         {
-            Repository<Product> repository = new ProductRepository();
             ChromelyResponse res = new ChromelyResponse(req.Id)
             {
-                Data = JsonConvert.SerializeObject(repository.Data)
+                Data = JsonConvert.SerializeObject(new ProductRepository().Data)
             };
-            repository.Discard();
             return res;
         }
 
-        [HttpPost(Route = "/products/add")]
+        [HttpPost(Route = "/products#add")]
         public ChromelyResponse AddProduct(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
@@ -32,7 +30,7 @@ namespace bioscoop_app.Controller
             };
         }
 
-        [HttpPost(Route = "/products/update")]
+        [HttpPost(Route = "/products#update")]
         public ChromelyResponse UpdateProduct(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());

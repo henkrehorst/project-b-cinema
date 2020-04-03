@@ -11,6 +11,7 @@ namespace bioscoop_app.Service
         public static void SetupStorageFiles()
         {
             MovieRepository.SetupDataSource();
+            ProductRepository.SetupDataSource();
         }
 
         public static string GetDataSourcePath()

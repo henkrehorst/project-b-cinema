@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Bioscoop app</title>
+</head>
+<body>
+    <div id="content">
+        <table id="overview">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Price</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="form" name="add" style="display: none">
+            <label for="Name">name: </label>
+            <input type="text" id="name"/><br/>
+            <label for="Price">price: </label>
+            <input type="number" step="0.01" name ="add" id="price"/><br/>
+            <button name="add" id="submit">Submit</button>
+        </div>
+        <button id="add-product">Add product</button>
+        <a href="/index.html">Home</a>
+    </div>
+    
+    <script src="/js/product_controller.js"></script>
+</body>
+</html>
