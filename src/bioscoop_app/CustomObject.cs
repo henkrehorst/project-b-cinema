@@ -16,14 +16,8 @@ namespace bioscoop_app
 			foreach (FieldInfo field in GetType().GetRuntimeFields())
 			{
 				//if (GetType() is DataType && field.FieldType is int && field.Name.Equals("id")) continue; //ignores the Model.DataType.id field
-				if (field.GetValue(this) is null || field.GetValue(other) is null)
-				{
-					if (field.GetValue(this) is null && field.GetValue(other) is null)
-					{
-						continue;
-					}
-					return false;
-				}
+				if (ReferenceEquals(field.GetValue(this), field.GetValue(other))) continue;
+				if (ReferenceEquals(null, field.GetValue(this)) || ReferenceEquals(null, field.GetValue(other))) return false;
 				if (field.FieldType is IEnumerable<object>)
 				{
 					if (!Enumerable.SequenceEqual((IEnumerable<object>) field.GetValue(this)
