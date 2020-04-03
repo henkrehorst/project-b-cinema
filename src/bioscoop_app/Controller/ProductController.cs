@@ -53,7 +53,7 @@ namespace bioscoop_app.Controller
             if (data.ContainsKey("seat") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
             {
                 return new Ticket(
-                    data["price"].Value<double>(),
+                    Ticket.GetModifier(data["price"].Value<double>()),
                     data["name"].Value<string>(),
                     data["seat"].Value<Seat>(),
                     data["screenTime"].Value<ScreenTime>(),
