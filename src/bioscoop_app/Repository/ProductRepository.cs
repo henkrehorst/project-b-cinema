@@ -17,15 +17,15 @@ namespace bioscoop_app.Repository
                 Ticket ticketSignature = (Ticket)signature;
                 foreach (Ticket entry in subset)
                 {
-                    if(ticketSignature.name == null || ticketSignature.name.Equals(entry.name))
+                    if(ticketSignature.name is null || ticketSignature.name.Equals(entry.name))
                     {
-                        if(ticketSignature.price == null || ticketSignature.price == entry.price)
+                        if(ticketSignature.price is null || ticketSignature.price == entry.price)
                         {
-                            if(ticketSignature.screenTime == null || ticketSignature.screenTime.Equals(entry.screenTime))
+                            if(ticketSignature.screenTime is null || ticketSignature.screenTime.Equals(entry.screenTime))
                             {
-                                if(ticketSignature.seat == null || ticketSignature.seat.Equals(entry.seat))
+                                if(ticketSignature.seat is null || ticketSignature.seat.Equals(entry.seat))
                                 {
-                                    if(ticketSignature.visitorAge == null || ticketSignature.visitorAge == entry.visitorAge)
+                                    if(ticketSignature.visitorAge is null || ticketSignature.visitorAge == entry.visitorAge)
                                     {
                                         resultSet.Add(entry);
                                         if(resultSet.Count >= limit)
@@ -42,9 +42,9 @@ namespace bioscoop_app.Repository
             {
                 foreach (Product entry in data.Values)
                 {
-                    if(signature.name == null || signature.name.Equals(entry.name))
+                    if(signature.name is null || signature.name.Equals(entry.name))
                     {
-                        if(signature.price == null || signature.price == entry.price)
+                        if(signature.price is null || signature.price == entry.price)
                         {
                             resultSet.Add(entry);
                             if(resultSet.Count() >= limit)

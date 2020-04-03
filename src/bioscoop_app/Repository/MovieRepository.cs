@@ -18,13 +18,13 @@ namespace bioscoop_app.Repository
             List<Movie> resultSet = new List<Movie>();
             foreach (Movie movie in Data.Values)
             {
-                if (title == null || movie.title.Equals(title))
+                if (title is null || movie.title.Equals(title))
                 {
-                    if (genre == null || movie.genre.Equals(genre))
+                    if (genre is null || movie.genre.Equals(genre))
                     {
-                        if (rating == null || movie.rating == rating)
+                        if (rating is null || movie.rating == rating)
                         {
-                            if (duration == null || movie.duration == duration)
+                            if (duration is null || movie.duration == duration)
                             {
                                 resultSet.Add(movie);
                                 if (resultSet.Count() == limit)
