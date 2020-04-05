@@ -30,6 +30,10 @@ function log(err, msg) {
     console.log(err, msg);
 }
 
+function reslog(res) {
+    console.log(JSON.parse(JSON.parse(res).Data));
+}
+
 function toggle_hide(identifier) {
     let el = document.querySelector(identifier);
     if (!el.style.display) {
@@ -56,6 +60,18 @@ document.querySelector("button[name='add', id='submit]").addEventListener('click
     };
 
     //post data
+    let req = {
+        'method': 'POST',
+        'url': "/products#add",
+        'parameters': null,
+        'postData': data
+    };
+
+    window.cefQuery({
+        request: JSON.stringify(req),
+        onsucces: reslog,
+        onfailure: log
+    });
 });
 
 window.onload = retrieve();
