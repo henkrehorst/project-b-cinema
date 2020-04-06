@@ -18,12 +18,14 @@ function editClick(id) {
     //console.log("#overview > tbody > tr[id='" + id + "']");
     //console.log(document.querySelector("#overview > tbody > tr[id='" + id + "']"));
 
-    let tr = document.querySelector("#overview > tbody > tr[id='" + id + "']");
+    document.querySelector("button[name='update'][id='submit']").data_update_id = id;
     let data = {};
 
-    document.querySelectorAll("#overview > tbody > tr[id='" + id + "'] > td").forEach(() => {
-        data[this.data_id] = this.innerHTML;
-    });
+    data["name"] = document.querySelector("#overview > tbody > tr[id='" + id + "'] > td[data_id='name'").innerHTML;
+    data["price"] = document.querySelector("#overview > tbody > tr[id='" + id + "'] > td[data_id='price'").innerHTML;
+    //document.querySelectorAll("#overview > tbody > tr[id='" + id + "'] > td").forEach(() => {
+    //    data[this.data_id] = this.innerHTML;
+    //});
 
     //for (let td in document.querySelectorAll("#overview > tbody > tr[id='" + id + "'] > td")) {
     //    console.log(td);
@@ -91,6 +93,30 @@ document.querySelector("button[name='add'][id='submit']").addEventListener('clic
     let req = {
         'method': 'POST',
         'url': "/products#add",
+        'parameters': null,
+        'postData': data
+    };
+
+    window.cefQuery({
+        request: JSON.stringify(req),
+        onSucces: reslog,
+        onFailure: log
+    });
+});
+
+document.querySelector("button[name='update'][id='submit']").addEventListener('click', () => {
+    toggle_hide("div.form[name='update']");
+
+    let data = {
+        'id': document.querySelector("button[name='update'][id='submit']").data_update_id,
+        'name': document.querySelector("input[name='update'][id='name']").value,
+        'price': parseFloat(document.querySelector("input[name='update'][id='price']").value)
+    };
+
+    //post data
+    let req = {
+        'method': 'POST',
+        'url': "/products#update",
         'parameters': null,
         'postData': data
     };
