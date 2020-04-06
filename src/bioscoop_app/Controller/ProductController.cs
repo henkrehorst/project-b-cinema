@@ -4,6 +4,7 @@ using bioscoop_app.Model;
 using bioscoop_app.Repository;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace bioscoop_app.Controller
 {
@@ -12,11 +13,16 @@ namespace bioscoop_app.Controller
         [HttpGet(Route = "/products")]
         public ChromelyResponse GetProducts(ChromelyRequest req)
         {
-            ChromelyResponse res = new ChromelyResponse(req.Id)
+            Dictionary<int, Product> rawData = new ProductRepository().Data;
+            List<Product> data = new List<Product>();
+            foreach (Product prod in rawData.Values)
             {
-                Data = JsonConvert.SerializeObject(new ProductRepository().Data)
+                if (prod.GetType() == typeof(Product)) data.Add(prod);
+            }
+            return new ChromelyResponse(req.Id)
+            {
+                Data = JsonConvert.SerializeObject(data)
             };
-            return res;
         }
 
         [HttpGet(Route = "/product#ticketprice")]
