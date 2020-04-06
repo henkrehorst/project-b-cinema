@@ -23,6 +23,7 @@ namespace bioscoop_app.Controller
         public ChromelyResponse AddProduct(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            //Console.WriteLine(data);
             new ProductRepository().AddAndWrite(ToProduct(data));
             return new ChromelyResponse(req.Id)
             {

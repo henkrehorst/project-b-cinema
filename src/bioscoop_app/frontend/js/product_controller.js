@@ -5,10 +5,18 @@
         'parameters': null,
         'postData': null
     };
+    console.log("retrieve");
     window.cefQuery({
         request: JSON.stringify(req),
-        onsucces: display,
-        onfailure: log
+        onsucces: function (res) {
+            console.log("retrieve succes");
+            reslog(res);
+            display(res);
+        },
+        onfailure: function (err, msg) {
+            console.log("retrieve failure");
+            log(err, msg);
+        }
     })
 }
 
@@ -50,13 +58,13 @@ document.querySelector("button[id='add-product']").addEventListener('click', () 
     toggle_hide("div.form[name='add']");
 });
 
-document.querySelector("button[name='add', id='submit]").addEventListener('click', () => {
+document.querySelector("button[name='add'][id='submit']").addEventListener('click', () => {
     toggle_hide("div.form[name='add']");
     toggle_hide("button[id='add-product']");
 
     let data = {
         'name': document.querySelector("input[name='add'][id='name']").value,
-        'price': parseFloat(document.querySelector("input[name='add'][id='name']").value)
+        'price': parseFloat(document.querySelector("input[name='add'][id='price']").value)
     };
 
     //post data
