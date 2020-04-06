@@ -16,7 +16,7 @@
                 let genre = '<td data-id="genre">' + movie.genre + '</td>';
                 let rating = '<td data-id="rating">' + movie.rating + '</td>';
 
-                document.querySelector('tbody').innerHTML += '<tr>' + title + genre + rating + '</tr>';
+                document.querySelector('#movies > tbody').innerHTML += '<tr>' + title + genre + rating + '</tr>';
             }
         }, onFailure: function (err, msg) {
             console.log(err, msg);
@@ -24,4 +24,4 @@
     });
 }
 
-loadOverview();
+window.onload = loadOverview();
