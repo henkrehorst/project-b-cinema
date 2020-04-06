@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using bioscoop_app.Model;
-using bioscoop_app.Repository;
+using System.Linq;
+using System.Reflection;
 
 namespace bioscoop_app.Service
 {
@@ -10,8 +9,25 @@ namespace bioscoop_app.Service
     {
         public static void SetupStorageFiles()
         {
-            MovieRepository.SetupDataSource();
-            ProductRepository.SetupDataSource();
+            // Get list of repository classes
+            var repositoryList = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.Namespace == "bioscoop_app.Repository")
+                .ToList();
+
+            // Call dynamic the SetupDataSource method for each repository class
+            foreach (Type repository in repositoryList)
+            {
+                if (!repository.GetTypeInfo().IsAbstract)
+                {
+                    var setupMethod = repository.GetMethod("SetupDataSource",
+                        BindingFlags.FlattenHierarchy
+                        | BindingFlags.Public
+                        | BindingFlags.Static
+                    );
+                    
+                    if (setupMethod != null) setupMethod.Invoke(repository, null);
+                }
+            }
         }
 
         public static string GetDataSourcePath()
