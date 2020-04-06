@@ -29,6 +29,8 @@ namespace bioscoop_app.Controller
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
             var movieRepository = new MovieRepository();
+            string fileName = "";
+            
             //get base64 image string
             string coverImage = data["cover_image"].Value<string>();
             if (coverImage.Length != 0)
@@ -37,6 +39,7 @@ namespace bioscoop_app.Controller
                 if (uploadService.CheckIsImage())
                 {
                     uploadService.CreateFileInUploadFolder();
+                    fileName = uploadService.GetFileName();
                 }
             }
 
@@ -45,7 +48,8 @@ namespace bioscoop_app.Controller
                 data["title"].Value<string>(),
                 data["genre"].Value<string>(),
                 data["rating"].Value<double>(),
-                data["duration"].Value<int>()
+                data["duration"].Value<int>(),
+                fileName
             ));
             
             movieRepository.SaveChanges();
