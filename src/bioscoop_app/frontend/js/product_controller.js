@@ -8,15 +8,8 @@
     console.log("retrieve");
     return window.cefQuery({
         request: JSON.stringify(req),
-        onSuccess: function (res) {
-            console.log("retrieve succes");
-            reslog(res);
-            display(res);
-        },
-        onFailure: function (err, msg) {
-            console.log("retrieve failure");
-            log(err, msg);
-        }
+        onSuccess: display,
+        onFailure: log
     })
 }
 
@@ -77,8 +70,8 @@ document.querySelector("button[name='add'][id='submit']").addEventListener('clic
 
     window.cefQuery({
         request: JSON.stringify(req),
-        onsucces: reslog,
-        onfailure: log
+        onSucces: reslog,
+        onFailure: log
     });
 });
 
