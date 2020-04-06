@@ -29,9 +29,7 @@ function display(response) {
         let tr = "<tr>" + name + price + edit + "</tr>";
 
         document.querySelector("#overview > tbody").innerHTML += tr;
-        document.querySelector("#overview > tbody > tr > td > button[name='edit'][id='" + key + "']").addEventListener('click', () => {
-            editClick(key);
-        })
+        document.querySelector("#overview > tbody > tr > td > button[name='edit'][id='" + key + "']").addEventListener('click', editClick.bind(key)); //alternatively use lambda to bind
     }
 }
 
