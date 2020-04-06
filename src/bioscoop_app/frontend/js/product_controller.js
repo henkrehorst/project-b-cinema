@@ -15,15 +15,21 @@
 
 function editClick(id) {
     //throw new Error("Function 'edit' was not implemented.");
-    console.log("#overview > tbody > tr[id='" + id + "']");
-    console.log(document.querySelector("#overview > tbody > tr[id='" + id + "']"));
+    //console.log("#overview > tbody > tr[id='" + id + "']");
+    //console.log(document.querySelector("#overview > tbody > tr[id='" + id + "']"));
 
     let tr = document.querySelector("#overview > tbody > tr[id='" + id + "']");
     let data = {};
 
-    for (let td in tr.childNodes) {
-        data[td.data_id] = td.innerHTML;
-    }
+    document.querySelectorAll("#overview > tbody > tr[id='" + id + "'] > td").forEach(() => {
+        data[this.data_id] = this.innerHTML;
+    });
+
+    //for (let td in document.querySelectorAll("#overview > tbody > tr[id='" + id + "'] > td")) {
+    //    console.log(td);
+    //    data[td.data_id] = td.innerHTML;
+    //}
+    console.log(JSON.stringify(data));
     //At this point, the selected product is converted to a dictionary called data
     document.querySelector("#content > div.form[name='update'] > input[id='name']").value = data["name"];
     document.querySelector("#content > div.form[name='update'] > input[id='price']").value = data["price"];
