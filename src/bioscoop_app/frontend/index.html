@@ -2,54 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>Bioscoop app</title>
+    <title>Film overzicht</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
 </head>
 <body>
-<div class="container">
-<div class="logo">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Intel-logo.svg/2000px-Intel-logo.svg.png" alt="" width="130"/>
-  </div>
 <nav>
-  <ul>
-  <li><a href="/index.html">Home</a></li>
-  <li><a href="/overview.html">Film overview pagina</a></li>
-  <li><a href="/add_movie.html">Voeg film toe</a></li>
-  <li><a href="#">Over Ons</a></li>
-  <li><a href="#">Contact</a></li>
-  </ul>
-  </nav>
-</div>
-<hr />
-
-    <h1>Sample page chromely</h1>
-    <h2>Hoi</h2>
-    <a href="/overview.html">Film overview pagina</a>
-    <a href="/add_movie.html">Voeg film toe</a>
-    <a href="/product.html">Product pagina</a>
-    <!--<script>
-        function getHello() {
-            var request = {
-                "method": "GET",
-                "url": "/movies",
-                "parameters": null,
-                "postData": null
-            };
-            window.cefQuery({
-                request: JSON.stringify(request),
-                onSuccess: function (response) {
-                    document.querySelector("body > h2").innerHTML = JSON.parse(response).Data;
-                }, onFailure: function (err, msg) {
-                    console.log(err, msg);
-                }
-            });
-        }
-        getHello();
-    </script>-->
-    <style>
-        h2{
-            background-color:brown;
-        }
-    </style>
+    <div class="container">
+        <ul>
+            <li><a href="/">De kijkdoos</a></li>
+        </ul>
+        <ul>
+            <li class="active"><a href="./index.html">Films</a></li>
+            <li><a href="#">Reserveringen</a></li>
+            <li><a href="./old_index.html">Old interface</a></li>
+        </ul>
+    </div>
+</nav>
+<main class="container">
+    <div class="row">
+        <p style="padding-top: 20px">Films laden ...</p>
+    </div>
+</main>
+<script src="./js/movie_overview.js"></script>
 </body>
 </html>
