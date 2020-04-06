@@ -5,10 +5,14 @@ using System.Reflection;
 
 namespace bioscoop_app.Service
 {
-    public sealed class StorageService
+    public static class StorageService
     {
         public static void SetupStorageFiles()
         {
+            //Create directories
+            CreateDataSourceDirectory();
+            CreateUploadDirectory();
+
             // Get list of repository classes
             var repositoryList = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => t.Namespace == "bioscoop_app.Repository")
@@ -30,11 +34,34 @@ namespace bioscoop_app.Service
             }
         }
 
+        private static void CreateDataSourceDirectory()
+        {
+            if (!Directory.Exists(GetDataSourcePath()))
+            {
+                Directory.CreateDirectory(GetDataSourcePath());
+            }
+        }
+
+        private static void CreateUploadDirectory()
+        {
+            if (!Directory.Exists(GetUploadPath()))
+            {
+                Directory.CreateDirectory(GetUploadPath());
+            }
+            
+            
+        }
+
         public static string GetDataSourcePath()
         {
             string projectPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\..\\"));
 
             return $"{projectPath}\\data\\";
+        }
+
+        public static string GetUploadPath()
+        {
+            return $"{AppDomain.CurrentDomain.BaseDirectory}\\frontend\\uploads\\";
         }
     }
 }
