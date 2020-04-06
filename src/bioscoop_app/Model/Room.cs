@@ -1,17 +1,33 @@
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+
 namespace bioscoop_app.Model
 {
-	public class Room
+	public class Room : DataType
 	{
-		public int id { get; set; }
+		public List<Seat> layout;
+		public int seats;
+		public bool auro;
+		public bool imax;
 
-		private Seat[] layout { get; set; }
+		public Room(List<Seat> layout, int seats, bool auro, bool imax)
+		{
+			this.layout = layout;
+			this.seats = seats;
+			this.auro = auro;
+			this.imax = imax;
+		}
 
-		private int seats { get; set; }
-
-		private bool auro { get; set; }
-
-		private bool imax { get; set; }
-
+		[JsonConstructor]
+		public Room(int id, List<Seat> layout, int seats, bool auro, bool imax)
+		{
+			this.id = id;
+			this.layout = layout;
+			this.seats = seats;
+			this.auro = auro;
+			this.imax = imax;
+		}
 	}
 
 }
