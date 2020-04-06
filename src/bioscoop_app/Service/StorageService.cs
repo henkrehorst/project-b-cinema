@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace bioscoop_app.Service
 {
-    public sealed class StorageService
+    public static class StorageService
     {
         public static void SetupStorageFiles()
         {
