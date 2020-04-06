@@ -88,7 +88,7 @@ function displayTicketPrice() {
         onSuccess: (res) => {
             reslog(res);
             console.log("displaying ticket price");
-            let price = JSON.parse(JSON.parse(res).Data);
+            let price = parseFloat(JSON.parse(JSON.parse(res).Data));
             document.querySelector("input[name='update'][id='ticket']").value = price;
             document.querySelector("p[id='ticket_price']").innerHTML = price;
         },
@@ -102,7 +102,7 @@ document.querySelector("button[id='add-product']").addEventListener('click', () 
 });
 
 document.querySelector("button[name='update'][id='ticket']").addEventListener('click', () => {
-    let data = { 'price': document.querySelector("input[name='update'][id='ticket']").value };
+    let data = { 'price': parseFloat(document.querySelector("input[name='update'][id='ticket']").value) };
     let req = {
         'method': 'POST',
         'url': "/product#ticketprice",

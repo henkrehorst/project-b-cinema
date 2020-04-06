@@ -31,7 +31,7 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/product#ticketprice")]
         public ChromelyResponse SetTicketPrice(ChromelyRequest req)
         {
-            Ticket.basePrice = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("price");
+            Ticket.basePrice = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<double>("price");
             return new ChromelyResponse(req.Id)
             {
                 Data = "Succesfully updated ticket price"
