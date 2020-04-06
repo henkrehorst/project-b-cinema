@@ -19,6 +19,25 @@ namespace bioscoop_app.Controller
             return res;
         }
 
+        [HttpGet(Route = "/product#ticketprice")]
+        public ChromelyResponse GetTicketPrice(ChromelyRequest req)
+        {
+            return new ChromelyResponse(req.Id)
+            {
+                Data = Ticket.basePrice
+            };
+        }
+
+        [HttpPost(Route = "/product#ticketprice")]
+        public ChromelyResponse SetTicketPrice(ChromelyRequest req)
+        {
+            Ticket.basePrice = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("price");
+            return new ChromelyResponse(req.Id)
+            {
+                Data = "Succesfully updated ticket price"
+            };
+        }
+
         [HttpPost(Route = "/products#add")]
         public ChromelyResponse AddProduct(ChromelyRequest req)
         {

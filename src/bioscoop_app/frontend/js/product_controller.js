@@ -75,10 +75,48 @@ function toggle_hide(identifier) {
     }
 }
 
+function displayTicketPrice() {
+    let req = {
+        'method': 'GET',
+        'url': "/product#ticketprice",
+        'parameters': null,
+        'postData': null
+    }
+    console.log("displayTicketPrice");
+    window.cefQuery({
+        request: JSON.stringify(req),
+        onSucces: (res) => {
+            reslog(res);
+            console.log("displaying ticket price");
+            let price = JSON.parse(JSON.parse(res).Data);
+            document.querySelector("input[name='update'][id='ticket']").value = price;
+            document.querySelector("p[id='ticket_price']").innerHTML = price;
+        },
+        onFailure: log
+    });
+}
+
 document.querySelector("button[id='add-product']").addEventListener('click', () => {
     toggle_hide("button[id='add-product']");
     toggle_hide("div.form[name='add']");
 });
+
+document.querySelector("button[name='update'][id='ticket']").addEventListener('click', () => {
+    let data = { 'price': document.querySelector("input[name='update'][id='ticket']").value };
+    let req = {
+        'method': 'POST',
+        'url': "/product#ticketprice",
+        'parameters': null,
+        'postData': data
+    }
+    console.log("updating ticket price");
+    window.cefQuery({
+        request: JSON.stringify(req),
+        onSucces: reslog,
+        onFailure: log
+    });
+    displayTicketPrice();
+})
 
 document.querySelector("button[name='add'][id='submit']").addEventListener('click', () => {
     toggle_hide("div.form[name='add']");
@@ -128,4 +166,7 @@ document.querySelector("button[name='update'][id='submit']").addEventListener('c
     });
 });
 
-window.onload = retrieve();
+window.onload = function () {
+    retrieve();
+    displayTicketPrice();
+}();
