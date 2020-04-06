@@ -15,21 +15,28 @@
 
 function editClick(id) {
     throw new Error("Function 'edit' was not implemented.");
+    let tr = document.querySelector("#overview > tbody > tr[id='" + key + "']");
+    let data = {};
+
+    for (let td in tr.childNodes) {
+        data[td.data_id] = td.innerHTML;
+    }
+    //At this point, the selected product is converted to a dictionary called data
 }
 
 function display(response) {
     let products = JSON.parse(JSON.parse(response).Data);
-    let td = (id, data) => "<td data-id=" + id + '>' + data + "</td>";
+    let td = (id, data) => "<td data_id=" + id + '>' + data + "</td>";
+    const edit = "<td><button name='edit'>Edit</button></td>";
 
     for (let key in products) {
         let product = products[key]
         let name = td("name", product.name);
         let price = td("price", product.price);
-        let edit = "<td><button name='edit' id='" + key + "'>Edit</button></td>";
-        let tr = "<tr>" + name + price + edit + "</tr>";
+        let tr = "<tr id ='" + key + "'>" + name + price + edit + "</tr>";
 
         document.querySelector("#overview > tbody").innerHTML += tr;
-        document.querySelector("#overview > tbody > tr > td > button[name='edit'][id='" + key + "']").addEventListener('click', editClick.bind(key)); //alternatively use lambda to bind
+        document.querySelector("#overview > tbody > tr[id='" + key + "'] > td > button[name='edit']").addEventListener('click', editClick.bind(key)); //alternatively use lambda to bind
     }
 }
 

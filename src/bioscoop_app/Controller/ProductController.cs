@@ -40,6 +40,7 @@ namespace bioscoop_app.Controller
             int checkedId = (int) id;
             Repository<Product> repository = new ProductRepository();
             repository.Update(checkedId, ToProduct(data));
+            repository.Discard();
             ChromelyResponse res = new ChromelyResponse(req.Id)
             {
                 Data = "Updated succesfully"
