@@ -14,14 +14,20 @@
 }
 
 function editClick(id) {
-    throw new Error("Function 'edit' was not implemented.");
-    let tr = document.querySelector("#overview > tbody > tr[id='" + key + "']");
+    //throw new Error("Function 'edit' was not implemented.");
+    console.log("#overview > tbody > tr[id='" + id + "']");
+    console.log(document.querySelector("#overview > tbody > tr[id='" + id + "']"));
+
+    let tr = document.querySelector("#overview > tbody > tr[id='" + id + "']");
     let data = {};
 
     for (let td in tr.childNodes) {
         data[td.data_id] = td.innerHTML;
     }
     //At this point, the selected product is converted to a dictionary called data
+    document.querySelector("#content > div.form[name='update'] > input[id='name']").value = data["name"];
+    document.querySelector("#content > div.form[name='update'] > input[id='price']").value = data["price"];
+    toggle_hide("#content > div.form[name='update']");
 }
 
 function display(response) {
@@ -36,7 +42,9 @@ function display(response) {
         let tr = "<tr id ='" + key + "'>" + name + price + edit + "</tr>";
 
         document.querySelector("#overview > tbody").innerHTML += tr;
-        document.querySelector("#overview > tbody > tr[id='" + key + "'] > td > button[name='edit']").addEventListener('click', editClick.bind(key)); //alternatively use lambda to bind
+        document.querySelector("#overview > tbody > tr[id='" + key + "'] > td > button[name='edit']").addEventListener('click', () => {
+            editClick(key);
+        }); //alternatively use lambda to bind
     }
 }
 
