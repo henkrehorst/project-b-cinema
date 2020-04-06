@@ -1,5 +1,8 @@
 using System;
+<<<<<<< HEAD
 using System.Reflection;
+=======
+>>>>>>> jordy
 using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
