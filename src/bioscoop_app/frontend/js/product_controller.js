@@ -6,14 +6,14 @@
         'postData': null
     };
     console.log("retrieve");
-    window.cefQuery({
+    return window.cefQuery({
         request: JSON.stringify(req),
-        onsucces: function (res) {
+        onSuccess: function (res) {
             console.log("retrieve succes");
             reslog(res);
             display(res);
         },
-        onfailure: function (err, msg) {
+        onFailure: function (err, msg) {
             console.log("retrieve failure");
             log(err, msg);
         }
@@ -30,7 +30,7 @@ function display(response) {
         let price = td("price", product.price);
         let tr = "<tr>" + name + price + "</tr>";
 
-        document.querySelector("table[id='overview'].tbody").innerHTML += tr;
+        document.querySelector("#overview > tbody").innerHTML += tr;
     }
 }
 
