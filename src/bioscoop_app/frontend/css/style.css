@@ -48,3 +48,45 @@ ul li:hover{
 }
 
 
+* {
+  box-sizing: border-box;
+}
+
+/* Overview van de films de colummen*/
+.column {
+  float: left;
+  width: 30%;
+  padding: 2%;
+  padding-top:7%;
+  margin: 10px;
+  height: 400px; /* Should be removed. Only for demonstration */
+}
+
+/* Overview van de films de rijen */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+ 
+}
+.row{
+ margin: auto;
+ width: 80%;
+}
+h2, p{
+    color: #fff;
+    text-align:center;
+}
+
+
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  margin-left: 7.5%;
+  text-decoration: none;
+  font-size: 16px;
+  
+  position: absolute;
+}
