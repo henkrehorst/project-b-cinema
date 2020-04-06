@@ -85,7 +85,7 @@ function displayTicketPrice() {
     console.log("displayTicketPrice");
     window.cefQuery({
         request: JSON.stringify(req),
-        onSucces: (res) => {
+        onSuccess: (res) => {
             reslog(res);
             console.log("displaying ticket price");
             let price = JSON.parse(JSON.parse(res).Data);
@@ -112,7 +112,7 @@ document.querySelector("button[name='update'][id='ticket']").addEventListener('c
     console.log("updating ticket price");
     window.cefQuery({
         request: JSON.stringify(req),
-        onSucces: reslog,
+        onSuccess: reslog,
         onFailure: log
     });
     displayTicketPrice();
@@ -137,7 +137,7 @@ document.querySelector("button[name='add'][id='submit']").addEventListener('clic
 
     window.cefQuery({
         request: JSON.stringify(req),
-        onSucces: reslog,
+        onSuccess: reslog,
         onFailure: log
     });
 });
@@ -161,7 +161,7 @@ document.querySelector("button[name='update'][id='submit']").addEventListener('c
 
     window.cefQuery({
         request: JSON.stringify(req),
-        onSucces: reslog,
+        onSuccess: reslog,
         onFailure: log
     });
 });
