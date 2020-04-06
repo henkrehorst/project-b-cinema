@@ -1,13 +1,25 @@
+using Newtonsoft.Json;
+
 namespace bioscoop_app.Model
 {
-	public class Kijkwijzer
+	public sealed class Kijkwijzer : DataType
 	{
-		public int id { get; set; }
+		public string symbool;
+		public string name;
 
-		private string symbool { get; set; }
+		public Kijkwijzer(string symbool, string name)
+		{
+			this.symbool = symbool;
+			this.name = name;
+		}
 
-		private string name { get; set; }
-
+		[JsonConstructor]
+		public Kijkwijzer(int id, string symbool, string name)
+		{
+			this.id = id;
+			this.symbool = symbool;
+			this.name = name;
+		}
 	}
 
 }

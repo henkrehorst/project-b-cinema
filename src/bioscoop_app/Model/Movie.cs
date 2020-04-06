@@ -3,15 +3,15 @@ using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
 {
-    public class Movie : DataType
+    public sealed class Movie : DataType
     {
-        public string title { get; set; }
+        public string title;
         //TODO: make properties later available
         // private Kijkwijzer[] kijkwijzers { get; set; }
         // public Enum dimension { get; set; }
-        public string genre { get; set; }
-        public double rating { get; set; }
-        public int duration { get; set; }
+        public string genre;
+        public double rating;
+        public int duration;
 
         public Movie(string title, string genre, double rating, int duration) {
             this.title = title;
