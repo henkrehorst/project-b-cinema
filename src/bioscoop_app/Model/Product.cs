@@ -1,16 +1,26 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
 {
-	public class Product
+	public class Product : DataType
 	{
-		public int id { get; set; }
+		public double price;
+		public string name;
 
-		public double price { get; set; }
+		public Product(double price, string name)
+		{
+			this.price = price;
+			this.name = name;
+		}
 
-		public string name { get; set; }
-
-		public List<Ticket> Tickets { get; set; }
+		[JsonConstructor]
+		public Product(int id, double price, string name)
+		{
+			this.id = id;
+			this.price = price;
+			this.name = name;
+		}
 	}
 
 }

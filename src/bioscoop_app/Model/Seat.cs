@@ -1,15 +1,28 @@
+using Newtonsoft.Json;
+
 namespace bioscoop_app.Model
 {
-	public class Seat
+	public class Seat : DataType
 	{
-		public int id { get; set; }
+		public double price_modifier;
+		public int row;
+		public int seatnr;
 
-		private double price_modifier { get; set; }
+		public Seat(double price_modifier, int row, int seatnr)
+		{
+			this.price_modifier = price_modifier;
+			this.row = row;
+			this.seatnr = seatnr;
+		}
 
-		private int row { get; set; }
-
-		private int seatnr { get; set; }
-
+		[JsonConstructor]
+		public Seat(int id, double price_modifier, int row, int seatnr)
+		{
+			this.id = id;
+			this.price_modifier = price_modifier;
+			this.row = row;
+			this.seatnr = seatnr;
+		}
 	}
 
 }

@@ -28,5 +28,15 @@
   "commandLineArgs": [
   ],
   "commandLineOptions": [
+  ],
+  "urlSchemes": [
+    {
+      "name": "custom-01",
+      "baseUrl": "",
+      "scheme": "local",
+      "host": "",
+      "urlSchemeType": "resource",
+      "baseUrlStrict": false
+    }
   ]
 }

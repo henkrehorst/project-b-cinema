@@ -16,8 +16,7 @@ namespace bioscoop_app
         {
             //setup storages files modules
             StorageService.SetupStorageFiles();
-            MovieRepository movieRepository = new MovieRepository();
-            
+
             // Create Chromely app
             AppBuilder
                 .Create()

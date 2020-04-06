@@ -62,6 +62,12 @@ namespace bioscoop_app.Repository
             }
             data.Add(entry.id, entry);
         }
+
+        public void Update(int id, T value)
+        {
+            value.id = id;
+            data[id] = value;
+        }
         
         public void SaveChanges()
         {
