@@ -13,6 +13,10 @@
     })
 }
 
+function editClick(id) {
+    throw new Error("Function 'edit' was not implemented.");
+}
+
 function display(response) {
     let products = JSON.parse(JSON.parse(response).Data);
     let td = (id, data) => "<td data-id=" + id + '>' + data + "</td>";
@@ -21,9 +25,13 @@ function display(response) {
         let product = products[key]
         let name = td("name", product.name);
         let price = td("price", product.price);
-        let tr = "<tr>" + name + price + "</tr>";
+        let edit = "<td><button name='edit' id='" + key + "'>Edit</button></td>";
+        let tr = "<tr>" + name + price + edit + "</tr>";
 
         document.querySelector("#overview > tbody").innerHTML += tr;
+        document.querySelector("#overview > tbody > tr > td > button[name='edit'][id='" + key + "']").addEventListener('click', () => {
+            editClick(key);
+        })
     }
 }
 
