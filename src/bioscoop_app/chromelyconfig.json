@@ -22,9 +22,6 @@
     "windowExStyles": 0,
     "useCustomtyle": false
   },
-  "controllerAssemblies": [
-    "Chromely.External.Controllers.dll"
-  ],
   "commandLineArgs": [
   ],
   "commandLineOptions": [
