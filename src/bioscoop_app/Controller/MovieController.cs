@@ -23,6 +23,15 @@ namespace bioscoop_app.Controller
             };
         }
 
+        [HttpPost(Route = "/movies#id")]
+        public ChromelyResponse GetMovieById(ChromelyRequest req)
+        {
+            int id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
+            return new ChromelyResponse(req.Id)
+            {
+                Data = JsonConvert.SerializeObject(new MovieRepository().Data[id])
+            };
+        }
 
         [HttpPost(Route = "/movies/add")]
         public ChromelyResponse AddMovie(ChromelyRequest request)
