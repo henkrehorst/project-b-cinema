@@ -31,3 +31,11 @@ document.querySelector('button.add-movie').addEventListener('click', () => {
 
     postMovie(data);
 });
+
+
+function getBase64String(file) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    
+    
+}
