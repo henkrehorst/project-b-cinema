@@ -15,8 +15,9 @@
                 let title = '<td data-id="title">' + movie.title + '</td>';
                 let genre = '<td data-id="genre">' + movie.genre + '</td>';
                 let rating = '<td data-id="rating">' + movie.rating + '</td>';
+                let edit = '<a href="edit_movie.html">Edit</a>';
 
-                document.querySelector('tbody').innerHTML += '<tr>' + title + genre + rating + '</tr>';
+                document.querySelector('tbody').innerHTML += '<tr>' + title + genre + rating + edit + '</tr>';
             }
         }, onFailure: function (err, msg) {
             console.log(err, msg);
