@@ -8,49 +8,19 @@
         <title>Bioscoop app</title>
     </head>
     <body>
-    <nav>
-    <div class="container">
-        <ul>
-            <li><a href="/">De kijkdoos</a></li>
-        </ul>
-        <ul>
-            <li><a href="../index.html">Klant applicatie</a></li>
-            <li><button id="movies">Film overview pagina</button></li>
-            <li><button id="add_movie">Voeg film toe</button></li>
-            <li><a href="/admin/product.html">Product pagina</a></li>
-        </ul>
-    </div>
-</nav>
-
-
-<hr />
- <script>
-        function getHello() {
-            var request = {
-                "method": "GET",
-                "url": "/movies",
-                "parameters": null,
-                "postData": null
-            };
-            window.cefQuery({
-                request: JSON.stringify(request),
-                onSuccess: function (response) {
-                    document.querySelector("body > h2").innerHTML = JSON.parse(response).Data;
-                }, onFailure: function (err, msg) {
-                    console.log(err, msg);
-                }
-            });
-        }
-        getHello();
-    </script>
-    <style>
-        h2{
-            background-color:brown;
-        }
-    </style>
-
-
-        <hr />
+        <nav>
+            <div class="container">
+                <ul>
+                    <li><a href="/">De kijkdoos</a></li>
+                </ul>
+                <ul>
+                    <li><a href="../index.html">Klant applicatie</a></li>
+                    <li><button id="movies">Film overview pagina</button></li>
+                    <li><button id="add_movie">Voeg film toe</button></li>
+                    <li><a href="/admin/product.html">Product pagina</a></li>
+                </ul>
+            </div>
+        </nav>
         <div class="page" id="movies" style="display:none">
             <h2>Movies</h2>
             <table id="movies">
