@@ -53,25 +53,33 @@ ul li:hover{
     display: inline-block;
     width: 350px;
     height: 250px;
+    position: relative;
     border: 2px solid #000;
 }
-
-.row {
-    width: 100%;
-    height: 10px;
-    position: relative;
+#cinema-room * {
+    transition: 0s;
 }
 
 .seat {
     width: 10px;
+    height: 10px;
     height: 100%;
-    top: 0;
     position: absolute;
     background-color: blue;
+    outline: 1px solid #fff;
+}
+.seat:hover {
+    background-color: lightblue;
 }
 .seat.luxery {
     background-color: orange;
 }
+.seat.luxery:hover {
+    background-color: lightgoldenrodyellow;
+}
 .seat.vip {
     background-color: red;
+}
+.seat.vip:hover {
+    background-color: lightpink;
 }
