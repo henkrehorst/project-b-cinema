@@ -2,24 +2,25 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="/admin/css/style.css">
+         <!--<link rel="stylesheet" type="text/css" href="/admin/css/style.css">-->
+         <link rel="stylesheet" href="./css/bootstrap.min.css">
+         <link rel="stylesheet" href="./css/main.css"/>
         <title>Bioscoop app</title>
     </head>
     <body>
-        <div class="container">
-            <div class="logo">
-                <img src="" alt="" width="130" />
-            </div>
-            <nav>
+        <nav>
+            <div class="container">
+                <ul>
+                    <li><a href="/">De kijkdoos</a></li>
+                </ul>
                 <ul>
                     <li><a href="../index.html">Klant applicatie</a></li>
                     <li><button id="movies">Film overview pagina</button></li>
                     <li><button id="add_movie">Voeg film toe</button></li>
                     <li><a href="/admin/product.html">Product pagina</a></li>
                 </ul>
-            </nav>
-        </div>
-        <hr />
+            </div>
+        </nav>
         <div class="page" id="movies" style="display:none">
             <h2>Movies</h2>
             <table id="movies">
