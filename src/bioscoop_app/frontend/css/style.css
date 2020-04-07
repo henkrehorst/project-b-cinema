@@ -23,7 +23,7 @@ li a {
 }
 
     a:hover {
-        color: darkseagreen;
+        color: limegreen;
         text-decoration: underline;
 
     }
@@ -72,4 +72,8 @@ li a {
     margin: 20px;
 }
 
+#rood {
+    color: limegreen;
+    text-decoration: underline;
+}
 
