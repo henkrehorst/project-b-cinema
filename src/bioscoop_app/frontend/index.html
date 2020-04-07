@@ -25,30 +25,5 @@
     </div>
 </main>
 <script src="./js/movie_overview.js"></script>
-
- <script>
-        function getHello() {
-            var request = {
-                "method": "GET",
-                "url": "/movies",
-                "parameters": null,
-                "postData": null
-            };
-            window.cefQuery({
-                request: JSON.stringify(request),
-                onSuccess: function (response) {
-                    document.querySelector("body > h2").innerHTML = JSON.parse(response).Data;
-                }, onFailure: function (err, msg) {
-                    console.log(err, msg);
-                }
-            });
-        }
-        getHello();
-    </script>
-    <style>
-        h2{
-            background-color:brown;
-        }
-    </style>
 </body>
 </html>
