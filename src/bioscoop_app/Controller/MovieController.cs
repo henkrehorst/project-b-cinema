@@ -61,7 +61,7 @@ namespace bioscoop_app.Controller
                 fileName
             ));
             
-            movieRepository.SaveChanges();
+            movieRepository.SaveChangesAndDiscard();
 
             return new ChromelyResponse(request.Id)
             {
@@ -72,6 +72,26 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/movies#update")]
         public ChromelyResponse UpdateMovie(ChromelyRequest req)
         {
+            JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            string filename = data["filename"].Value<string>();
+            string filestring = data["filestring"].Value<string>();
+            if (filestring is object)
+            {
+                var uploadService = new UploadService(filestring);
+                if (uploadService.CheckIsImage())
+                {
+                    uploadService.UpdateFile(filename);
+                }
+            }
+            Repository<Movie> repository = new MovieRepository();
+            repository.Update(data.Value<int>("id"), new Movie(
+                    data["title"].Value<string>(),
+                    data["genre"].Value<string>(),
+                    data["rating"].Value<double>(),
+                    data["duration"].Value<int>(),
+                    filename
+                ));
+            repository.SaveChangesAndDiscard();
             return new ChromelyResponse(req.Id)
             {
                 Data = req.PostData.ToJson()

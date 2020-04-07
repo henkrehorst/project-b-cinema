@@ -1,6 +1,7 @@
 ﻿document.querySelector("button.submit[id='update_movie'").addEventListener('click', () => {
     let files = document.querySelector("div.form[name='update_movie'] > input[name='cover-image']").files;
     let data = {
+        'id': document.querySelector("button.submit[id='update_movie']").data_update_id,
         'title': document.querySelector("div.form[name='update_movie'] > input[name='title']").value,
         'duration': document.querySelector("div.form[name='update_movie'] > input[name='duration']").value,
         'genre': document.querySelector("div.form[name='update_movie'] > input[name='genre']").value,
