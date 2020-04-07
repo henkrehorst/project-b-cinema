@@ -19,12 +19,20 @@
                 let rating = '<td data-id="rating">' + movie.rating + '</td>';
 
                 document.querySelector('#movies > tbody').innerHTML += '<tr id="' + key + '">' + title + duration + genre + rating + edit + '</tr>';
-                console.log("#movies > tbody > tr[id='" + key + "'] > td > button[name='edit']");
-                console.log(document.querySelector("#movies > tbody > tr[id='" + key + "'] > td > button[name='edit']"));
-                document.querySelector("#movies > tbody > tr[id='" + key + "'] > td > button[name='edit']").addEventListener('click', () => {
-                    editMovieButton(key);
+                //console.log("#movies > tbody > tr[id='" + key + "'] > td > button[name='edit']");
+                //console.log(document.querySelector("#movies > tbody > tr[id='" + key + "'] > td > button[name='edit']").parentElement.parentElement.id);
+                //document.querySelectorAll("#movies > tbody > tr > td > button[name='edit']").addEventListener('click', () => {
+                //    editMovieButton(key);
+                //});
+                //console.log("finished " + key);
+            }
+            for (let button in (buttons = document.querySelectorAll("#movies > tbody > tr > td > button[name='edit']"))) {
+                if (buttons[button] === buttons.length) break;
+                console.log(buttons[button]);
+                console.log(document.querySelectorAll("#movies > tbody > tr > td > button[name='edit']"));
+                buttons[button].addEventListener('click', () => {
+                    editMovieButton(buttons[button].parentElement.parentElement.id);
                 });
-                console.log("finished " + key);
             }
         }, onFailure: function (err, msg) {
             console.log(err, msg);
@@ -43,8 +51,6 @@ function editMovieButton(id) {
 }
 
 function getMovieById(id) {
-    let data;
-
     let req = {
         'method': 'POST',
         'url': '/movies#id',
@@ -54,15 +60,15 @@ function getMovieById(id) {
     window.cefQuery({
         request: JSON.stringify(req),
         onSuccess: function (res) {
-            console.log(JSON.parse(res));
-            data = JSON.parse(JSON.parse(res).Data);
+            //console.log(JSON.parse(res));
+            console.log(JSON.parse(JSON.parse(res).Data));
+            return JSON.parse(JSON.parse(res).Data);
         },
         onFailure: function (err, msg) {
             console.log(err, msg);
+            throw new Error("requesting movie from server failed");
         }
     });
-
-    return data;
 }
 
 window.onload = loadOverview();
