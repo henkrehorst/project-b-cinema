@@ -52,7 +52,7 @@ namespace bioscoop_app.Controller
 
 
         [HttpPost(Route = "/screentime#update")]
-        public ChromelyResponse UpdateMovie(ChromelyRequest req)
+        public ChromelyResponse UpdateScreenTime(ChromelyRequest req)
         {
             JObject data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
 
@@ -67,6 +67,18 @@ namespace bioscoop_app.Controller
             return new ChromelyResponse(req.Id)
             {
                 Data = "screenTime updated"
+            };
+        }
+        
+        [HttpPost(Route = "/screentime#movie")]
+        public ChromelyResponse GetScreenTimesByMovieId(ChromelyRequest req)
+        {
+            JObject data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
+            
+            return new ChromelyResponse(req.Id)
+            {
+                Data = JsonConvert.SerializeObject(new ScreenTimeRepository()
+                    .GetScreenTimeByMovieId(data["id"].Value<int>()))
             };
         }
     }
