@@ -1,8 +1,4 @@
 using System;
-<<<<<<< HEAD
-using System.Reflection;
-=======
->>>>>>> jordy
 using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
@@ -14,22 +10,22 @@ namespace bioscoop_app.Model
 		public DateTime endTime;
 		public Room room;
 
-		public ScreenTime(Movie movie, DateTime startTime, DateTime endTime, Room room)
+		public ScreenTime(Movie movie, DateTime startTime, DateTime endTime /*, Room room*/)
 		{
 			this.movie = movie;
 			this.startTime = startTime;
 			this.endTime = endTime;
-			this.room = room;
+			// this.room = room;
 		}
 
 		[JsonConstructor]
-		public ScreenTime(int id, Movie movie, DateTime startTime, DateTime endTime, Room room)
+		public ScreenTime(int id, Movie movie, DateTime startTime, DateTime endTime /*, Room room*/)
 		{
 			this.id = id;
 			this.movie = movie;
 			this.startTime = startTime;
 			this.endTime = endTime;
-			this.room = room;
+			// this.room = room;
 		}
 	}
 

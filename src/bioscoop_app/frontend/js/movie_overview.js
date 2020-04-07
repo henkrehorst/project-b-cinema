@@ -14,11 +14,11 @@
             for (let key in movies) {
                 let movie = movies[key];
                 let movieItem = "<div class=\"col-md-3 col-sm-4\">\n" +
-                    "            <div class=\"box_wrapper\">\n" +
+                    "            <a class='box_wrapper_a' href='./movie_detail.html?id="+ movie.id +"'><div class=\"box_wrapper\">\n" +
                     "                <img src=\"local://frontend/uploads/" + movie.coverImage + "\" alt=\"" + movie.title + "\">\n" +
                     "                <p>" + movie.title + "</p>\n" +
                     "                <button>Meer info</button>\n" +
-                    "            </div>\n" +
+                    "            </div></a>\n" +
                     "        </div>";
                 
                 movieOverview += movieItem;
