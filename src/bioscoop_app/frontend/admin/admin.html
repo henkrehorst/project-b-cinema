@@ -2,23 +2,60 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="/admin/css/style.css">
+         <!--<link rel="stylesheet" type="text/css" href="/admin/css/style.css">-->
+         <link rel="stylesheet" href="./css/bootstrap.min.css">
+         <link rel="stylesheet" href="./css/main.css"/>
         <title>Bioscoop app</title>
     </head>
     <body>
-        <div class="container">
-            <div class="logo">
-                <img src="" alt="" width="130" />
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="../index.html">Klant applicatie</a></li>
-                    <li><button id="movies">Film overview pagina</button></li>
-                    <li><button id="add_movie">Voeg film toe</button></li>
-                    <li><a href="/admin/product.html">Product pagina</a></li>
-                </ul>
-            </nav>
-        </div>
+    <nav>
+    <div class="container">
+        <ul>
+            <li><a href="/">De kijkdoos</a></li>
+        </ul>
+        <ul>
+            <li><a id="rood" href="/index.html">Home</a></li>
+                <li><a href="/overview.html">Film overview pagina</a></li>
+                <li><a href="/add_movie.html">Voeg film toe</a></li>
+                <li><a href="#">Over Ons</a></li>
+                <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+<main class="container">
+    <div class="row">
+        <p style="padding-top: 20px">Films laden ...</p>
+    </div>
+</main>
+<script src="./js/movie_overview.js"></script>
+  
+<hr />
+ <script>
+        function getHello() {
+            var request = {
+                "method": "GET",
+                "url": "/movies",
+                "parameters": null,
+                "postData": null
+            };
+            window.cefQuery({
+                request: JSON.stringify(request),
+                onSuccess: function (response) {
+                    document.querySelector("body > h2").innerHTML = JSON.parse(response).Data;
+                }, onFailure: function (err, msg) {
+                    console.log(err, msg);
+                }
+            });
+        }
+        getHello();
+    </script>
+    <style>
+        h2{
+            background-color:brown;
+        }
+    </style>
+
+
         <hr />
         <div class="page" id="movies" style="display:none">
             <h2>Movies</h2>
