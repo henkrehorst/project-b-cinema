@@ -4,9 +4,21 @@
     }
 }
 
+function updateOrderText() {
+    let orderedText = '';
+    let totalPrice = 0;
+
+    for (let i = 0; i < selectedSeats.length; i++) {
+        orderedText += '\nRow ' + selectedSeats[i].row + ', seat ' + selectedSeats[i].seat + ' (' + selectedSeats[i].type + ' ' + selectedSeats[i].price + '$).';
+        totalPrice += selectedSeats[i].price;
+    }
+
+    let seatDescription = 'Selected ' + (selectedSeats.length) + ' seat' + (selectedSeats.length != 1 ? 's: ' : ': ') + orderedText + '\nTotal price of: $' + (Math.round(totalPrice * 100) / 100);
+    document.querySelector('.seat-description').innerText = seatDescription;
+}
+
 function loadSeatOverview() {
     let room = rooms[selectedRoom];
-    let seatTypes = ['normal', 'luxery', 'vip'];
 
     for (let row = 0; row < room.length; row++) {
         for (let seat = 0; seat < room[row].length; seat++) {
@@ -14,7 +26,7 @@ function loadSeatOverview() {
 
             if (seatType != 0) {
                 let elSeat = document.createElement('div');
-                elSeat.classList.add('seat', 'seat-' + seat, seatTypes[seatType - 1]);
+                elSeat.classList.add('seat', 'row-' + row, 'seat-' + seat, seatTypes[seatType - 1]);
                 setStyle(elSeat, {
                     'top': (row * blockSize) + 'px',
                     'left': (seat * blockSize) + 'px',
@@ -26,7 +38,28 @@ function loadSeatOverview() {
                 container.appendChild(elSeat);
                 elSeat.addEventListener('click', (event, selectedRow = row, selectedSeat = seat, type = seatType) => {
                     let price = seatPrices[type - 1];
-                    document.querySelector('.seat-description').innerText = 'Selected seat ' + selectedSeat + ' ( ' + seatTypes[type - 1] + ' ) on row ' + selectedRow + ' ( ' + price + '$ ).';
+                    let selected = document.querySelector('.seat-' + selectedSeat + '.row-' + selectedRow);
+
+                    if (selected.classList.contains('selected')) {
+                        selected.classList.remove('selected');
+
+                        for (let i = 0; i < selectedSeats.length; i++) {
+                            if (selectedSeats[i].row == selectedRow && selectedSeats[i].seat == selectedSeat) {
+                                selectedSeats.splice(i, 1);
+                            }
+                        }
+                    }
+                    else {
+                        if (!selectedSeats.length || selectedSeats[0].row == selectedRow) {
+                            selected.classList.add('selected');
+                            selectedSeats.push({ 'row': selectedRow, 'seat': selectedSeat, 'type': seatTypes[type - 1], 'price': price });
+                        }
+                        else {
+                            document.querySelector('.error-msg').innerText = 'You can only reserve a seat next to your previous one!';
+                        }
+                    }
+
+                    updateOrderText();
                 });
             }
         }
@@ -57,5 +90,7 @@ let container = document.querySelector('#cinema-room');
 let selectedRoom = 0;
 let blockSize = 20;
 let seatPrices = [7.99, 12.99, 17.99];
+let seatTypes = ['normal', 'luxery', 'vip'];
+let selectedSeats = [];
 
 loadSeatOverview();

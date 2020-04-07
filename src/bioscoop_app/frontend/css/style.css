@@ -68,6 +68,9 @@ ul li:hover{
     background-color: blue;
     outline: 1px solid #fff;
 }
+.seat.selected {
+    background-color: lightgreen!important;
+}
 .seat:hover {
     background-color: lightblue;
 }
