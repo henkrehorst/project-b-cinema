@@ -1,16 +1,33 @@
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+
 namespace bioscoop_app.Model
 {
-	public class Order
+	public sealed class Order : DataType
 	{
-		public int id { get; set; }
-		private Product[] items { get; set; }
+		public List<Product> items;
+		public string code;
+		public string cust_name;
+		public string cust_email;
 
-		private string code { get; set; }
+		public Order(List<Product> items, string code, string cust_name, string cust_email)
+		{
+			this.items = items;
+			this.code = code;
+			this.cust_email = cust_email;
+			this.cust_name = cust_name;
+		}
 
-		private string cust_name { get; set; }
-
-		private string cust_email { get; set; }
-
+		[JsonConstructor]
+		public Order(int id, List<Product> items, string code, string cust_name, string cust_email)
+		{
+			this.id = id;
+			this.items = items;
+			this.code = code;
+			this.cust_email = cust_email;
+			this.cust_name = cust_name;
+		}
 	}
 
 }

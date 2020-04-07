@@ -1,19 +1,33 @@
 using System;
+using System.Reflection;
+using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
 {
-	public class ScreenTime
+	public class ScreenTime : DataType
 	{
-		public int id { get; set; }
+		public Movie movie;
+		public DateTime startTime;
+		public DateTime endTime;
+		public Room room;
 
-		private Movie movie { get; set; }
+		public ScreenTime(Movie movie, DateTime startTime, DateTime endTime, Room room)
+		{
+			this.movie = movie;
+			this.startTime = startTime;
+			this.endTime = endTime;
+			this.room = room;
+		}
 
-		private DateTime startTime1 { get; set; }
-
-		private DateTime endTime { get; set; }
-
-		private Room room { get; set; }
-
+		[JsonConstructor]
+		public ScreenTime(int id, Movie movie, DateTime startTime, DateTime endTime, Room room)
+		{
+			this.id = id;
+			this.movie = movie;
+			this.startTime = startTime;
+			this.endTime = endTime;
+			this.room = room;
+		}
 	}
 
 }

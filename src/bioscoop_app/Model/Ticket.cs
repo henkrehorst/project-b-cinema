@@ -1,22 +1,33 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
 {
-	public class Ticket
+	public sealed class Ticket : Product
 	{
-		//public Seat seat { get; set; }
+		public static double basePrice = 10.00;
+		public static Func<double, double> GetModifier = price => price / basePrice;
+		public Seat seat;
+		public ScreenTime screenTime;
+		public int visitorAge;
 
-		//private ScreenTime screenTime { get; set; }
-		
+		public Ticket(double priceModifier, string name, Seat seat, ScreenTime screenTime, int visitorAge)
+			: base(basePrice*priceModifier, name)
+		{
+			this.seat = seat;
+			this.screenTime = screenTime;
+			this.visitorAge = visitorAge;
+		}
 
-		public int id { get; set; }
-
-		public int visitorAge { get; set; }
-
-		public int productId { get; set; }
-		
-		public Product product { get; set; }
+		[JsonConstructor]
+		public Ticket(int id, double priceModifier, string name, Seat seat, ScreenTime screenTime, int visitorAge)
+			: base(id, basePrice*priceModifier, name)
+		{
+			this.seat = seat;
+			this.screenTime = screenTime;
+			this.visitorAge = visitorAge;
+		}
 	}
 
 }

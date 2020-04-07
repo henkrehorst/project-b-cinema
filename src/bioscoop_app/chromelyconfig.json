@@ -8,8 +8,8 @@
   "silentCefBinariesLoading": false,
   "windowLeft": 0,
   "windowTop": 0,
-  "windowWidth": 1000,
-  "windowHeight": 800,
+  "windowWidth": 1200,
+  "windowHeight": 850,
   "windowNoResize": false,
   "windowNoMinMaxBoxes": false,
   "windowCenterScreen": true,
@@ -22,11 +22,18 @@
     "windowExStyles": 0,
     "useCustomtyle": false
   },
-  "controllerAssemblies": [
-    "Chromely.External.Controllers.dll"
-  ],
   "commandLineArgs": [
   ],
   "commandLineOptions": [
+  ],
+  "urlSchemes": [
+    {
+      "name": "custom-01",
+      "baseUrl": "",
+      "scheme": "local",
+      "host": "",
+      "urlSchemeType": "resource",
+      "baseUrlStrict": false
+    }
   ]
 }

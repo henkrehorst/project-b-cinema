@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="/admin/css/style.css">
+        <title>Bioscoop app</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="logo">
+                <img src="" alt="" width="130" />
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Klant applicatie</a></li>
+                    <li><button id="movies">Film overview pagina</button></li>
+                    <li><button id="add_movie">Voeg film toe</button></li>
+                    <li><a href="/admin/product.html">Product pagina</a></li>
+                </ul>
+            </nav>
+        </div>
+        <hr />
+        <div class="page" id="movies" style="display:none">
+            <h2>Movies</h2>
+            <table id="movies">
+                <tr>
+                    <th>Name</th>
+                    <th>Genre</th>
+                    <th>Rating</th>
+                </tr>
+                <tbody></tbody>
+            </table>
+
+            <script src="/admin/js/overview.js"></script>
+        </div>
+        <div class="page" id="add_movie" style="display:none">
+            <div class="form" name="add_movie">
+                <span>Title</span><input type="text" name="movie-title" />
+                <span>Duration</span><input type="number" name="movie-duration" />
+                <span>Genre</span><input type="text" name="movie-genre" />
+                <span>Rating</span><input type="number" name="movie-rating" />
+                <span>Cover image</span><input type="file" required="required" name="movie-cover-image">
+                <button class="add-movie">Add Movie</button>
+            </div>
+
+            <script src="/admin/js/add_movie.js"></script>
+        </div>
+        <script src="/admin/js/admin.js"></script>
+    </body>
+</html>
