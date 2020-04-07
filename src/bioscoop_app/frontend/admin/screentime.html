@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" type="text/css" href="/admin/css/style.css">-->
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
+    <title>Bioscoop app</title>
+</head>
+<body>
+<nav>
+    <div class="container">
+        <ul>
+            <li><a href="/">De kijkdoos</a></li>
+        </ul>
+        <ul>
+            <li><a href="../index.html">Klant applicatie</a></li>
+            <li>
+                <button id="movies">Film overview pagina</button>
+            </li>
+            <li>
+                <button id="add_movie">Voeg film toe</button>
+            </li>
+            <li><a href="/admin/product.html">Product pagina</a></li>
+            <li class="active"><a href="/admin/screentime.html">Screentime</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <h3 style="padding: 20px 0;">Screentimes</h3>
+    <div class="row">
+        <div class="col-md-9">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Film</th>
+                    <th>Start tijd</th>
+                    <th>Eind tijd</th>
+                    <th>Edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table>
+            <a class="btn-primary btn" href="/admin/screentime_add.html">Voeg een nieuwe screentime toe</a>
+        </div>
+    </div>
+</div>
+<script src="/admin/js/admin.js"></script>
+<script src="/admin/js/screentime_overview.js"></script>
+</body>
+</html>
