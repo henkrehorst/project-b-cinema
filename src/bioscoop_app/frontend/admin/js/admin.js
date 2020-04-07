@@ -15,6 +15,3 @@ document.querySelector("li > a[id='movies']").addEventListener('click', () => {
 document.querySelector("li > a[id='add_movie']").addEventListener('click', () => {
     togglepage("div.page[id='add_movie']");
 });
-document.querySelector("li > a[id='update_movie']").addEventListener('click', () => {
-    togglepage("div.page[id='update_movie']");
-});
