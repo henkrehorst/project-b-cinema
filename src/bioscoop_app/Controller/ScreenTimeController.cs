@@ -10,10 +10,10 @@ namespace bioscoop_app.Controller
 {
     public class ScreenTimeController : ChromelyController
     {
-        public void AddScreenTime(Movie movie, DateTime startTime, DateTime endTime /*, Room room*/)
-        {
-            var screenTimeRepository = new ScreenTimeRepository();
-            screenTimeRepository.Add(new ScreenTime(movie, startTime, endTime /*, Room room*/));
-        }
+        //public void AddScreenTime(Movie movie, DateTime startTime, DateTime endTime /*, Room room*/)
+        //{
+        //    var screenTimeRepository = new ScreenTimeRepository();
+        //    screenTimeRepository.Add(new ScreenTime(movie, startTime, endTime /*, Room room*/));
+        //}
     }
 }
