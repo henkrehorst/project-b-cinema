@@ -40,35 +40,38 @@
     });
 }
 
-function editMovieButton(id) {
+async function editMovieButton(id) {
     document.querySelector("button.submit[id='update_movie']").data_update_id = id;
-    let data = getMovieById(id);
+    let data = await getMovieById(id);
     document.querySelector("div.form[name='update_movie'] > input[name='title']").value = data.title;
     document.querySelector("div.form[name='update_movie'] > input[name='duration']").value = data.duration;
     document.querySelector("div.form[name='update_movie'] > input[name='genre']").value = data.genre;
     document.querySelector("div.form[name='update_movie'] > input[name='rating']").value = data.rating;
+    document.querySelector("div.form[name='update_movie'] > input[name='cover-image']").data_existing = data.coverImage;
     document.querySelector("div.page[id='update_movie']").style.display = "block";
 }
 
-function getMovieById(id) {
-    let req = {
-        'method': 'POST',
-        'url': '/movies#id',
-        'parameters': null,
-        'postData': { 'id': id }
-    }
-    window.cefQuery({
-        request: JSON.stringify(req),
-        onSuccess: function (res) {
-            //console.log(JSON.parse(res));
-            console.log(JSON.parse(JSON.parse(res).Data));
-            return JSON.parse(JSON.parse(res).Data);
-        },
-        onFailure: function (err, msg) {
-            console.log(err, msg);
-            throw new Error("requesting movie from server failed");
+async function getMovieById(id) {
+    return new Promise(((resolve, reject) => {
+        let req = {
+            'method': 'POST',
+            'url': '/movies#id',
+            'parameters': null,
+            'postData': { 'id': id }
         }
-    });
+        window.cefQuery({
+            request: JSON.stringify(req),
+            onSuccess: function (res) {
+                //console.log(JSON.parse(res));
+                console.log(JSON.parse(JSON.parse(res).Data));
+                resolve(JSON.parse(JSON.parse(res).Data));
+            },
+            onFailure: function (err, msg) {
+                console.log(msg);
+                reject(err);
+            }
+        });
+    })).then(data => data);
 }
 
 window.onload = loadOverview();

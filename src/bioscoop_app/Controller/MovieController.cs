@@ -68,5 +68,14 @@ namespace bioscoop_app.Controller
                 Data = "Movie added"
             };
         }
+
+        [HttpPost(Route = "/movies#update")]
+        public ChromelyResponse UpdateMovie(ChromelyRequest req)
+        {
+            return new ChromelyResponse(req.Id)
+            {
+                Data = req.PostData.ToJson()
+            };
+        }
     }
 }
