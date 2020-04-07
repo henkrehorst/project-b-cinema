@@ -9,13 +9,12 @@
     }
 }
 
-document.querySelector("li > button[id='movies']").addEventListener('click', () => {
-    console.log("movies_start");
+document.querySelector("li > a[id='movies']").addEventListener('click', () => {
     togglepage("div.page[id='movies']");
-    console.log("movies_end");
 });
-document.querySelector("li > button[id='add_movie']").addEventListener('click', () => {
-    console.log("add_movie_start");
+document.querySelector("li > a[id='add_movie']").addEventListener('click', () => {
     togglepage("div.page[id='add_movie']");
-    console.log("add_movie_end");
+});
+document.querySelector("li > a[id='update_movie']").addEventListener('click', () => {
+    togglepage("div.page[id='update_movie']");
 });
