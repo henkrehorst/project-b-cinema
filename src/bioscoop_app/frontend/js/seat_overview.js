@@ -26,16 +26,23 @@ function loadSeatOverview() {
 
             if (seatType != 0) {
                 let elSeat = document.createElement('div');
+                setStyle(container, { 'width': (blockSize * room[0].length + padding) + 'px', 'height': (blockSize * room.length + padding) + 'px' });
                 elSeat.classList.add('seat', 'row-' + row, 'seat-' + seat, seatTypes[seatType - 1]);
                 setStyle(elSeat, {
-                    'top': (row * blockSize) + 'px',
-                    'left': (seat * blockSize) + 'px',
+                    'top': (row * blockSize + (padding / 2)) + 'px',
+                    'left': (seat * blockSize + (padding / 2)) + 'px',
                     'width': blockSize + 'px',
                     'height': blockSize + 'px'
                 });
-                setStyle(container, { 'width': (blockSize * room[0].length + 2) + 'px', 'height': (blockSize * room.length + 2) + 'px' });
+
+                for (let i = 0; i < selectedSeats.length; i++) {
+                    if (selectedSeats[i].row == row && selectedSeats[i].seat == seat) {
+                        elSeat.classList.add('selected');
+                    }
+                }
                 
                 container.appendChild(elSeat);
+
                 elSeat.addEventListener('click', (event, selectedRow = row, selectedSeat = seat, type = seatType) => {
                     let price = seatPrices[type - 1];
                     let selected = document.querySelector('.seat-' + selectedSeat + '.row-' + selectedRow);
@@ -55,7 +62,7 @@ function loadSeatOverview() {
                             selectedSeats.push({ 'row': selectedRow, 'seat': selectedSeat, 'type': seatTypes[type - 1], 'price': price });
                         }
                         else {
-                            document.querySelector('.error-msg').innerText = 'You can only reserve a seat next to your previous one!';
+                            document.querySelector('.error-msg').innerText = 'You can only reserve seats adjacent to your chosen ones!';
                         }
                     }
 
@@ -87,6 +94,7 @@ let rooms = [[
     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]]
 ];
 let container = document.querySelector('#cinema-room');
+let padding = 40;
 let selectedRoom = 0;
 let blockSize = 20;
 let seatPrices = [7.99, 12.99, 17.99];
