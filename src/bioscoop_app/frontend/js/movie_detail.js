@@ -52,6 +52,7 @@ function getScreenTimes() {
                     rows += "<tr>" +
                         "<td>" + screenTimes[key].startTime + "</td>" +
                         "<td>" + screenTimes[key].endTime + "</td>" +
+                        "<td><a href='#'>Reserveren</a></td>" +
                         "</tr>"
                 }
 
