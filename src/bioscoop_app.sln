@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bioscoop_app", "bioscoop_app\bioscoop_app.csproj", "{03F783D8-C7C4-4598-83E6-C915E32900C4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03F783D8-C7C4-4598-83E6-C915E32900C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03F783D8-C7C4-4598-83E6-C915E32900C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03F783D8-C7C4-4598-83E6-C915E32900C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03F783D8-C7C4-4598-83E6-C915E32900C4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {208170B9-C519-4EA5-96DB-50F779488BE0}
+	EndGlobalSection
+EndGlobal

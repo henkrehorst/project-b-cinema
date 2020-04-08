@@ -1,0 +1,39 @@
+﻿{
+  "appName": "hoi",
+  "startUrl": {
+    "url": /*"http://localhost:8080",*/ "http://localhost:8081",
+    "loadType": "localResource"
+  },
+  "loadCefBinariesIfNotFound": true,
+  "silentCefBinariesLoading": false,
+  "windowLeft": 0,
+  "windowTop": 0,
+  "windowWidth": 1200,
+  "windowHeight": 850,
+  "windowNoResize": false,
+  "windowNoMinMaxBoxes": false,
+  "windowCenterScreen": true,
+  "windowKioskMode": false,
+  "windowState": "normal",
+  "windowTitle": "Bioscoop app",
+  "debuggingMode": true,
+  "windowCustomCreation": {
+    "windowStyles": 0,
+    "windowExStyles": 0,
+    "useCustomtyle": false
+  },
+  "commandLineArgs": [
+  ],
+  "commandLineOptions": [
+  ],
+  "urlSchemes": [
+    {
+      "name": "custom-01",
+      "baseUrl": "",
+      "scheme": "local",
+      "host": "",
+      "urlSchemeType": "resource",
+      "baseUrlStrict": false
+    }
+  ]
+}

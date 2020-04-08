@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Bioscoop app</title>
+</head>
+<body>
+    <div id="content">
+        <table id="overview">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Price</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="form" name="add" style="display: none">
+            <label for="name">name: </label>
+            <input type="text" name="add" id="name"/><br/>
+            <label for="price">price: </label>
+            <input type="number" step="0.01" name ="add" id="price"/><br/>
+            <button name="add" id="submit">Submit</button>
+        </div>
+        <div class="form" name="update" style="display: none">
+            <label for="name">name: </label>
+            <input type="text" name="update" id="name" /><br />
+            <label for="price">price: </label>
+            <input type="number" step="0.01" name="update" id="price" /><br />
+            <button name="update" id="submit">Submit</button>
+        </div>
+        <button id="add-product">Add product</button>
+        <a href="/index.html">Home</a>
+        <div id="display_base_price">
+            <p id="ticket_price"></p>
+            <input type="number" step="0.01" name="update" id="ticket"/>
+            <button name="update" id="ticket">Update</button>
+        </div>
+    </div>
+    
+    <script src="/admin/js/product_controller.js"></script>
+</body>
+</html>
