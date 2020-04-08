@@ -15,11 +15,18 @@ ul li{
   display: inline-block; padding:6px;
   font-size:17px; font-family:raleway;
 }
-
-ul li:hover{
-  color:orange;
-  
+li a {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color: green;
+    text-decoration: none;
 }
+
+    a:hover {
+        color: limegreen;
+        text-decoration: underline;
+
+    }
 
 
 /*Table opmaak van add_movie.html*/
@@ -46,7 +53,6 @@ ul li:hover{
   background-color: #4CAF50;
   color: white;
 }
-
 
 /* Seat overview styling */
 #cinema-room {
@@ -86,3 +92,26 @@ ul li:hover{
 .seat.vip:hover {
     background-color: lightpink;
 }
+
+#moviein {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    float: left;
+    clear: left;
+    padding: 20px;
+}
+
+
+#movieinbutton {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    float: left;
+    clear: left;
+    float: right;
+    padding: 20px;
+    margin: 20px;
+}
+
+#rood {
+    color: limegreen;
+    text-decoration: underline;
+}
+
