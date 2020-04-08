@@ -40,6 +40,17 @@ main .row div {
 .box_wrapper p {
     margin-top: 5px;
     font-size: 18px;
+    color: #000000;
+}
+
+.box_wrapper_a{
+    color:#000000;
+    text-decoration: none;
+}
+
+.box_wrapper_a:hover{
+    text-decoration: none;
+    color: #000000;
 }
 
 .box_wrapper button:hover {
@@ -93,4 +104,11 @@ nav .container ul li a {
 nav .container ul li a:hover {
     color: #FF4336;
     text-decoration: none;
+}
+
+.movie_detail{
+    padding-top: 40px;
+}
+.cover_image{
+    height: 360px;
 }

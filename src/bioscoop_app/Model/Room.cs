@@ -6,12 +6,12 @@ namespace bioscoop_app.Model
 {
 	public class Room : DataType
 	{
-		public List<Seat> layout;
+		public List<List<Seat>> layout;
 		public int seats;
 		public bool auro;
 		public bool imax;
 
-		public Room(List<Seat> layout, int seats, bool auro, bool imax)
+		public Room(List<List<Seat>> layout, int seats, bool auro, bool imax)
 		{
 			this.layout = layout;
 			this.seats = seats;
@@ -20,7 +20,7 @@ namespace bioscoop_app.Model
 		}
 
 		[JsonConstructor]
-		public Room(int id, List<Seat> layout, int seats, bool auro, bool imax)
+		public Room(int id, List<List<Seat>> layout, int seats, bool auro, bool imax)
 		{
 			this.id = id;
 			this.layout = layout;
