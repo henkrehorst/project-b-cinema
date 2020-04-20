@@ -20,7 +20,7 @@ namespace bioscoop_app
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
-			if (other.GetType().Equals(GetType())) return false;
+			if (!other.GetType().Equals(GetType())) return false;
 			foreach (FieldInfo field in GetType().GetRuntimeFields())
 			{
 				//if (GetType() is DataType && field.FieldType is int && field.Name.Equals("id")) continue; //ignores the Model.DataType.id field
