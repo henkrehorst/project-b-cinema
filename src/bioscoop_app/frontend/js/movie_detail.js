@@ -50,8 +50,8 @@ function getScreenTimes() {
                 let rows = "";
                 for (key in screenTimes) {
                     rows += "<tr>" +
-                        "<td>" + screenTimes[key].startTime + "</td>" +
-                        "<td>" + screenTimes[key].endTime + "</td>" +
+                        "<td>" + new Date(screenTimes[key].startTime).toLocaleString() + "</td>" +
+                        "<td>" + new Date(screenTimes[key].endTime).toLocaleString() + "</td>" +
                         "<td><a href='#'>Reserveren</a></td>" +
                         "</tr>"
                 }
