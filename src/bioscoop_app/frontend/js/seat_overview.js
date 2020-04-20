@@ -21,7 +21,7 @@ function loadSeatOverview() {
     let room = rooms[selectedRoom];
     let gridColumn = document.createElement('div');
     let gridRow = document.createElement('div');
-    let leftOffset = blockSize / 1.75 + 10;
+    let leftOffset = blockSize;
 
     gridColumn.classList.add('grid-column');
     gridRow.classList.add('grid-row');
@@ -32,7 +32,7 @@ function loadSeatOverview() {
 
         elSpan.appendChild(txt);
         elSpan.classList.add('grid-number');
-        setStyle(elSpan, { 'left': (blockSize * column + padding / 2 + 54.5 - (column < 9 ? 0 : 2.5) - leftOffset * 1.2) + 'px', 'top': '0px', 'font-size': (blockSize / 1.75) + 'px' });
+        setStyle(elSpan, { 'width': blockSize + 'px', 'height': blockSize + 'px', left: (blockSize * column + padding / 2 + blockSize) + 'px', 'top': '0px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': blockSize + 'px' });
         gridColumn.appendChild(elSpan);
     }
 
@@ -42,13 +42,13 @@ function loadSeatOverview() {
 
         elSpan.appendChild(txt);
         elSpan.classList.add('grid-number');
-        setStyle(elSpan, { 'left': '0px', 'top': (blockSize * row + padding / 2 + 18.5) + 'px', 'font-size': (blockSize / 1.75) + 'px' });
+        setStyle(elSpan, { 'width': blockSize + 'px', 'height': blockSize + 'px', 'left': '0px', 'top': (blockSize * row + blockSize + padding / 2 + 2) + 'px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': (blockSize / 2) + 'px' });
         gridRow.appendChild(elSpan);
     }
 
     gridContainer.appendChild(gridColumn);
     gridContainer.appendChild(gridRow);
-    setStyle(container, { 'top': (blockSize / 1.75 + 3) + 'px', 'left': (leftOffset) + 'px' });
+    setStyle(container, { 'top': (blockSize / 1.75 + 5) + 'px', 'left': (blockSize) + 'px' });
 
     for (let row = 0; row < room.length; row++) {
         for (let seat = 0; seat < room[row].length; seat++) {
@@ -192,7 +192,7 @@ let gridContainer = document.querySelector('#cinema-grid');
 let container = document.querySelector('#cinema-room');
 let selectedRoom = 2;
 let blockSize = 20;
-let padding = blockSize;
+let padding = 20;
 let seatPrices = [7.99, 12.99, 17.99];
 let seatTypes = ['normal', 'luxery', 'vip'];
 let selectedSeats = [];
