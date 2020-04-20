@@ -115,11 +115,18 @@ nav .container ul li a:hover {
 
 
 /* Seat Overview Page */
+#cinema-grid {
+    display: inline-block;
+    position: relative;
+    margin: 25px;
+}
+
 #cinema-room {
     display: inline-block;
     width: 350px;
     height: 250px;
-    border: 2px solid #000;
+    position: relative;
+    border: 1px solid #000;
 }
 
 .row {
@@ -160,4 +167,9 @@ nav .container ul li a:hover {
 
 .seat.vip:hover {
     background-color: lightpink;
+}
+
+.grid-number {
+    position: absolute;
+    font-size: 0.75em;
 }

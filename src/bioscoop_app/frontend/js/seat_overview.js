@@ -19,6 +19,36 @@ function updateOrderText() {
 
 function loadSeatOverview() {
     let room = rooms[selectedRoom];
+    let gridColumn = document.createElement('div');
+    let gridRow = document.createElement('div');
+    let leftOffset = blockSize / 1.75 + 10;
+
+    gridColumn.classList.add('grid-column');
+    gridRow.classList.add('grid-row');
+
+    for (let column = 0; column < room[0].length; column++) {
+        let elSpan = document.createElement('span');
+        let txt = document.createTextNode(column + 1);
+
+        elSpan.appendChild(txt);
+        elSpan.classList.add('grid-number');
+        setStyle(elSpan, { 'left': (blockSize * column + padding / 2 + 54.5 - (column < 9 ? 0 : 2.5) - leftOffset * 1.2) + 'px', 'top': '0px', 'font-size': (blockSize / 1.75) + 'px' });
+        gridColumn.appendChild(elSpan);
+    }
+
+    for (let row = 0; row < room.length; row++) {
+        let elSpan = document.createElement('span');
+        let txt = document.createTextNode(room.length - row);
+
+        elSpan.appendChild(txt);
+        elSpan.classList.add('grid-number');
+        setStyle(elSpan, { 'left': '0px', 'top': (blockSize * row + padding / 2 + 18.5) + 'px', 'font-size': (blockSize / 1.75) + 'px' });
+        gridRow.appendChild(elSpan);
+    }
+
+    gridContainer.appendChild(gridColumn);
+    gridContainer.appendChild(gridRow);
+    setStyle(container, { 'top': (blockSize / 1.75 + 3) + 'px', 'left': (leftOffset) + 'px' });
 
     for (let row = 0; row < room.length; row++) {
         for (let seat = 0; seat < room[row].length; seat++) {
@@ -73,8 +103,18 @@ function loadSeatOverview() {
     }
 }
 
-document.querySelector('.controls button.zoom-in').addEventListener('click', () => { blockSize < 30 ? blockSize += 2 : 30; container.innerHTML = ''; loadSeatOverview() });
-document.querySelector('.controls button.zoom-out').addEventListener('click', () => { blockSize > 6 ? blockSize -= 2 : 6; container.innerHTML = ''; loadSeatOverview() });
+document.querySelector('.controls button.zoom-in').addEventListener('click', () => {
+    blockSize < 30 ? blockSize += 2 : 30;
+    gridContainer.innerHTML = '<div id="cinema-room"></div>';
+    container = document.querySelector('#cinema-room');
+    loadSeatOverview();
+});
+document.querySelector('.controls button.zoom-out').addEventListener('click', () => {
+    blockSize > 6 ? blockSize -= 2 : 6;
+    gridContainer.innerHTML = '<div id="cinema-room"></div>';
+    container = document.querySelector('#cinema-room');
+    loadSeatOverview();
+});
 
 // Settings for prototype/demo
 let rooms = [
@@ -148,10 +188,11 @@ let rooms = [
         [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
     ]
 ];
+let gridContainer = document.querySelector('#cinema-grid');
 let container = document.querySelector('#cinema-room');
-let padding = 40;
 let selectedRoom = 2;
 let blockSize = 20;
+let padding = blockSize;
 let seatPrices = [7.99, 12.99, 17.99];
 let seatTypes = ['normal', 'luxery', 'vip'];
 let selectedSeats = [];
