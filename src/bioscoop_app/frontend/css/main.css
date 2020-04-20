@@ -121,6 +121,10 @@ nav .container ul li a:hover {
     margin: 25px;
 }
 
+#cinema-grid .grid-column span {
+    text-align: center;
+}
+
 #cinema-room {
     display: inline-block;
     width: 350px;
