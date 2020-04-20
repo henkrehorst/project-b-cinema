@@ -112,3 +112,52 @@ nav .container ul li a:hover {
 .cover_image{
     height: 360px;
 }
+
+
+/* Seat Overview Page */
+#cinema-room {
+    display: inline-block;
+    width: 350px;
+    height: 250px;
+    border: 2px solid #000;
+}
+
+.row {
+    width: 100%;
+    height: 10px;
+    position: relative;
+}
+
+.seat {
+    width: 10px;
+    height: 10px;
+    height: 100%;
+    top: 0;
+    position: absolute;
+    background-color: #5488C8;
+    outline: 1px solid #000;
+}
+
+.seat:hover {
+    background-color: lightblue;
+}
+
+.seat.selected {
+    background-color: lightgreen !important;
+}
+
+    .seat.luxery {
+        background-color: #F79646;
+    }
+
+.seat.luxery:hover {
+    background-color: lightgoldenrodyellow;
+}
+
+    .seat.vip {
+        background-color: #C00000;
+    }
+
+.seat.vip:hover {
+    background-color: lightpink;
+}
