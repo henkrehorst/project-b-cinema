@@ -4,12 +4,23 @@
     }
 }
 
+function isAdjacent(newSelected, allSelected = []) {
+    for (let i = 0; i < allSelected.length; i++) {
+        if (allSelected[i].seat == (newSelected - 1) || allSelected[i].seat == (newSelected + 1)) {
+            return true;
+        }
+    }
+
+    return allSelected.length > 0 ? false : true;
+}
+
 function updateOrderText() {
     let orderedText = '';
     let totalPrice = 0;
+    let room = rooms[selectedRoom];
 
     for (let i = 0; i < selectedSeats.length; i++) {
-        orderedText += '\nRow ' + selectedSeats[i].row + ', seat ' + selectedSeats[i].seat + ' (' + selectedSeats[i].type + ' ' + selectedSeats[i].price + '$).';
+        orderedText += '\nRow ' + (room.length - selectedSeats[i].row) + ', seat ' + (selectedSeats[i].seat + 1) + ' (' + selectedSeats[i].type + ' ' + selectedSeats[i].price + '$).';
         totalPrice += selectedSeats[i].price;
     }
 
@@ -21,7 +32,6 @@ function loadSeatOverview() {
     let room = rooms[selectedRoom];
     let gridColumn = document.createElement('div');
     let gridRow = document.createElement('div');
-    let leftOffset = blockSize;
 
     gridColumn.classList.add('grid-column');
     gridRow.classList.add('grid-row');
@@ -48,7 +58,9 @@ function loadSeatOverview() {
 
     gridContainer.appendChild(gridColumn);
     gridContainer.appendChild(gridRow);
-    setStyle(container, { 'top': (blockSize / 1.75 + 5) + 'px', 'left': (blockSize) + 'px' });
+    setStyle(container, { 'width': (blockSize * room[0].length + padding) + 'px', 'height': (blockSize * room.length + padding) + 'px', 'top': (blockSize / 1.75 + 5) + 'px', 'left': (blockSize) + 'px' });
+    setStyle(document.querySelector('.screen-title'), { 'width': (blockSize * room[0].length + padding) + 'px' });
+    setStyle(document.querySelector('.controls'), { 'margin-left': (blockSize + 15) + 'px' });
 
     for (let row = 0; row < room.length; row++) {
         for (let seat = 0; seat < room[row].length; seat++) {
@@ -56,7 +68,6 @@ function loadSeatOverview() {
 
             if (seatType != 0) {
                 let elSeat = document.createElement('div');
-                setStyle(container, { 'width': (blockSize * room[0].length + padding) + 'px', 'height': (blockSize * room.length + padding) + 'px' });
                 elSeat.classList.add('seat', 'row-' + row, 'seat-' + seat, seatTypes[seatType - 1]);
                 setStyle(elSeat, {
                     'top': (row * blockSize + (padding / 2)) + 'px',
@@ -87,12 +98,19 @@ function loadSeatOverview() {
                         }
                     }
                     else {
+                        let errorMsg = document.querySelector('.error-msg');
+
                         if (!selectedSeats.length || selectedSeats[0].row == selectedRow) {
-                            selected.classList.add('selected');
-                            selectedSeats.push({ 'row': selectedRow, 'seat': selectedSeat, 'type': seatTypes[type - 1], 'price': price });
+                            if (isAdjacent(selectedSeat, selectedSeats)) {
+                                selected.classList.add('selected');
+                                selectedSeats.push({ 'row': selectedRow, 'seat': selectedSeat, 'type': seatTypes[type - 1], 'price': price });
+                            }
+                            else {
+                                errorMsg.innerText = 'Je kan alleen stoelen naast je geselecteerde stoelen selecteren!';
+                            }
                         }
                         else {
-                            document.querySelector('.error-msg').innerText = 'You can only reserve seats adjacent to your chosen ones!';
+                            errorMsg.innerText = 'Je kan alleen stoelen van dezelfde rij selecteren!';
                         }
                     }
 
