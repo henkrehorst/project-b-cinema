@@ -7,6 +7,7 @@
 function resetSeatOverview() {
     gridContainer.innerHTML = '<div id="cinema-room"></div>';
     container = document.querySelector('#cinema-room');
+    maxColLength = rooms[selectedRoom][0].length;
 }
 
 function sendError(errorMsg = '') {
@@ -14,7 +15,9 @@ function sendError(errorMsg = '') {
 
     elError.innerText = errorMsg;
     elError.classList.add('warning');
-    setTimeout(function () { elError.classList.remove('warning') }, 2000);
+    setTimeout(function () {
+        elError.classList.remove('warning');
+    }, 2000);
 }
 
 function isAdjacent(newSelected, allSelected = []) {
@@ -45,12 +48,14 @@ function loadSeatOverview() {
     let room = rooms[selectedRoom];
     let gridColumn = document.createElement('div');
     let gridRow = document.createElement('div');
+    let gridAvailable = document.createElement('div');
 
     gridColumn.classList.add('grid-column');
     gridRow.classList.add('grid-row');
+    gridAvailable.classList.add('grid-available');
 
     // Grid columns
-    for (let column = 0; column < room[0].length; column++) {
+    for (let column = 0; column < maxColLength; column++) {
         let elSpan = document.createElement('span');
         let txt = document.createTextNode(column + 1);
 
@@ -67,14 +72,46 @@ function loadSeatOverview() {
 
         elSpan.appendChild(txt);
         elSpan.classList.add('grid-number');
-        setStyle(elSpan, { 'width': blockSize + 'px', 'height': blockSize + 'px', 'left': '0px', 'top': (blockSize * row + blockSize + padding / 2 + 2) + 'px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': (blockSize / 2) + 'px' });
+        setStyle(elSpan, { 'width': blockSize + 'px', 'height': blockSize + 'px', 'left': '0px', 'top': (blockSize * row + blockSize + padding / 2) + 'px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': (blockSize) + 'px' });
         gridRow.appendChild(elSpan);
     }
 
+    // Grid available seats
+    let totalAvailable = 0;
+
+    for (let column = 0; column <= maxColLength; column++) {
+        let elSpan = document.createElement('span');
+        let txt;
+        let offset = 0;
+
+        if (column != maxColLength) {
+            let availableSeats = 0;
+
+            for (let row = 0; row < room.length; row++) {
+                if (room[row][column] != 0) {
+                    availableSeats++;
+                }
+            }
+
+            totalAvailable += availableSeats;
+            txt = document.createTextNode(availableSeats);
+        }
+        else {
+            txt = document.createTextNode(totalAvailable);
+            offset = 25;
+        }
+
+        elSpan.appendChild(txt);
+        elSpan.classList.add('grid-number');
+        setStyle(elSpan, { 'width': blockSize + 'px', 'height': blockSize + 'px', left: (blockSize * column + padding / 2 + blockSize + offset) + 'px', 'bottom': (-blockSize - padding / 2 - 50) + 'px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': blockSize + 'px' });
+        gridAvailable.appendChild(elSpan);
+    }
+     
     gridContainer.appendChild(gridColumn);
     gridContainer.appendChild(gridRow);
-    setStyle(container, { 'width': (blockSize * room[0].length + padding) + 'px', 'height': (blockSize * room.length + padding) + 'px', 'top': (blockSize / 1.75 + 5) + 'px', 'left': (blockSize) + 'px' });
-    setStyle(document.querySelector('.screen-title'), { 'width': (blockSize * room[0].length + padding) + 'px' });
+    gridContainer.appendChild(gridAvailable);
+    setStyle(container, { 'width': (blockSize * maxColLength + padding) + 'px', 'height': (blockSize * room.length + padding) + 'px', 'top': (blockSize / 1.75 + 8 * (blockSize / 20)) + 'px', 'left': (blockSize) + 'px' });
+    setStyle(document.querySelector('.screen-title'), { 'width': (blockSize * maxColLength + padding) + 'px' });
     setStyle(document.querySelector('.controls'), { 'margin-left': (blockSize + 15) + 'px' });
 
     // Seat overview
@@ -100,6 +137,7 @@ function loadSeatOverview() {
                 
                 container.appendChild(elSeat);
 
+                // Seat click event
                 elSeat.addEventListener('click', (event, selectedRow = row, selectedSeat = seat, type = seatType) => {
                     let price = seatPrices[type - 1];
                     let selected = document.querySelector('.seat-' + selectedSeat + '.row-' + selectedRow);
@@ -129,6 +167,49 @@ function loadSeatOverview() {
                     }
 
                     updateOrderText();
+                });
+
+                // Seat hover events
+                elSeat.addEventListener('mouseenter', (event) => {
+                    let target = event.target;
+                    let targetRow = 0;
+                    let targetCol = 0;
+                    
+                    for (let i = 0; i < target.classList.length; i++) {
+                        if (target.classList[i].substring(0, 4) == 'row-') {
+                            targetRow = parseInt(target.classList[i].substring(4, target.classList[i].length));
+                        }
+                        else if (target.classList[i].substring(0, 5) == 'seat-') {
+                            targetCol = parseInt(target.classList[i].substring(5, target.classList[i].length));
+                        }
+                    }
+
+                    for (let row = 0; row < room.length; row++) {
+                        for (let column = 0; column < maxColLength; column++) {
+                            let seat = document.querySelector('.seat.row-' + row + '.seat-' + column);
+
+                            if (seat) {
+                                if (targetCol == column || targetRow == row) {
+                                    let highlight = document.querySelector('.seat.row-' + row + '.seat-' + column);
+                                    let gridRow = document.querySelectorAll('.grid-row .grid-number')[row];
+                                    let gridCol = document.querySelectorAll('.grid-column .grid-number')[column];
+
+                                    highlight.classList.add('highlighted');
+
+                                    if(targetRow == row) gridRow.classList.add('highlighted');
+                                    else if(targetCol == column) gridCol.classList.add('highlighted');
+                                }
+                            }
+                        }
+                    }
+                });
+
+                elSeat.addEventListener('mouseleave', (event) => {
+                    let highlighted = document.querySelectorAll('.highlighted');
+
+                    for (let i = 0; i < highlighted.length; i++) {
+                        highlighted[i].classList.remove('highlighted');
+                    }
                 });
             }
         }
@@ -237,5 +318,6 @@ let padding = 20; // Padding that surrounds the cinema room container
 let seatPrices = [7.99, 12.99, 17.99]; // Prices of each seat
 let seatTypes = ['normal', 'luxery', 'vip']; // Type of each seat (Can be merged with the array above but I'm to lazy)
 let selectedSeats = []; // All newly selected seats will be stored inside this array
+let maxColLength = rooms[selectedRoom][0].length; // Defines the max amount of columns in a row (default row 0)
 
 loadSeatOverview();
