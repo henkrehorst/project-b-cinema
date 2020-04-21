@@ -4,6 +4,19 @@
     }
 }
 
+function resetSeatOverview() {
+    gridContainer.innerHTML = '<div id="cinema-room"></div>';
+    container = document.querySelector('#cinema-room');
+}
+
+function sendError(errorMsg = '') {
+    let elError = document.querySelector('.error-msg');
+
+    elError.innerText = errorMsg;
+    elError.classList.add('warning');
+    setTimeout(function () { elError.classList.remove('warning') }, 2000);
+}
+
 function isAdjacent(newSelected, allSelected = []) {
     for (let i = 0; i < allSelected.length; i++) {
         if (allSelected[i].seat == (newSelected - 1) || allSelected[i].seat == (newSelected + 1)) {
@@ -20,11 +33,11 @@ function updateOrderText() {
     let room = rooms[selectedRoom];
 
     for (let i = 0; i < selectedSeats.length; i++) {
-        orderedText += '\nRow ' + (room.length - selectedSeats[i].row) + ', seat ' + (selectedSeats[i].seat + 1) + ' (' + selectedSeats[i].type + ' ' + selectedSeats[i].price + '$).';
+        orderedText += '\nRij ' + (room.length - selectedSeats[i].row) + ', stoel ' + (selectedSeats[i].seat + 1) + ' (' + selectedSeats[i].type + ' ' + selectedSeats[i].price + '$).';
         totalPrice += selectedSeats[i].price;
     }
 
-    let seatDescription = 'Selected ' + (selectedSeats.length) + ' seat' + (selectedSeats.length != 1 ? 's: ' : ': ') + orderedText + '\nTotal price of: $' + (Math.round(totalPrice * 100) / 100);
+    let seatDescription = (selectedSeats.length) + ' stoel' + (selectedSeats.length != 1 ? 'en ' : ' ') + (selectedSeats.length > 0 ? 'geselecteerd: ' : 'geselecteerd.') + orderedText + '\nTotale prijs: \u20AC' + (Math.round(totalPrice * 100) / 100);
     document.querySelector('.seat-description').innerText = seatDescription;
 }
 
@@ -36,6 +49,7 @@ function loadSeatOverview() {
     gridColumn.classList.add('grid-column');
     gridRow.classList.add('grid-row');
 
+    // Grid columns
     for (let column = 0; column < room[0].length; column++) {
         let elSpan = document.createElement('span');
         let txt = document.createTextNode(column + 1);
@@ -46,6 +60,7 @@ function loadSeatOverview() {
         gridColumn.appendChild(elSpan);
     }
 
+    // Grid rows
     for (let row = 0; row < room.length; row++) {
         let elSpan = document.createElement('span');
         let txt = document.createTextNode(room.length - row);
@@ -62,6 +77,7 @@ function loadSeatOverview() {
     setStyle(document.querySelector('.screen-title'), { 'width': (blockSize * room[0].length + padding) + 'px' });
     setStyle(document.querySelector('.controls'), { 'margin-left': (blockSize + 15) + 'px' });
 
+    // Seat overview
     for (let row = 0; row < room.length; row++) {
         for (let seat = 0; seat < room[row].length; seat++) {
             let seatType = room[row][seat];
@@ -98,19 +114,17 @@ function loadSeatOverview() {
                         }
                     }
                     else {
-                        let errorMsg = document.querySelector('.error-msg');
-
                         if (!selectedSeats.length || selectedSeats[0].row == selectedRow) {
                             if (isAdjacent(selectedSeat, selectedSeats)) {
                                 selected.classList.add('selected');
-                                selectedSeats.push({ 'row': selectedRow, 'seat': selectedSeat, 'type': seatTypes[type - 1], 'price': price });
+                                selectedSeats.push({ 'row': selectedRow, 'seat': selectedSeat, 'type': (type == 1 ? 'normaal' : (type == 2 ? 'luxe' : 'VIP')), 'price': price });
                             }
                             else {
-                                errorMsg.innerText = 'Je kan alleen stoelen naast je geselecteerde stoelen selecteren!';
+                                sendError('Je kan alleen stoelen naast je geselecteerde stoelen selecteren!');
                             }
                         }
                         else {
-                            errorMsg.innerText = 'Je kan alleen stoelen van dezelfde rij selecteren!';
+                            sendError('Je kan alleen stoelen van dezelfde rij selecteren!');
                         }
                     }
 
@@ -121,20 +135,29 @@ function loadSeatOverview() {
     }
 }
 
+// Controls: zoom-in, zoom-out & load new room
 document.querySelector('.controls button.zoom-in').addEventListener('click', () => {
-    blockSize < 30 ? blockSize += 2 : 30;
-    gridContainer.innerHTML = '<div id="cinema-room"></div>';
-    container = document.querySelector('#cinema-room');
+    blockSize < 30 ? blockSize += 5 : blockSize = 30;
+    resetSeatOverview();
     loadSeatOverview();
 });
 document.querySelector('.controls button.zoom-out').addEventListener('click', () => {
-    blockSize > 6 ? blockSize -= 2 : 6;
-    gridContainer.innerHTML = '<div id="cinema-room"></div>';
-    container = document.querySelector('#cinema-room');
+    blockSize > 10 ? blockSize -= 5 : blockSize = 10;
+    resetSeatOverview();
+    loadSeatOverview();
+});
+document.querySelector('.controls button.next-screen').addEventListener('click', () => {
+    selectedRoom < 2 ? selectedRoom++ : selectedRoom = 0;
+    selectedSeats = [];
+    document.querySelector('.screen-title').innerText = 'SCHERM ' + (selectedRoom + 1);
+    updateOrderText();
+    resetSeatOverview();
     loadSeatOverview();
 });
 
-// Settings for prototype/demo
+// Settings for prototype/demo (All can easely be adjusted by the back-end, I made everything dynamic)
+
+// Below is a 2 dimensional array of all rooms, you can close this variable to save space (Press the - icon, left from the variable)
 let rooms = [
     // Screen auditorium 1
     [
@@ -206,13 +229,13 @@ let rooms = [
         [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
     ]
 ];
-let gridContainer = document.querySelector('#cinema-grid');
-let container = document.querySelector('#cinema-room');
-let selectedRoom = 2;
-let blockSize = 20;
-let padding = 20;
-let seatPrices = [7.99, 12.99, 17.99];
-let seatTypes = ['normal', 'luxery', 'vip'];
-let selectedSeats = [];
+let gridContainer = document.querySelector('#cinema-grid'); // The container that surrounds the grid and seats
+let container = document.querySelector('#cinema-room'); // The container that surrounds the seats overview
+let selectedRoom = 2; // Current selected room (0 is small, 1 is medium and 2 is the big room)
+let blockSize = 20; // Starting size of each seat block
+let padding = 20; // Padding that surrounds the cinema room container
+let seatPrices = [7.99, 12.99, 17.99]; // Prices of each seat
+let seatTypes = ['normal', 'luxery', 'vip']; // Type of each seat (Can be merged with the array above but I'm to lazy)
+let selectedSeats = []; // All newly selected seats will be stored inside this array
 
 loadSeatOverview();
