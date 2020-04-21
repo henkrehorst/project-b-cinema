@@ -150,24 +150,24 @@ nav .container ul li a:hover {
 }
 
 .seat:hover {
-    background-color: lightblue;
+    background-color: #A4C8F8;
 }
 
 .seat.selected {
     background-color: lightgreen !important;
 }
 
-    .seat.luxery {
-        background-color: #F79646;
-    }
-
-.seat.luxery:hover {
-    background-color: lightgoldenrodyellow;
+.seat.luxery {
+    background-color: #F79646;
 }
 
-    .seat.vip {
-        background-color: #C00000;
-    }
+.seat.luxery:hover {
+    background-color: #FFC6A6;
+}
+
+.seat.vip {
+    background-color: #C00000;
+}
 
 .seat.vip:hover {
     background-color: lightpink;
@@ -178,8 +178,19 @@ nav .container ul li a:hover {
     font-size: 0.75em;
 }
 
+.grid-number.highlighted {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+}
+
+.grid-available span {
+    text-align: center;
+}
+
 p.screen-title {
     display: block;
+    margin-bottom: 50px;
     background-color: grey;
     color: #000;
     border: 1px solid #000;
@@ -193,4 +204,13 @@ p.screen-title {
 }
 .warning {
     background-color: lightcoral;
+    transition: 0.5s;
+}
+.seat.warning {
+    background-color: #a00!important;
+}
+
+.seat.highlighted {
+    outline: 1px solid #fff;
+    z-index: 1;
 }
