@@ -61,7 +61,12 @@ function loadSeatOverview() {
 
         elSpan.appendChild(txt);
         elSpan.classList.add('grid-number');
-        setStyle(elSpan, { 'width': blockSize + 'px', 'height': blockSize + 'px', left: (blockSize * column + padding / 2 + blockSize) + 'px', 'top': '0px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': blockSize + 'px' });
+        setStyle(elSpan, {
+            'width': blockSize + 'px',
+            'height': blockSize + 'px',
+            'left': (blockSize * column + padding / 2 + blockSize) + 'px',
+            'top': '0px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': blockSize + 'px'
+        });
         gridColumn.appendChild(elSpan);
     }
 
@@ -72,7 +77,13 @@ function loadSeatOverview() {
 
         elSpan.appendChild(txt);
         elSpan.classList.add('grid-number');
-        setStyle(elSpan, { 'width': blockSize + 'px', 'height': blockSize + 'px', 'left': '0px', 'top': (blockSize * row + blockSize + padding / 2) + 'px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': (blockSize) + 'px' });
+        setStyle(elSpan, {
+            'width': blockSize + 'px',
+            'height': blockSize + 'px', 'left': '0px',
+            'top': (blockSize * row + blockSize + padding / 2) + 'px',
+            'font-size': (15 + blockSize * 3) + '%',
+            'line-height': (blockSize) + 'px'
+        });
         gridRow.appendChild(elSpan);
     }
 
@@ -103,14 +114,25 @@ function loadSeatOverview() {
 
         elSpan.appendChild(txt);
         elSpan.classList.add('grid-number');
-        setStyle(elSpan, { 'width': blockSize + 'px', 'height': blockSize + 'px', left: (blockSize * column + padding / 2 + blockSize + offset) + 'px', 'bottom': (-blockSize - padding / 2 - 50) + 'px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': blockSize + 'px' });
+        setStyle(elSpan, {
+            'width': blockSize + 'px',
+            'height': blockSize + 'px',
+            'left': (blockSize * column + padding / 2 + blockSize + offset) + 'px',
+            'bottom': (-blockSize - padding / 2 - 50) + 'px', 'font-size': (15 + blockSize * 3) + '%',
+            'line-height': blockSize + 'px'
+        });
         gridAvailable.appendChild(elSpan);
     }
      
     gridContainer.appendChild(gridColumn);
     gridContainer.appendChild(gridRow);
     gridContainer.appendChild(gridAvailable);
-    setStyle(container, { 'width': (blockSize * maxColLength + padding) + 'px', 'height': (blockSize * room.length + padding) + 'px', 'top': (blockSize / 1.75 + 8 * (blockSize / 20)) + 'px', 'left': (blockSize) + 'px' });
+    setStyle(container, {
+        'width': (blockSize * maxColLength + padding) + 'px',
+        'height': (blockSize * room.length + padding) + 'px',
+        'top': (blockSize / 1.75 + 8 * (blockSize / 20)) + 'px',
+        'left': (blockSize) + 'px'
+    });
     setStyle(document.querySelector('.screen-title'), { 'width': (blockSize * maxColLength + padding) + 'px' });
     setStyle(document.querySelector('.controls'), { 'margin-left': (blockSize + 15) + 'px' });
 
