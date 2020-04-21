@@ -303,3 +303,11 @@ p.screen-title {
     text-align: center;
     font-size: 0.85em;
 }
+
+.error-msg {
+    display: inline-block;
+    transition: 2s;
+}
+.warning {
+    background-color: lightcoral;
+}
