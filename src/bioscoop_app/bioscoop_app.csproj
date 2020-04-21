@@ -29,10 +29,14 @@
     <None Update="chromelyconfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+<<<<<<< Updated upstream
     <None Update="frontend\add_movie.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="frontend\demo.html">
+=======
+    <None Update="frontend\order-page.html">
+>>>>>>> Stashed changes
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="frontend\index.html">
@@ -47,6 +51,10 @@
     <None Update="frontend\overview.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="frontend\NewFolder\" />
   </ItemGroup>
 
 </Project>
