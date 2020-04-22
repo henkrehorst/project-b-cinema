@@ -245,12 +245,27 @@ namespace CinemaTests
         }
 
         [TestMethod]
-        public void diffInst()
+        public void diffInst_swap()
         {
             //Arrange
             bool expected = false;
             Movie a = new Movie(34, "jkl;", "asdf", 9.8, 124, "qwert");
             Movie b = new Movie(65, "asdf", "jkl;", 9.8, 124, "qwert");
+
+            //Act
+            bool actual = a.GetHashCode() == b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual, "Different instances should not have the same hashcode.");
+        }
+
+        [TestMethod]
+        public void diffInst_newId()
+        {
+            //Arrange
+            bool expected = false;
+            Movie a = new Movie(34, "jkl;", "asdf", 9.8, 124, "qwert");
+            Movie b = new Movie(65, "jkl", "asdf;", 9.8, 124, "qwert");
 
             //Act
             bool actual = a.GetHashCode() == b.GetHashCode();
