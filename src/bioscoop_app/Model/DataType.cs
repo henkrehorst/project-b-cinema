@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.Linq;
+using System.IO;
 
 namespace bioscoop_app.Model
 {
@@ -14,6 +15,19 @@ namespace bioscoop_app.Model
         /// <summary>
         /// The id by which you can fetch the instance from the database.
         /// </summary>
-        public int id;
+        public int Id { 
+            get 
+            { 
+                return this.Id; 
+            } 
+            set 
+            {
+                if (Id <= 0)
+                {
+                    throw new InvalidDataException("DataType.Id can't be zero or negative");
+                }
+                this.Id = value;
+            } 
+        }
 	}
 }

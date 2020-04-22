@@ -18,7 +18,7 @@ namespace bioscoop_app.Model
 		[JsonConstructor]
 		public Seat(int id, double price_modifier, int row, int seatnr)
 		{
-			this.id = id;
+			this.Id = id;
 			this.price_modifier = price_modifier;
 			this.row = row;
 			this.seatnr = seatnr;
