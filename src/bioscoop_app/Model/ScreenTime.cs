@@ -24,7 +24,7 @@ namespace bioscoop_app.Model
 		[JsonConstructor]
 		public ScreenTime(int id, int movie, DateTime startTime, DateTime endTime /*,Room room, List<List<bool>> availability*/)
 		{
-			this.id = id;
+			this.Id = id;
 			this.movie = movie;
 			this.startTime = startTime;
 			this.endTime = endTime;

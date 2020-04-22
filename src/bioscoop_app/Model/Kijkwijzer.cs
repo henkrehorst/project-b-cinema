@@ -16,7 +16,7 @@ namespace bioscoop_app.Model
 		[JsonConstructor]
 		public Kijkwijzer(int id, string symbool, string name)
 		{
-			this.id = id;
+			this.Id = id;
 			this.symbool = symbool;
 			this.name = name;
 		}

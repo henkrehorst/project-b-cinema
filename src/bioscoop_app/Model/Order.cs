@@ -22,7 +22,7 @@ namespace bioscoop_app.Model
 		[JsonConstructor]
 		public Order(int id, List<Product> items, string code, string cust_name, string cust_email)
 		{
-			this.id = id;
+			this.Id = id;
 			this.items = items;
 			this.code = code;
 			this.cust_email = cust_email;

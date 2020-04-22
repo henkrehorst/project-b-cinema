@@ -22,7 +22,7 @@ namespace bioscoop_app.Model
 		[JsonConstructor]
 		public Room(int id, List<List<Seat>> layout, int seats, bool auro, bool imax)
 		{
-			this.id = id;
+			this.Id = id;
 			this.layout = layout;
 			this.seats = seats;
 			this.auro = auro;
