@@ -25,3 +25,23 @@ function fillNavbar() {
 
 //trigger fillNavbar function
 fillNavbar();
+
+// function for getting data and posting data to backend 
+async function chromelyRequest(route, method = 'GET', postData = null ) {
+    return new Promise((resolve, reject) => {
+        var request = {
+            'method': method,
+            'url': route,
+            'parameters': null,
+            'postData': postData
+        };
+        window.cefQuery({
+            request: JSON.stringify(request),
+            onSuccess: function (response) {
+               resolve(response);
+            }, onFailure: function (err, msg) {
+                reject(err)
+            }
+        });
+    }).then(data => data);
+}
