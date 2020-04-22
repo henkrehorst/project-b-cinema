@@ -4,6 +4,7 @@ using System;
 using bioscoop_app.Model;
 using System.Security.Cryptography;
 using Moq;
+using System.Text;
 
 namespace CinemaTests
 {
@@ -202,31 +203,90 @@ namespace CinemaTests
         [TestMethod]
         public void equalInst()
         {
-            throw new NotImplementedException();
+            // Arrange
+            bool expected = true;
+            DataType a = new Seat(3, 6, 9, 12);
+            DataType b = new Seat(3, 6, 9, 12);
+
+            // Act
+            bool actual = a.GetHashCode() == b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual, "Instances that are equal must return the same hashcode");
         }
 
         [TestMethod]
         public void sameInst()
         {
-            throw new NotImplementedException();
+            //Arrange
+            bool expected = true;
+            ScreenTime obj = new ScreenTime(5, new DateTime(), new DateTime());
+
+            //Act
+            bool actual = obj.GetHashCode() == obj.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual, "Hashcode should be consistent.");
         }
 
         [TestMethod]
         public void diffType()
         {
-            throw new NotImplementedException();
+            //Arrange
+            bool expected = false;
+            ScreenTime a = new ScreenTime(3, 4, new DateTime(), new DateTime());
+            Seat b = new Seat(6, 7, 8);
+
+            //Act
+            bool actual = a.GetHashCode() == b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual, "Different object should not produce the same hashcode.");
         }
 
         [TestMethod]
         public void diffInst()
         {
-            throw new NotImplementedException();
+            //Arrange
+            bool expected = false;
+            Movie a = new Movie(34, "jkl;", "asdf", 9.8, 124, "qwert");
+            Movie b = new Movie(65, "asdf", "jkl;", 9.8, 124, "qwert");
+
+            //Act
+            bool actual = a.GetHashCode() == b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual, "Different instances should not have the same hashcode.");
         }
 
         [TestMethod]
-        public void inheritance()
+        public void polymorph()
         {
-            throw new NotImplementedException();
+            //Arrange
+            bool expected = false;
+            Product a = new Ticket(54, 1.4, "kalskdjfi", null, null, 37);
+            Product b = new Product(12, "podasiuf");
+
+            //Act
+            bool actual = a.GetHashCode() == b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void fieldEqZeroSignature()
+        {
+            // A number field equal to zero should change the hashcode
+            //Arrange
+            bool expected = false;
+            DataType a = new Movie(0, "dasfda", "dlaskd;hfu", 3.7, 177, "dasdfioyywer");
+            DataType b = new Movie("dasfda", "dlaskd;hfu", 3.7, 177, "dasdfioyywer");
+
+            //Act
+            bool actual = a.GetHashCode() == b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual);
         }
     }
 }
