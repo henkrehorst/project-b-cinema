@@ -196,4 +196,37 @@ namespace CinemaTests
             Assert.AreEqual(expected, actual);
         }
     }
+
+    [TestClass]
+    public class GetHashCodeTests {
+        [TestMethod]
+        public void equalInst()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void sameInst()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void diffType()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void diffInst()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void inheritance()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
