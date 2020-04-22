@@ -20,7 +20,7 @@ namespace CinemaTests
         [ClassInitialize]
         public static void TestFixtureSetup(TestContext context)
         {
-            randomTicket = new Ticket(0, 1, "randtick", null, null, 25);
+            randomTicket = new Ticket(1, 1, "randtick", null, null, 25);
         }
 
         [TestInitialize]
@@ -68,7 +68,7 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Product other = new Product(0, 10, "stub");
+            Product other = new Product(1, 10, "stub");
 
             //act
             bool actual = randomTicket.Equals(other);
@@ -82,8 +82,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(0, 1, "", null, null, 10);
-            Ticket two = new Ticket(0, 0.9, "", null, null, 10);
+            Ticket one = new Ticket(1, 1, "", null, null, 10);
+            Ticket two = new Ticket(1, 0.9, "", null, null, 10);
 
             //act
             bool actual = one.Equals(two);
@@ -97,8 +97,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(0, 1, "John", null, null, 10);
-            Ticket two = new Ticket(0, 1, "Doe", null, null, 10);
+            Ticket one = new Ticket(1, 1, "John", null, null, 10);
+            Ticket two = new Ticket(1, 1, "Doe", null, null, 10);
 
             //act
             bool actual = one.Equals(two);
@@ -112,8 +112,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(0, 1, "", null, null, 10);
-            Ticket two = new Ticket(0, 1, "", null, null, 11);
+            Ticket one = new Ticket(1, 1, "", null, null, 10);
+            Ticket two = new Ticket(1, 1, "", null, null, 11);
 
             //act
             bool actual = one.Equals(two);
@@ -127,8 +127,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(0, 1, "", null, MockedScreenTimeA.Object, 10);
-            Ticket two = new Ticket(0, 1, "", null, MockedScreenTimeB.Object, 10);
+            Ticket one = new Ticket(1, 1, "", null, MockedScreenTimeA.Object, 10);
+            Ticket two = new Ticket(1, 1, "", null, MockedScreenTimeB.Object, 10);
 
             //act
             bool actual = one.Equals(two);
@@ -142,8 +142,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(0, 1, "", MockedSeatA.Object, null, 10);
-            Ticket two = new Ticket(0, 1, "", MockedSeatB.Object, null, 10);
+            Ticket one = new Ticket(1, 1, "", MockedSeatA.Object, null, 10);
+            Ticket two = new Ticket(1, 1, "", MockedSeatB.Object, null, 10);
 
             //act
             bool actual = one.Equals(two);
@@ -157,7 +157,7 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(0, 1, "", null, null, 10);
+            Ticket one = new Ticket(2, 1, "", null, null, 10);
             Ticket two = new Ticket(1, 1, "", null, null, 10);
 
             //act
@@ -172,8 +172,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = true;
-            Ticket one = new Ticket(0, 1, "", null, null, 10);
-            Ticket two = new Ticket(0, 1, "", null, null, 10);
+            Ticket one = new Ticket(1, 1, "", null, null, 10);
+            Ticket two = new Ticket(1, 1, "", null, null, 10);
 
             //act
             bool actual = one.Equals(two);
@@ -294,11 +294,13 @@ namespace CinemaTests
             // A number field equal to zero should change the hashcode
             //Arrange
             bool expected = false;
-            DataType a = new Movie(0, "dasfda", "dlaskd;hfu", 3.7, 177, "dasdfioyywer");
+            DataType a = new Movie(1, "dasfda", "dlaskd;hfu", 3.7, 177, "dasdfioyywer");
             DataType b = new Movie("dasfda", "dlaskd;hfu", 3.7, 177, "dasdfioyywer");
 
             //Act
-            bool actual = a.GetHashCode() == b.GetHashCode();
+            //int hasha = a.GetHashCode();
+            //int hashb = b.GetHashCode();
+            bool actual = b.GetHashCode() == 0;//b.GetHashCode();
 
             //Assert
             Assert.AreEqual(expected, actual);
