@@ -3,13 +3,37 @@ using bioscoop_app;
 using System;
 using bioscoop_app.Model;
 using System.Security.Cryptography;
+using Moq;
 
 namespace CinemaTests
 {
     [TestClass]
     public class EqualsTicketCase
     {
-        readonly Ticket randomTicket = new Ticket(0, 1, "randtick", null, null, 25);
+        static Ticket randomTicket;
+        Mock<Seat> MockedSeatA;
+        Mock<Seat> MockedSeatB;
+        Mock<ScreenTime> MockedScreenTimeA;
+        Mock<ScreenTime> MockedScreenTimeB;
+
+        [ClassInitialize]
+        public static void TestFixtureSetup(TestContext context)
+        {
+            randomTicket = new Ticket(0, 1, "randtick", null, null, 25);
+        }
+
+        [TestInitialize]
+        public void Setup()
+        {
+            MockedSeatA = new Mock<Seat>(-1, -1, -1);
+            MockedSeatB = new Mock<Seat>(-1, -1, -1);
+            MockedScreenTimeA = new Mock<ScreenTime>(-1, new DateTime(), new DateTime());
+            MockedScreenTimeB = new Mock<ScreenTime>(-1, new DateTime(), new DateTime());
+            MockedSeatA.Setup(x => x.Equals(MockedSeatB)).Returns(false);
+            MockedSeatB.Setup(x => x.Equals(MockedSeatA)).Returns(false);
+            MockedScreenTimeA.Setup(x => x.Equals(MockedScreenTimeB)).Returns(false);
+            MockedScreenTimeB.Setup(x => x.Equals(MockedScreenTimeA)).Returns(false);
+        }
 
         [TestMethod]
         public void Other_is_null()
@@ -100,11 +124,10 @@ namespace CinemaTests
         [TestMethod]
         public void ScreenTime_not_eq()
         {
-            return; //Mocking should be used
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(0, 1, "", null, null, 10);
-            Ticket two = new Ticket(0, 1, "", null, null, 10);
+            Ticket one = new Ticket(0, 1, "", null, MockedScreenTimeA.Object, 10);
+            Ticket two = new Ticket(0, 1, "", null, MockedScreenTimeB.Object, 10);
 
             //act
             bool actual = one.Equals(two);
@@ -116,11 +139,10 @@ namespace CinemaTests
         [TestMethod]
         public void Seat_not_eq()
         {
-            return; //Mocking should be used
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(0, 1, "", null, null, 10);
-            Ticket two = new Ticket(0, 1, "", null, null, 10);
+            Ticket one = new Ticket(0, 1, "", MockedSeatA.Object, null, 10);
+            Ticket two = new Ticket(0, 1, "", MockedSeatB.Object, null, 10);
 
             //act
             bool actual = one.Equals(two);
