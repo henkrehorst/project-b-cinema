@@ -8,10 +8,9 @@ function fillNavbar() {
         </ul>
         <ul>
           <li><a href="../index.html">Klant applicatie</a></li>
-          <li><button id="movies">Film overview pagina</button></li>
-          <li><button id="add_movie">Voeg film toe</button></li>
-          <li><a href="/admin/product.html">Product pagina</a></li>
-          <li><a href="/admin/screentime.html">Screentime</a></li>
+          <li class="menu-item"><a href="/admin/product.html">Films</a></li>
+          <li class="menu-item"><a href="/admin/product.html">Product pagina</a></li>
+          <li class="menu-item"><a href="/admin/screentime.html">Screentime</a></li>
         </ul>`;
 
     //set active item

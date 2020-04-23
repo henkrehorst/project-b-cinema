@@ -31,8 +31,34 @@ async function screentimeOverviewPage() {
 async function screentimeEditPage() {
     //prepare movie dropdown
     await fillMovieDropdown();
+    //get screen time by id
+    let screenTime = await chromelyRequest('/screentime#id','POST',{'id': getIdFromUrl()})
     
-    
+    //file movie form
+    let movieDropdown = document.querySelector("#movies_field");
+    movieDropdown.options[screenTime.movie].selected = true;
+    document.querySelector("#start_time").value = screenTime.startTime;
+    document.querySelector("#end_time").value = screenTime.endTime;
+
+    /**
+     * function for updating screentime in backend
+     */
+    function updateScreenTime() {
+        // get screentime form data
+        const screenTimeForm = new FormData(document.querySelector("body > div > div > div > form"));
+
+        // post screentime to backend
+        chromelyRequest('/screentime#update', 'POST', {
+            'id': getIdFromUrl(),
+            'movie_id': screenTimeForm.get('movie'),
+            'start_time': screenTimeForm.get('start_time'),
+            'end_time': screenTimeForm.get('end_time')
+        }).then(value => {
+            return window.location.href = "/admin/screentime.html";
+        })
+    }
+
+    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', updateScreenTime);
 }
 
 /**
