@@ -8,8 +8,16 @@ using System.Collections.Generic;
 
 namespace bioscoop_app.Controller
 {
+    /// <summary>
+    /// Controller that handles the routes related to Product.
+    /// </summary>
     public class ProductController : ChromelyController
     {
+        /// <summary>
+        /// Retrieves all products from the Data file. Excludes Tickets.
+        /// </summary>
+        /// <param name="req">http GET request</param>
+        /// <returns>Products from the Data file, excluding Tickets.</returns>
         [HttpGet(Route = "/products")]
         public ChromelyResponse GetProducts(ChromelyRequest req)
         {
@@ -25,6 +33,8 @@ namespace bioscoop_app.Controller
             };
         }
 
+        /// <param name="req">http GET request</param>
+        /// <returns>Current ticket price.</returns>
         [HttpGet(Route = "/product#ticketprice")]
         public ChromelyResponse GetTicketPrice(ChromelyRequest req)
         {
@@ -34,6 +44,11 @@ namespace bioscoop_app.Controller
             };
         }
 
+        /// <summary>
+        /// Updates the basePrice of a Ticket to the specified value.
+        /// </summary>
+        /// <param name="req">http POST request containing the new basePrice</param>
+        /// <returns>Status 204</returns>
         [HttpPost(Route = "/product#ticketprice")]
         public ChromelyResponse SetTicketPrice(ChromelyRequest req)
         {
@@ -44,6 +59,11 @@ namespace bioscoop_app.Controller
             };
         }
 
+        /// <summary>
+        /// Adds the specified Product to the data file.
+        /// </summary>
+        /// <param name="req">http POST request containing the Product data</param>
+        /// <returns>Status 204</returns>
         [HttpPost(Route = "/products#add")]
         public ChromelyResponse AddProduct(ChromelyRequest req)
         {
@@ -56,6 +76,11 @@ namespace bioscoop_app.Controller
             };
         }
 
+        /// <summary>
+        /// Updates Product associated with the specified id in the data file.
+        /// </summary>
+        /// <param name="req">http POST request containing the key and value data.</param>
+        /// <returns>Status 204 on succes, Status 400 on failure</returns>
         [HttpPost(Route = "/products#update")]
         public ChromelyResponse UpdateProduct(ChromelyRequest req)
         {
@@ -73,6 +98,8 @@ namespace bioscoop_app.Controller
             return res;
         }
 
+        /// <param name="data">Product as a JObject</param>
+        /// <returns>Product as a Product or Ticket</returns>
         private Product ToProduct(JObject data)
         {
             if (data.ContainsKey("seat") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
