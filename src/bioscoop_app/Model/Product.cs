@@ -17,7 +17,7 @@ namespace bioscoop_app.Model
 		[JsonConstructor]
 		public Product(int id, double price, string name)
 		{
-			this.Id = id;
+			Id = id;
 			this.price = price;
 			this.name = name;
 		}
