@@ -5,6 +5,7 @@ using bioscoop_app.Repository;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using bioscoop_app.Helper;
 
 namespace bioscoop_app.Controller
 {
@@ -27,10 +28,11 @@ namespace bioscoop_app.Controller
             {
                 if (prod.GetType() == typeof(Product)) data.Add(prod);
             }
-            return new ChromelyResponse(req.Id)
+            return new Response
             {
-                Data = JsonConvert.SerializeObject(data)
-            };
+                status = 200,
+                data = JsonConvert.SerializeObject(data)
+            }.ChromelyWrapper(req.Id);
         }
 
         /// <param name="req">http GET request</param>
@@ -38,10 +40,11 @@ namespace bioscoop_app.Controller
         [HttpGet(Route = "/product#ticketprice")]
         public ChromelyResponse GetTicketPrice(ChromelyRequest req)
         {
-            return new ChromelyResponse(req.Id)
+            return new Response
             {
-                Data = Ticket.basePrice
-            };
+                status = 200,
+                data = JsonConvert.SerializeObject(Ticket.basePrice)
+            }.ChromelyWrapper(req.Id);
         }
 
         /// <summary>
@@ -53,10 +56,10 @@ namespace bioscoop_app.Controller
         public ChromelyResponse SetTicketPrice(ChromelyRequest req)
         {
             Ticket.basePrice = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<double>("price");
-            return new ChromelyResponse(req.Id)
+            return new Response
             {
-                Data = "Succesfully updated ticket price"
-            };
+                Status = 204
+            }.ChromelyWrapper(req.Id);
         }
 
         /// <summary>
@@ -70,10 +73,10 @@ namespace bioscoop_app.Controller
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             //Console.WriteLine(data);
             new ProductRepository().AddThenWrite(ToProduct(data));
-            return new ChromelyResponse(req.Id)
+            return new Response
             {
-                Data = "Product added"
-            };
+                status = 204
+            }.ChromelyWrapper(req.Id);
         }
 
         /// <summary>
@@ -86,16 +89,32 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             int? id = data.Value<int>("id");
-            if (id is null) throw new ArgumentNullException();
+            if (id is null)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "id undefined"
+                }.ChromelyWrapper(req.Id);
+            }
             int checkedId = (int) id;
             Repository<Product> repository = new ProductRepository();
-            repository.Update(checkedId, ToProduct(data));
-            repository.SaveChangesThenDiscard();
-            ChromelyResponse res = new ChromelyResponse(req.Id)
+            try
             {
-                Data = "Updated succesfully"
-            };
-            return res;
+                repository.Update(checkedId, ToProduct(data));
+            } catch (InvalidOperationException exception)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = exception.Message
+                }.ChromelyWrapper(req.Id);
+            }
+            repository.SaveChanges();
+            return new Response
+            {
+                status = 204
+            }.ChromelyWrapper(req.Id);
         }
 
         /// <param name="data">Product as a JObject</param>
