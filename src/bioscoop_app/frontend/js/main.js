@@ -27,7 +27,7 @@ function fillNavbar() {
 fillNavbar();
 
 // function for getting data and posting data to backend 
-async function chromelyRequest(route, method = 'GET', postData = null ) {
+async function chromelyRequest(route, method = 'GET', postData = {} ) {
     return new Promise((resolve, reject) => {
         var request = {
             'method': method,
@@ -38,10 +38,16 @@ async function chromelyRequest(route, method = 'GET', postData = null ) {
         window.cefQuery({
             request: JSON.stringify(request),
             onSuccess: function (response) {
-               resolve(response);
+               resolve(JSON.parse(JSON.parse(response).Data));
             }, onFailure: function (err, msg) {
                 reject(err)
             }
         });
     }).then(data => data);
+}
+
+// function for reading id parameter from url
+function getIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
 }
