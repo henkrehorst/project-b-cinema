@@ -3,14 +3,14 @@
  */
 function fillNavbar() {
     document.querySelector("body > nav > div").innerHTML =
-        "<ul>" +
-        "   <li><a href=\"/\">De kijkdoos</a></li>" +
-        "</ul>" +
-        "<ul>" +
-        "   <li class=\"menu-item\"><a href=\"./index.html\">Films</a></li>" +
-        "   <li class=\"menu-item\"><a href=\"#\">Reserveringen</a></li>" +
-        "   <li class=\"menu-item\"><a href=\"./admin/admin.html\">Beheerder</a></li>" +
-        "</ul>";
+        `<ul>
+           <li><a href=\"/\">De kijkdoos</a></li>
+        </ul>
+        <ul>
+          <li class=\"menu-item\"><a href="./index.html">Films</a></li>
+          <li class=\"menu-item\"><a href="#">Reserveringen</a></li>
+          <li class=\"menu-item\"><a href="./admin/admin.html">Beheerder</a></li>
+        </ul>`;
 
     //set active item
     let nav = document.querySelector("body > nav");
@@ -35,7 +35,7 @@ fillNavbar();
  * @param postData
  * @returns {Promise<{}>}
  */
-async function chromelyRequest(route, method = 'GET', postData = {} ) {
+async function chromelyRequest(route, method = 'GET', postData = {}) {
     return new Promise((resolve, reject) => {
         var request = {
             'method': method,
@@ -46,7 +46,7 @@ async function chromelyRequest(route, method = 'GET', postData = {} ) {
         window.cefQuery({
             request: JSON.stringify(request),
             onSuccess: function (response) {
-               resolve(JSON.parse(JSON.parse(response).Data));
+                resolve(JSON.parse(JSON.parse(response).Data));
             }, onFailure: function (err, msg) {
                 reject(err)
             }
