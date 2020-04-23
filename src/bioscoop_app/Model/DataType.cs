@@ -12,21 +12,23 @@ namespace bioscoop_app.Model
     /// </summary>
     public abstract class DataType : CustomObject
     {
+        private int id;
+
         /// <summary>
         /// The id by which you can fetch the instance from the database.
         /// </summary>
         public int Id { 
             get 
-            { 
-                return this.Id; 
+            {
+                return id; 
             } 
             set 
             {
-                if (Id <= 0)
+                if (value <= 0)
                 {
                     throw new InvalidDataException("DataType.Id can't be zero or negative");
                 }
-                this.Id = value;
+                id = value;
             } 
         }
 	}
