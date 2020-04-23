@@ -12,7 +12,6 @@ namespace bioscoop_app
         public override void Configure(IChromelyContainer container)
         {
             base.Configure(container);
-            container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(DemoController));
             container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(MovieController));
             container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(ProductController));
             container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(ScreenTimeController));
