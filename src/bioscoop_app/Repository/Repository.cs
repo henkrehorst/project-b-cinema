@@ -54,18 +54,18 @@ namespace bioscoop_app.Repository
             }
             if (!data.Any())
             {
-                entry.id = 0;
+                entry.Id = 1;
             }
             else
             {
-                entry.id = data.Keys.Max() + 1;
+                entry.Id = data.Keys.Max() + 1;
             }
-            data.Add(entry.id, entry);
+            data.Add(entry.Id, entry);
         }
 
         public void Update(int id, T value)
         {
-            value.id = id;
+            value.Id = id;
             data[id] = value;
         }
         

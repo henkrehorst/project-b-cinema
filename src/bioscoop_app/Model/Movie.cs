@@ -24,7 +24,7 @@ namespace bioscoop_app.Model
         
         [JsonConstructor]
         public Movie(int id, string title, string genre, double rating, int duration, string coverImage) {
-            this.id = id;
+            this.Id = id;
             this.title = title;
             this.genre = genre;
             this.rating = rating;
