@@ -8,8 +8,13 @@ using Newtonsoft.Json.Linq;
 
 namespace bioscoop_app.Controller
 {
+    /// <summary>
+    /// Controller that handles the routes related to ScreenTime.
+    /// </summary>
     public class ScreenTimeController : ChromelyController
     {
+        /// <param name="request">http GET request</param>
+        /// <returns>All ScreenTime data.</returns>
         [HttpGet(Route = "/screentime")]
         public ChromelyResponse GetScreenTimes(ChromelyRequest request)
         {
@@ -17,59 +22,91 @@ namespace bioscoop_app.Controller
 
             return new ChromelyResponse(request.Id)
             {
+                Status = 200,
                 Data = JsonConvert.SerializeObject(screenTimeRepository.Data)
             };
         }
 
+        /// <summary>
+        /// Adds posted ScreenTime to the data file.
+        /// </summary>
+        /// <param name="request">http POST request that contains a ScreenTime as postData.</param>
+        /// <returns>An http response stating the addition was succesfull.</returns>
         [HttpPost(Route = "/screentime/add")]
         public ChromelyResponse AddScreenTime(ChromelyRequest request)
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
 
             var screenTimeRepository = new ScreenTimeRepository();
-            screenTimeRepository.Add(new ScreenTime(
+            screenTimeRepository.AddThenWrite(new ScreenTime(
                 data["movie_id"].Value<int>(),
                 data["start_time"].Value<DateTime>(),
                 data["end_time"].Value<DateTime>())
             );
-            screenTimeRepository.SaveChanges();
 
             return new ChromelyResponse(request.Id)
             {
+                Status = 200,
                 Data = "Screentime added"
             };
         }
 
+        /// <param name="req">http POST re</param>
+        /// <returns>the ScreenTime associated with the provided id</returns>
         [HttpPost(Route = "/screentime#id")]
         public ChromelyResponse GetScreenTimeById(ChromelyRequest req)
         {
             int id = ((JObject) JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
             return new ChromelyResponse(req.Id)
             {
+                Status = 200,
                 Data = JsonConvert.SerializeObject(new ScreenTimeRepository().Data[id])
             };
         }
 
-
+        /// <summary>
+        /// Updates posted ScreenTime in the data file.
+        /// </summary>
+        /// <param name="request">http POST request that contains a ScreenTime with and id as postData.</param>
+        /// <returns>An http response stating the update was succesfull.</returns>
         [HttpPost(Route = "/screentime#update")]
         public ChromelyResponse UpdateScreenTime(ChromelyRequest req)
         {
             JObject data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
 
-            var screenTimeRepository = new ScreenTimeRepository();
-            screenTimeRepository.Update(data["id"].Value<int>(), new ScreenTime(
-                data["movie_id"].Value<int>(),
-                data["start_time"].Value<DateTime>(),
-                data["end_time"].Value<DateTime>())
-            );
-            screenTimeRepository.SaveChanges();
-
-            return new ChromelyResponse(req.Id)
+            if (data["id"] is null) return new ChromelyResponse(req.Id)
             {
-                Data = "screenTime updated"
+                Status = 400,
+                StatusText = "no id provided"
             };
+
+            try
+            {
+                var screenTimeRepository = new ScreenTimeRepository();
+                screenTimeRepository.Update(data["id"].Value<int>(), new ScreenTime(
+                    data["movie_id"].Value<int>(),
+                    data["start_time"].Value<DateTime>(),
+                    data["end_time"].Value<DateTime>())
+                );
+                screenTimeRepository.SaveChanges();
+
+                return new ChromelyResponse(req.Id)
+                {
+                    Status = 200,
+                    Data = "screenTime updated"
+                };
+            } catch (InvalidOperationException exception)
+            {
+                return new ChromelyResponse(req.Id)
+                {
+                    Status = 400,
+                    StatusText = exception.Message
+                };
+            }
         }
         
+        /// <param name="req">http POST request that contains the id of the movie</param>
+        /// <returns>The Screentimes associated with the movie.</returns>
         [HttpPost(Route = "/screentime#movie")]
         public ChromelyResponse GetScreenTimesByMovieId(ChromelyRequest req)
         {
@@ -77,6 +114,7 @@ namespace bioscoop_app.Controller
             
             return new ChromelyResponse(req.Id)
             {
+                Status = 200,
                 Data = JsonConvert.SerializeObject(new ScreenTimeRepository()
                     .GetScreenTimeByMovieId(data["id"].Value<int>()))
             };
