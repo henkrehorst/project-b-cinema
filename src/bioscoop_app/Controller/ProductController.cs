@@ -58,7 +58,7 @@ namespace bioscoop_app.Controller
             Ticket.basePrice = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<double>("price");
             return new Response
             {
-                Status = 204
+                status = 204
             }.ChromelyWrapper(req.Id);
         }
 
