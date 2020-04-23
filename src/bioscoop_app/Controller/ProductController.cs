@@ -49,7 +49,7 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             //Console.WriteLine(data);
-            new ProductRepository().AddAndWrite(ToProduct(data));
+            new ProductRepository().AddThenWrite(ToProduct(data));
             return new ChromelyResponse(req.Id)
             {
                 Data = "Product added"
@@ -65,7 +65,7 @@ namespace bioscoop_app.Controller
             int checkedId = (int) id;
             Repository<Product> repository = new ProductRepository();
             repository.Update(checkedId, ToProduct(data));
-            repository.SaveChangesAndDiscard();
+            repository.SaveChangesThenDiscard();
             ChromelyResponse res = new ChromelyResponse(req.Id)
             {
                 Data = "Updated succesfully"

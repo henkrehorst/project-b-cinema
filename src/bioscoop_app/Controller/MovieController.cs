@@ -61,7 +61,7 @@ namespace bioscoop_app.Controller
                 fileName
             ));
             
-            movieRepository.SaveChangesAndDiscard();
+            movieRepository.SaveChangesThenDiscard();
 
             return new ChromelyResponse(request.Id)
             {
@@ -91,7 +91,7 @@ namespace bioscoop_app.Controller
                     data["duration"].Value<int>(),
                     filename
                 ));
-            repository.SaveChangesAndDiscard();
+            repository.SaveChangesThenDiscard();
             return new ChromelyResponse(req.Id)
             {
                 Data = req.PostData.ToJson()
