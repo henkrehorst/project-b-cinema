@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Go to source folder
-      run: cd src
+      run: ls
     - name: Install dependencies
       run: dotnet restore
     - name: Build
