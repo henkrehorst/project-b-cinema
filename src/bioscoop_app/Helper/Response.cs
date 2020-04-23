@@ -31,6 +31,7 @@ namespace bioscoop_app.Helper
         public ChromelyResponse ChromelyWrapper(string reqId)
         {
             if (status < 100 || status >= 600) throw new InvalidDataException("Invalid status code");
+            if (status == 204) data = null;
             return new ChromelyResponse(reqId)
             {
                 Data = JsonConvert.SerializeObject(this)

@@ -47,8 +47,7 @@ namespace bioscoop_app.Controller
 
             return new Response
             {
-                status = 200,
-                data = "ScreenTime added"
+                status = 204
             }.ChromelyWrapper(request.Id);
         }
 
@@ -93,8 +92,7 @@ namespace bioscoop_app.Controller
 
                 return new Response
                 {
-                    status = 200,
-                    data = "screenTime updated"
+                    status = 204
                 }.ChromelyWrapper(req.Id);
             } catch (InvalidOperationException exception)
             {
