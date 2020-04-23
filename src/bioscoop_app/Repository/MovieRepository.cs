@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 
 namespace bioscoop_app.Repository
 {
+    /// <summary>
+    /// Repository that acts on Movie.
+    /// </summary>
     public sealed class MovieRepository : Repository<Movie>
     {
     }
