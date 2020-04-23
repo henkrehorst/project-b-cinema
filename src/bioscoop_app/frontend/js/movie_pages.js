@@ -1,4 +1,7 @@
-﻿//function with all javascript running on the movie overview page
+﻿/**
+ * function with all javascript running on the movie overview page
+ * @returns {Promise<void>}
+ */
 async function movieOverviewPage() {
     //get all movies
     let movies = await chromelyRequest('/movies');
@@ -21,7 +24,10 @@ async function movieOverviewPage() {
 }
 
 
-//function with all javascript running on the movie detail page
+/**
+ * function with all javascript running on the movie detail page
+ * @returns {Promise<void>}
+ */
 async function movieDetailPage() {
     //get movie by id
     let movie = await chromelyRequest('/movies#id', 'POST', {'id': getIdFromUrl()})

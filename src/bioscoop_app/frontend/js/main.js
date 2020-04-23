@@ -1,4 +1,6 @@
-﻿//load dynamic items in navbar
+﻿/**
+ * load dynamic items in navbar
+ */
 function fillNavbar() {
     document.querySelector("body > nav > div").innerHTML =
         "<ul>" +
@@ -26,7 +28,13 @@ function fillNavbar() {
 //trigger fillNavbar function
 fillNavbar();
 
-// function for getting data and posting data to backend 
+/**
+ * function for getting data and posting data to backend
+ * @param route
+ * @param method
+ * @param postData
+ * @returns {Promise<{}>}
+ */
 async function chromelyRequest(route, method = 'GET', postData = {} ) {
     return new Promise((resolve, reject) => {
         var request = {
@@ -46,7 +54,10 @@ async function chromelyRequest(route, method = 'GET', postData = {} ) {
     }).then(data => data);
 }
 
-// function for reading id parameter from url
+/**
+ * function for reading id parameter from url
+ * @returns {string}
+ */
 function getIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');
