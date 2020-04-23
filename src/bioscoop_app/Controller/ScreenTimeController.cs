@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using bioscoop_app.Helper;
 using bioscoop_app.Model;
 using bioscoop_app.Repository;
 using Chromely.Core.Network;
@@ -20,11 +21,11 @@ namespace bioscoop_app.Controller
         {
             var screenTimeRepository = new ScreenTimeRepository();
 
-            return new ChromelyResponse(request.Id)
+            return new Response
             {
-                Status = 200,
-                Data = JsonConvert.SerializeObject(screenTimeRepository.Data)
-            };
+                status = 200,
+                data = JsonConvert.SerializeObject(screenTimeRepository.Data)
+            }.ChromelyWrapper(request.Id);
         }
 
         /// <summary>
@@ -44,11 +45,11 @@ namespace bioscoop_app.Controller
                 data["end_time"].Value<DateTime>())
             );
 
-            return new ChromelyResponse(request.Id)
+            return new Response
             {
-                Status = 200,
-                Data = "Screentime added"
-            };
+                status = 200,
+                data = "ScreenTime added"
+            }.ChromelyWrapper(request.Id);
         }
 
         /// <param name="req">http POST re</param>
@@ -57,11 +58,11 @@ namespace bioscoop_app.Controller
         public ChromelyResponse GetScreenTimeById(ChromelyRequest req)
         {
             int id = ((JObject) JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
-            return new ChromelyResponse(req.Id)
+            return new Response
             {
-                Status = 200,
-                Data = JsonConvert.SerializeObject(new ScreenTimeRepository().Data[id])
-            };
+                status = 200,
+                data = JsonConvert.SerializeObject(new ScreenTimeRepository().Data[id])
+            }.ChromelyWrapper(req.Id);
         }
 
         /// <summary>
@@ -74,11 +75,11 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
 
-            if (data["id"] is null) return new ChromelyResponse(req.Id)
-            {
-                Status = 400,
-                StatusText = "no id provided"
-            };
+            if (data["id"] is null) return new Response
+                {
+                    status = 400,
+                    statusText = "no id provided"
+                }.ChromelyWrapper(req.Id);
 
             try
             {
@@ -90,18 +91,18 @@ namespace bioscoop_app.Controller
                 );
                 screenTimeRepository.SaveChanges();
 
-                return new ChromelyResponse(req.Id)
+                return new Response
                 {
-                    Status = 200,
-                    Data = "screenTime updated"
-                };
+                    status = 200,
+                    data = "screenTime updated"
+                }.ChromelyWrapper(req.Id);
             } catch (InvalidOperationException exception)
             {
-                return new ChromelyResponse(req.Id)
+                return new Response
                 {
-                    Status = 400,
-                    StatusText = exception.Message
-                };
+                    status = 400,
+                    statusText = exception.Message
+                }.ChromelyWrapper(req.Id);
             }
         }
         
@@ -112,12 +113,12 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
             
-            return new ChromelyResponse(req.Id)
+            return new Response
             {
-                Status = 200,
-                Data = JsonConvert.SerializeObject(new ScreenTimeRepository()
+                status = 200,
+                data = JsonConvert.SerializeObject(new ScreenTimeRepository()
                     .GetScreenTimeByMovieId(data["id"].Value<int>()))
-            };
+            }.ChromelyWrapper(req.Id);
         }
     }
 }
