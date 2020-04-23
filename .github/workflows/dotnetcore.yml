@@ -1,11 +1,6 @@
 name: .NET Core test pipeline
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+on: [push, pull_request]
 jobs:
   test:
 
