@@ -16,7 +16,7 @@ async function screentimeOverviewPage() {
                 <td>${movie.title}</td>
                 <td>${new Date(screenTimes[key].startTime).toLocaleString()}</td>
                 <td>${new Date(screenTimes[key].endTime).toLocaleString()}</td>
-                <td><a href='/admin/screentime_edit.html?id=${screenTimes[key].id}'>Edit</a></td>
+                <td><a href='/admin/screentime_edit.html?id=${screenTimes[key].Id}'>Edit</a></td>
             </tr>`;       
     }
     
@@ -98,6 +98,6 @@ async function fillMovieDropdown() {
     let movies = await chromelyRequest('/movies');
     for(let movie in movies){
         document.querySelector("#movies_field").innerHTML += 
-            `<option value="${movies[movie].id}">${movies[movie].title}</option>`;
+            `<option value="${movies[movie].Id}">${movies[movie].title}</option>`;
     }
 }

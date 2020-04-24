@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" type="text/css" href="/admin/css/style.css">-->
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
+    <title>Bioscoop app</title>
+</head>
+<body onload="screentimeAddPage()">
+<nav data-active-item="Films">
+    <div class="container">
+    </div>
+</nav>
+<div class="container">
+    <h3 style="padding: 20px 0;">Pas film aan</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <form>
+                <div class="form-group">
+                    <label for="title">Titel</label>
+                    <input name="title" id="title" type="text" placeholder="titel" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="genre">Genre</label>
+                    <input name="genre" type="text" placeholder="Genre" class="form-control" id="genre">
+                </div>
+                <div class="form-group">
+                    <label for="duration">Duur</label>
+                    <input name="duration" type="number" placeholder="Duur" class="form-control" id="duration">
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating</label>
+                    <input name="rating" type="number" min="0" max="5" step="0.1" placeholder="Rating" class="form-control" id="rating">
+                </div>
+                <div class="form-group">
+                    <label for="cover_image">Cover image</label>
+                    <input name="cover_image" type="file" class="form-control-file" id="cover_image">
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary">Voeg film toe</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/admin/js/main.js"></script>
+<script src="/admin/js/movie_pages.js"></script>
+</body>
+</html>

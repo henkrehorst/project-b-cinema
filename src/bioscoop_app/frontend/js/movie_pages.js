@@ -11,7 +11,7 @@ async function movieOverviewPage() {
     for (let movie in movies) {
         movieOverview +=
             `<div class=\"col-md-3 col-sm-4\">
-                <a class='box_wrapper_a' href="./movie_detail.html?id=${movies[movie].id}"><div class="box_wrapper">
+                <a class='box_wrapper_a' href="./movie_detail.html?id=${movies[movie].Id}"><div class="box_wrapper">
                     <img src="local://frontend/uploads/${movies[movie].coverImage}"  alt="${movies[movie].title}">
                     <p>${movies[movie].title}</p>
                     <button>Meer info</button>
