@@ -8,8 +8,13 @@ using Newtonsoft.Json.Linq;
 
 namespace bioscoop_app.Controller
 {
+    /// <summary>
+    /// Class that controls the routes related to Movie.
+    /// </summary>
     public class MovieController : ChromelyController
     {
+        /// <param name="request">http GET request</param>
+        /// <returns>All Movies in the data file.</returns>
         [HttpGet(Route = "/movies")]
         public ChromelyResponse GetMovies(ChromelyRequest request)
         {
@@ -23,6 +28,8 @@ namespace bioscoop_app.Controller
             };
         }
 
+        /// <param name="req">http POST request containing the desired Movie's id</param>
+        /// <returns>The Movie associated with the id.</returns>
         [HttpPost(Route = "/movies#id")]
         public ChromelyResponse GetMovieById(ChromelyRequest req)
         {
@@ -33,6 +40,11 @@ namespace bioscoop_app.Controller
             };
         }
 
+        /// <summary>
+        /// Adds a movie to the data file.
+        /// </summary>
+        /// <param name="request">http POST request containing the movie</param>
+        /// <returns>Status 204 indicating the movie was added successfully</returns>
         [HttpPost(Route = "/movies/add")]
         public ChromelyResponse AddMovie(ChromelyRequest request)
         {
@@ -69,6 +81,11 @@ namespace bioscoop_app.Controller
             };
         }
 
+        /// <summary>
+        /// Updates the movie associated with the specified id, with the specified data.
+        /// </summary>
+        /// <param name="req">http POST request containing the id and data</param>
+        /// <returns>Status code indicating success or failure.</returns>
         [HttpPost(Route = "/movies#update")]
         public ChromelyResponse UpdateMovie(ChromelyRequest req)
         {
