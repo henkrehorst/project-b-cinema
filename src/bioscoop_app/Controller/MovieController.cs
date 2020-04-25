@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using bioscoop_app.Helper;
 using bioscoop_app.Model;
 using bioscoop_app.Repository;
 using bioscoop_app.Service;
@@ -22,10 +24,11 @@ namespace bioscoop_app.Controller
 
             var movies = movieRepository.Data;
 
-            return new ChromelyResponse(request.Id)
+            return new Response
             {
-                Data = JsonConvert.SerializeObject(movies)
-            };
+                status = 200,
+                data = JsonConvert.SerializeObject(movies)
+            }.ChromelyWrapper(request.Id);
         }
 
         /// <param name="req">http POST request containing the desired Movie's id</param>
@@ -34,10 +37,11 @@ namespace bioscoop_app.Controller
         public ChromelyResponse GetMovieById(ChromelyRequest req)
         {
             int id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
-            return new ChromelyResponse(req.Id)
+            return new Response
             {
-                Data = JsonConvert.SerializeObject(new MovieRepository().Data[id])
-            };
+                status = 200,
+                data = JsonConvert.SerializeObject(new MovieRepository().Data[id])
+            }.ChromelyWrapper(req.Id);
         }
 
         /// <summary>
@@ -75,10 +79,10 @@ namespace bioscoop_app.Controller
             
             movieRepository.SaveChangesThenDiscard();
 
-            return new ChromelyResponse(request.Id)
+            return new Response
             {
-                Data = "Movie added"
-            };
+                status = 204
+            }.ChromelyWrapper(request.Id);
         }
 
         /// <summary>
@@ -100,19 +104,39 @@ namespace bioscoop_app.Controller
                     uploadService.UpdateFile(filename);
                 }
             }
+            int? idCheck = data.Value<int>("id");
+            if (idCheck is null)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "id undefined"
+                }.ChromelyWrapper(req.Id);
+            }
             Repository<Movie> repository = new MovieRepository();
-            repository.Update(data.Value<int>("id"), new Movie(
+            try
+            {
+                repository.Update(data.Value<int>("id"), new Movie(
                     data["title"].Value<string>(),
                     data["genre"].Value<string>(),
                     data["rating"].Value<double>(),
                     data["duration"].Value<int>(),
                     filename
                 ));
-            repository.SaveChangesThenDiscard();
-            return new ChromelyResponse(req.Id)
+            } catch(InvalidOperationException except)
             {
-                Data = req.PostData.ToJson()
-            };
+                return new Response
+                {
+                    status = 400,
+                    statusText = except.Message
+                }.ChromelyWrapper(req.Id);
+            }
+            repository.SaveChangesThenDiscard();
+            return new Response
+            {
+                status = 200,
+                data = req.PostData.ToJson()
+            }.ChromelyWrapper(req.Id);
         }
     }
 }
