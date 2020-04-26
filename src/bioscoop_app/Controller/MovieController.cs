@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using bioscoop_app.Helper;
 using bioscoop_app.Model;
 using bioscoop_app.Repository;
 using bioscoop_app.Service;
@@ -8,8 +10,13 @@ using Newtonsoft.Json.Linq;
 
 namespace bioscoop_app.Controller
 {
+    /// <summary>
+    /// Class that controls the routes related to Movie.
+    /// </summary>
     public class MovieController : ChromelyController
     {
+        /// <param name="request">http GET request</param>
+        /// <returns>All Movies in the data file.</returns>
         [HttpGet(Route = "/movies")]
         public ChromelyResponse GetMovies(ChromelyRequest request)
         {
@@ -17,22 +24,31 @@ namespace bioscoop_app.Controller
 
             var movies = movieRepository.Data;
 
-            return new ChromelyResponse(request.Id)
+            return new Response
             {
-                Data = JsonConvert.SerializeObject(movies)
-            };
+                status = 200,
+                data = JsonConvert.SerializeObject(movies)
+            }.ChromelyWrapper(request.Id);
         }
 
+        /// <param name="req">http POST request containing the desired Movie's id</param>
+        /// <returns>The Movie associated with the id.</returns>
         [HttpPost(Route = "/movies#id")]
         public ChromelyResponse GetMovieById(ChromelyRequest req)
         {
             int id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
-            return new ChromelyResponse(req.Id)
+            return new Response
             {
-                Data = JsonConvert.SerializeObject(new MovieRepository().Data[id])
-            };
+                status = 200,
+                data = JsonConvert.SerializeObject(new MovieRepository().Data[id])
+            }.ChromelyWrapper(req.Id);
         }
 
+        /// <summary>
+        /// Adds a movie to the data file.
+        /// </summary>
+        /// <param name="request">http POST request containing the movie</param>
+        /// <returns>Status 204 indicating the movie was added successfully</returns>
         [HttpPost(Route = "/movies/add")]
         public ChromelyResponse AddMovie(ChromelyRequest request)
         {
@@ -61,14 +77,19 @@ namespace bioscoop_app.Controller
                 fileName
             ));
             
-            movieRepository.SaveChangesAndDiscard();
+            movieRepository.SaveChangesThenDiscard();
 
-            return new ChromelyResponse(request.Id)
+            return new Response
             {
-                Data = "Movie added"
-            };
+                status = 204
+            }.ChromelyWrapper(request.Id);
         }
 
+        /// <summary>
+        /// Updates the movie associated with the specified id, with the specified data.
+        /// </summary>
+        /// <param name="req">http POST request containing the id and data</param>
+        /// <returns>Status code indicating success or failure.</returns>
         [HttpPost(Route = "/movies#update")]
         public ChromelyResponse UpdateMovie(ChromelyRequest req)
         {
@@ -83,19 +104,39 @@ namespace bioscoop_app.Controller
                     uploadService.UpdateFile(filename);
                 }
             }
+            int? idCheck = data.Value<int>("id");
+            if (idCheck is null)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "id undefined"
+                }.ChromelyWrapper(req.Id);
+            }
             Repository<Movie> repository = new MovieRepository();
-            repository.Update(data.Value<int>("id"), new Movie(
+            try
+            {
+                repository.Update(data.Value<int>("id"), new Movie(
                     data["title"].Value<string>(),
                     data["genre"].Value<string>(),
                     data["rating"].Value<double>(),
                     data["duration"].Value<int>(),
                     filename
                 ));
-            repository.SaveChangesAndDiscard();
-            return new ChromelyResponse(req.Id)
+            } catch(InvalidOperationException except)
             {
-                Data = req.PostData.ToJson()
-            };
+                return new Response
+                {
+                    status = 400,
+                    statusText = except.Message
+                }.ChromelyWrapper(req.Id);
+            }
+            repository.SaveChangesThenDiscard();
+            return new Response
+            {
+                status = 200,
+                data = req.PostData.ToJson()
+            }.ChromelyWrapper(req.Id);
         }
     }
 }
