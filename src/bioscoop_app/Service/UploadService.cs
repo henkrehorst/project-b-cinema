@@ -5,22 +5,33 @@ using System.Text.RegularExpressions;
 
 namespace bioscoop_app.Service
 {
+    /// <summary>
+    /// Single use service object that stores an image in the image folder.
+    /// </summary>
     public class UploadService
     {
-        private string _base64FileString;
+        private readonly string _base64FileString;
         private string _fileName;
 
-
+        /// <summary>
+        /// Initializes an uploadservice object for one image.
+        /// </summary>
+        /// <param name="base64FileString">the image in base 64 string</param>
         public UploadService(string base64FileString)
         {
             this._base64FileString = base64FileString;
         }
 
+        /// <returns>True iff the file is an image.</returns>
         public bool CheckIsImage()
         {
             return GetMimeType() == "image/jpeg" || GetMimeType() == "image/png";
         }
 
+        /// <summary>
+        /// Retrieves the mime type from a base64 string.
+        /// </summary>
+        /// <returns>the mime type</returns>
         private string GetMimeType()
         {
             string mimeTyperesult = "";
@@ -33,6 +44,7 @@ namespace bioscoop_app.Service
             return mimeTyperesult;
         }
 
+        /// <returns>The file extension of the data provided</returns>
         private string GetFileExtension()
         {
             string[] splitMimeType = GetMimeType().Split("/").ToArray();
@@ -40,6 +52,9 @@ namespace bioscoop_app.Service
             return splitMimeType[1];
         }
 
+        /// <summary>
+        /// Creates the file in the upload folder and writes all data.
+        /// </summary>
         public void CreateFileInUploadFolder()
         {
             //convert base64
@@ -49,6 +64,10 @@ namespace bioscoop_app.Service
                 Convert.FromBase64String(convertBase64));
         }
 
+        /// <summary>
+        /// Finds the file in the upload folder and overwrites all data.
+        /// </summary>
+        /// <param name="filename"></param>
         public void UpdateFile(string filename)
         {
             //convert base64
@@ -58,6 +77,10 @@ namespace bioscoop_app.Service
                 Convert.FromBase64String(convertBase64));
         }
 
+        /// <summary>
+        /// Get method for the filename. Initialized if null or empty string.
+        /// </summary>
+        /// <returns>the filename</returns>
         public string GetFileName()
         {
             if (String.IsNullOrEmpty(this._fileName))
