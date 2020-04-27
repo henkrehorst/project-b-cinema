@@ -4,7 +4,8 @@
  */
 async function movieOverviewPage() {
     //get all movies
-    let movies = await chromelyRequest('/movies');
+    const moviesResponse = await chromelyRequest('/movies');
+    let movies = moviesResponse.getData();
     let movieOverview = "";
 
     //convert movies array to html
@@ -30,7 +31,8 @@ async function movieOverviewPage() {
  */
 async function movieDetailPage() {
     //get movie by id
-    let movie = await chromelyRequest('/movies#id', 'POST', {'id': getIdFromUrl()})
+    const movieResponse = await chromelyRequest('/movies#id', 'POST', {'id': getIdFromUrl()});
+    let movie = movieResponse.getData();
 
     //display cover image of movie
     document.querySelector("body > div > div > div.col-md-3").innerHTML =
@@ -45,7 +47,8 @@ async function movieDetailPage() {
         </table>`;
 
     //display movie screentimes
-    const screenTimes = await chromelyRequest('/screentime#movie', 'POST', {id: getIdFromUrl()})
+    const screenTimesResponse = await chromelyRequest('/screentime#movie', 'POST', {id: getIdFromUrl()});
+    let screenTimes = screenTimesResponse.getData();
 
     if (Object.keys(screenTimes).length === 0) {
         document.querySelector("body > div > div:nth-child(2) > div").innerHTML += "<p>Geen tijden gevonden</p>";
