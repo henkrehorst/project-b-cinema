@@ -4,7 +4,9 @@
  */
 async function moviesOverviewPage() {
     // get all movies
-    const movies = await chromelyRequest('/movies');
+    const moviesResponse = await chromelyRequest('/movies');
+    console.log(moviesResponse);
+    let movies = moviesResponse.getData();
     let movieTable = "";
 
     // create a table with screentimes
@@ -23,40 +25,49 @@ async function moviesOverviewPage() {
 }
 
 /**
- * function with all javascript running on the screentime edit page
+ * function with all javascript running on the movie edit page
  * @returns {Promise<void>}
  */
-async function screentimeEditPage() {
-    //prepare movie dropdown
-    await fillMovieDropdown();
-    //get screen time by id
-    let screenTime = await chromelyRequest('/screentime#id','POST',{'id': getIdFromUrl()})
-
-    //file movie form
-    let movieDropdown = document.querySelector("#movies_field");
-    movieDropdown.options[screenTime.movie].selected = true;
-    document.querySelector("#start_time").value = screenTime.startTime;
-    document.querySelector("#end_time").value = screenTime.endTime;
-
+async function movieEditPage() {
+    //get movie by id
+    const movieResponse = await chromelyRequest('/movies#id','POST',{'id': getIdFromUrl()});
+    let movie = movieResponse.getData();
+    
+    //fill form with movie data
+    document.getElementById('title').value = movie.title;
+    document.getElementById('genre').value = movie.genre;
+    document.getElementById('duration').value = movie.duration;
+    document.getElementById('rating').value = movie.rating;
+    //show preview cover image
+    document.querySelector("body > div > div > .cover-image-preview").innerHTML +=
+        `<img src="local://frontend/uploads/${movie.coverImage}" alt="cover image" />`
+    
     /**
-     * function for updating screentime in backend
+     * function for posting movie to backend
      */
-    function updateScreenTime() {
-        // get screentime form data
-        const screenTimeForm = new FormData(document.querySelector("body > div > div > div > form"));
+    async function updateMovie() {
+        // get movie form data
+        const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
+        //covert cover image to string
+        let cover_image = await getBase64String(movieForm.get('cover_image'))
 
-        // post screentime to backend
-        chromelyRequest('/screentime#update', 'POST', {
+        // post movie to backend
+        const response = await chromelyRequest('/movies#update', 'POST', {
             'id': getIdFromUrl(),
-            'movie_id': screenTimeForm.get('movie'),
-            'start_time': screenTimeForm.get('start_time'),
-            'end_time': screenTimeForm.get('end_time')
-        }).then(value => {
-            return window.location.href = "/admin/screentime.html";
+            'title': movieForm.get('title'),
+            'duration': movieForm.get('duration'),
+            'genre': movieForm.get('genre'),
+            'rating': movieForm.get('rating'),
+            'cover_image': cover_image
         })
+
+        // if response = 200: redirect to movie overview page
+        if(response.getStatusCode() === 200){
+            window.location.href = "/admin/movie.html"
+        }
     }
 
-    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', updateScreenTime);
+    document.querySelector("body > div > div > div > form > div > button").addEventListener('click', updateMovie);
 }
 
 /**
@@ -67,23 +78,25 @@ async function movieAddPage() {
     /**
      * function for posting movie to backend
      */
-    function addMovie() {
+    async function addMovie() {
         // get movie form data
         const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
         //covert cover image to string
-        getBase64String(movieForm.get('cover_image')).then(cover_image => {
+        let cover_image = await getBase64String(movieForm.get('cover_image'))
             
-            // post movie to backend
-            chromelyRequest('/movies/add', 'POST', {
+        // post movie to backend
+        const response = await chromelyRequest('/movies/add', 'POST', {
                 'title': movieForm.get('title'),
                 'duration': movieForm.get('duration'),
                 'genre': movieForm.get('genre'),
                 'rating': movieForm.get('rating'),
                 'cover_image': cover_image
-            }).then(value => {
-                return window.location.href = "/admin/movie.html";
             })
-        });
+            
+            // if response = 204: redirect to movie overview page
+            if(response.getStatusCode() === 204){
+                window.location.href = "/admin/movie.html"
+            }
     }
 
     document.querySelector("body > div > div > div > form > div > button").addEventListener('click', addMovie);
@@ -99,10 +112,29 @@ async function getBase64String(file) {
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function () {
-            resolve(reader.result);
+            if(reader.result === "data:"){
+                resolve("")
+            }else {
+                resolve(reader.result);
+            }
         };
         reader.error = function (error) {
             reject(error);
         };
-    })
+    }).then(value => value)
+}
+
+/**
+ * show a preview of the uploaded cover image
+ * @returns {Promise<void>}
+ */
+async function coverImagePreview() {
+    // get movie form data
+    const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
+    // convert cover image to base64
+    let cover_image = await getBase64String(movieForm.get('cover_image'))
+    
+    document.querySelector("body > div > div > .cover-image-preview").innerHTML =
+        `<p>Cover image preview</p>
+         <img src="${cover_image}" alt="cover image" />`;
 }

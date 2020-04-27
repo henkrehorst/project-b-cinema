@@ -2,7 +2,7 @@
  * load dynamic items in navbar
  */
 function fillNavbar() {
-    document.querySelector("body > nav > div").innerHTML = 
+    document.querySelector("body > nav > div").innerHTML =
         `<ul>
           <li><a href="/">De kijkdoos</a></li>
         </ul>
@@ -34,9 +34,9 @@ fillNavbar();
  * @param route
  * @param method
  * @param postData
- * @returns {Promise<{}>}
+ * @returns {chromelyResponse}
  */
-async function chromelyRequest(route, method = 'GET', postData = {} ) {
+async function chromelyRequest(route, method = 'GET', postData = {}) {
     return new Promise((resolve, reject) => {
         var request = {
             'method': method,
@@ -47,7 +47,8 @@ async function chromelyRequest(route, method = 'GET', postData = {} ) {
         window.cefQuery({
             request: JSON.stringify(request),
             onSuccess: function (response) {
-                resolve(JSON.parse(JSON.parse(response).Data));
+                let result = JSON.parse(JSON.parse(response).Data);
+                resolve(new chromelyResponse(result.status, result.statusText, result.data))
             }, onFailure: function (err, msg) {
                 reject(err)
             }
@@ -64,4 +65,44 @@ function getIdFromUrl() {
     return urlParams.get('id');
 }
 
+/**
+ * chromely response format class
+ */
+class chromelyResponse {
+    /**
+     * @param status
+     * @param statusText
+     * @param data
+     */
+    constructor(status, statusText, data) {
+        this.status = status;
+        this.statusText = statusText;
+        //convert json data string to object
+        try {
+            this.data = JSON.parse(data)
+        }catch (e) {
+            this.data = "";
+        }
+    }
 
+    /**
+     * @returns number
+     */
+    getStatusCode(){
+        return this.status;
+    }
+
+    /**
+     * @returns {*}
+     */
+    getData(){
+        return this.data;
+    }
+
+    /**
+     * @returns string
+     */
+    getStatusText(){
+        return this.statusText;
+    }
+}

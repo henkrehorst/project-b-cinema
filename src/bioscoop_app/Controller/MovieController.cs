@@ -94,26 +94,22 @@ namespace bioscoop_app.Controller
         public ChromelyResponse UpdateMovie(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            string filename = data["filename"].Value<string>();
-            string filestring = data["filestring"].Value<string>();
-            if (filestring is object)
+            Repository<Movie> repository = new MovieRepository();
+            
+            string filestring = data["cover_image"].Value<string>();
+            string filename = repository.Data[data.Value<int>("id")].coverImage;
+            
+            if (filestring.Length > 0)
             {
                 var uploadService = new UploadService(filestring);
                 if (uploadService.CheckIsImage())
                 {
-                    uploadService.UpdateFile(filename);
+                    uploadService.DeleteFile(filename);
+                    uploadService.CreateFileInUploadFolder();
+                    filename = uploadService.GetFileName();
                 }
             }
-            int? idCheck = data.Value<int>("id");
-            if (idCheck is null)
-            {
-                return new Response
-                {
-                    status = 400,
-                    statusText = "id undefined"
-                }.ChromelyWrapper(req.Id);
-            }
-            Repository<Movie> repository = new MovieRepository();
+            
             try
             {
                 repository.Update(data.Value<int>("id"), new Movie(

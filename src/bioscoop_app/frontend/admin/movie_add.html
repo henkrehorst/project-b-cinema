@@ -35,13 +35,14 @@
                 </div>
                 <div class="form-group">
                     <label for="cover_image">Cover image</label>
-                    <input name="cover_image" type="file" class="form-control-file" id="cover_image">
+                    <input name="cover_image" type="file" class="form-control-file" id="cover_image" onchange="coverImagePreview()">
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary">Voeg film toe</button>
                 </div>
             </form>
         </div>
+        <div class="col-md-6 cover-image-preview"></div>
     </div>
 </div>
 
