@@ -1,71 +1,18 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-         <!--<link rel="stylesheet" type="text/css" href="/admin/css/style.css">-->
-         <link rel="stylesheet" href="./css/bootstrap.min.css">
-         <link rel="stylesheet" href="./css/main.css"/>
-        <title>Bioscoop app</title>
-    </head>
-    <body>
-        <nav>
-            <div class="container">
-                <ul>
-                    <li><a href="/">De kijkdoos</a></li>
-                </ul>
-                <ul>
-                    <li><a href="../index.html">Klant applicatie</a></li>
-                    <li><a href="#" id="movies">Film overview pagina</a></li>
-                    <li><a href="#" id="add_movie">Voeg film toe</a></li>
-                    <li><a href="/admin/product.html">Product pagina</a></li>
-                    <li><a href="/admin/screentime.html">Screentime</a></li>
-                </ul>
-            </div>
-        </nav>
-        <div class="page" id="movies" style="display:none">
-            <h2>Movies</h2>
-            <table id="movies">
-                <tr>
-                    <th>Name</th>
-                    <th>Genre</th>
-                    <th>Rating</th>
-                </tr>
-                <tbody></tbody>
-            </table>
-        </div>
-        <div class="page" id="add_movie" style="display:none">
-            <div class="form" name="add_movie">
-                <span>Title</span><input type="text" name="movie-title" />
-                <br />
-                <span>Duration</span><input type="number" name="movie-duration" />
-                <br />
-                <span>Genre</span><input type="text" name="movie-genre" />
-                <br />
-                <span>Rating</span><input type="number" step="0.1" name="movie-rating" />
-                <br />
-                <span>Cover image</span><input type="file" required="required" name="movie-cover-image">
-                <br />
-                <button class="add-movie">Add Movie</button>
-            </div>
-        </div>
-        <div class="page" id="update_movie" style="display:none">
-            <div class="form" name="update_movie">
-                <span>Title</span><input type="text" name="title" />
-                <br />
-                <span>Duration</span><input type="number" name="duration" />
-                <br />
-                <span>Genre</span><input type="text" name="genre" />
-                <br />
-                <span>Rating</span><input type="number" step="0.1" name="rating" />
-                <br />
-                <span>Cover image</span><input type="file" name="cover-image" />
-                <br />
-                <button class="submit" id="update_movie">Wijzigingen opslaan</button>
-            </div>
-        </div>
-        <script src="/admin/js/admin.js"></script>
-        <script src="/admin/js/add_movie.js"></script>
-        <script src="/admin/js/overview.js"></script>
-        <script src="/admin/js/update_movie.js"></script>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" type="text/css" href="/admin/css/style.css">-->
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
+    <title>Bioscoop app</title>
+</head>
+<body>
+<nav>
+    <div class="container">
+    </div>
+</nav>
+
+<script src="/admin/js/main.js"></script>
+</body>
 </html>

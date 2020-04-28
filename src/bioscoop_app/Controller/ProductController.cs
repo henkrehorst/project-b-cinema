@@ -139,5 +139,18 @@ namespace bioscoop_app.Controller
                     );
             }
         }
+        
+        /// <param name="req">http POST request containing the desired Product id</param>
+        /// <returns>The product associated with the id.</returns>
+        [HttpPost(Route = "/product#id")]
+        public ChromelyResponse GetMovieById(ChromelyRequest req)
+        {
+            int id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
+            return new Response
+            {
+                status = 200,
+                data = JsonConvert.SerializeObject(new ProductRepository().Data[id])
+            }.ChromelyWrapper(req.Id);
+        }
     }
 }
