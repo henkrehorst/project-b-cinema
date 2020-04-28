@@ -17,7 +17,12 @@ async function productOverviewPage() {
             </tr>`;
     }
     document.querySelector("body > div > div > div > table > tbody").innerHTML = productTable;
-    console.log(products);
+    
+    // get default price ticket from backend
+    const ticketPriceResponse = await chromelyRequest('/product#ticketprice');
+    // show default ticket price
+    document.querySelector("body > div:nth-child(3) > div > div > table > tbody > tr > td:nth-child(2)").innerHTML =
+        `&euro; ${ticketPriceResponse.getData().toFixed(2).replace('.', ',')}`
 }
 
 /**
