@@ -23,6 +23,26 @@ async function productOverviewPage() {
     // show default ticket price
     document.querySelector("body > div:nth-child(3) > div > div > table > tbody > tr > td:nth-child(2)").innerHTML =
         `&euro; ${ticketPriceResponse.getData().toFixed(2).replace('.', ',')}`
+
+    /**
+     * show ticket price edit form
+     */
+    function showPriceEditForm() {
+        document.querySelector("body > div:nth-child(3) > div > div > table > tbody > tr").innerHTML = 
+            `<td>
+                <div class="form-group">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">&euro;</div>
+                        </div>
+                        <input name="price" value="${ticketPriceResponse.getData().toFixed(2)}" type="number" step="0.01" class="form-control" id="price_field">
+                    </div>
+            </td><td><button onclick="updateTicketPrice()" class="btn-primary btn">Pas aan</button></td>`
+    }
+
+    // click event edit price button
+    document.querySelector("body > div:nth-child(3) > div > div > table > tbody > tr > td:nth-child(3) > button")
+        .addEventListener('click', showPriceEditForm);
 }
 
 /**
@@ -86,4 +106,21 @@ async function productEditPage() {
     }
     
     document.querySelector("body > div > div > div > form > div:nth-child(3) > button").addEventListener('click', updateProduct);
+}
+
+
+/**
+ * Function for update ticket price in backend 
+ */
+async function updateTicketPrice() {
+    // read ticket price from price field
+    let ticketPrice = document.getElementById('price_field').value;
+    
+    // update ticket price in backend
+    const response = await chromelyRequest('/product#ticketprice','POST',{'price':parseFloat(ticketPrice)});
+    
+    // if response is success: return to overview page
+    if(response.getStatusCode() === 204){
+        window.location.href = '/admin/product.html'
+    }
 }
