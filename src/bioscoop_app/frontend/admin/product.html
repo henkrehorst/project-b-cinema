@@ -1,44 +1,53 @@
 ﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" type="text/css" href="/admin/css/style.css">-->
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
     <title>Bioscoop app</title>
 </head>
-<body>
-    <div id="content">
-        <table id="overview">
-            <thead>
+<body onload="productOverviewPage()">
+<nav data-active-item="Producten">
+    <div class="container">
+    </div>
+</nav>
+<div class="container">
+    <h3 style="padding: 20px 0;">Producten</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <thead>
                 <tr>
-                    <td>Name</td>
-                    <td>Price</td>
+                    <th>Naam</th>
+                    <th>Prijs</th>
+                    <th>Edit</th>
                 </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div class="form" name="add" style="display: none">
-            <label for="name">name: </label>
-            <input type="text" name="add" id="name"/><br/>
-            <label for="price">price: </label>
-            <input type="number" step="0.01" name ="add" id="price"/><br/>
-            <button name="add" id="submit">Submit</button>
-        </div>
-        <div class="form" name="update" style="display: none">
-            <label for="name">name: </label>
-            <input type="text" name="update" id="name" /><br />
-            <label for="price">price: </label>
-            <input type="number" step="0.01" name="update" id="price" /><br />
-            <button name="update" id="submit">Submit</button>
-        </div>
-        <button id="add-product">Add product</button>
-        <a href="/index.html">Home</a>
-        <div id="display_base_price">
-            <p id="ticket_price"></p>
-            <input type="number" step="0.01" name="update" id="ticket"/>
-            <button name="update" id="ticket">Update</button>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <a class="btn-primary btn" href="/admin/product_add.html">Voeg een nieuw product toe</a>
         </div>
     </div>
-    
-    <script src="/admin/js/product_controller.js"></script>
+</div>
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h4>Basisprijs ticket</h4>
+            <p>Hieronder kunt u de basis prijs van een ticket aanpassen en bekijken.</p>
+            <table class="table">
+                <tr>
+                    <th>Basisprijs ticket:</th>
+                    <td></td>
+                    <td><button type="button" class="btn btn-primary">Pas prijs aan</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="/admin/js/main.js"></script>
+<script src="/admin/js/product_pages.js"></script>
 </body>
 </html>

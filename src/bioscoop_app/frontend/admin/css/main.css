@@ -94,3 +94,7 @@ nav .container ul li a:hover {
     color: #FF4336;
     text-decoration: none;
 }
+
+.cover-image-preview img{
+    width: 240px;
+}

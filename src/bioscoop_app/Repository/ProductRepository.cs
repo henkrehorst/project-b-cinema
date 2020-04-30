@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace bioscoop_app.Repository
 {
+    /// <summary>
+    /// Repository that acts on Product.
+    /// </summary>
     class ProductRepository : Repository<Product>
     {
     }

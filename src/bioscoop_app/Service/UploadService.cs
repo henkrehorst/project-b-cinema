@@ -49,13 +49,9 @@ namespace bioscoop_app.Service
                 Convert.FromBase64String(convertBase64));
         }
 
-        public void UpdateFile(string filename)
+        public void DeleteFile(string filename)
         {
-            //convert base64
-            string convertBase64 = this._base64FileString.Replace($"data:{GetMimeType()};base64,", String.Empty);
-
-            File.WriteAllBytes($"{StorageService.GetUploadPath()}{filename}",
-                Convert.FromBase64String(convertBase64));
+            File.Delete($"{StorageService.GetUploadPath()}{filename}");
         }
 
         public string GetFileName()
