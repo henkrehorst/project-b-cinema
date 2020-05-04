@@ -32,11 +32,6 @@ async function productOverviewPage() {
             </tr>`;
     }
     document.querySelector("body > div > div > div:nth-child(2) > table > tbody").innerHTML = productTable;
-    
-    
-    // click event edit price button
-    document.querySelector("body > div:nth-child(3) > div > div > table > tbody > tr > td:nth-child(3) > button")
-        .addEventListener('click', showPriceEditForm);
 }
 
 /**
