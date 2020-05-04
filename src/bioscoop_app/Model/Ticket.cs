@@ -13,7 +13,7 @@ namespace bioscoop_app.Model
 		public int visitorAge;
 
 		public Ticket(double priceModifier, string name, Seat seat, ScreenTime screenTime, int visitorAge)
-			: base(basePrice*priceModifier, name)
+			: base(basePrice*priceModifier, name, "ticket")
 		{
 			this.seat = seat;
 			this.screenTime = screenTime;
@@ -22,7 +22,7 @@ namespace bioscoop_app.Model
 
 		[JsonConstructor]
 		public Ticket(int id, double priceModifier, string name, Seat seat, ScreenTime screenTime, int visitorAge)
-			: base(id, basePrice*priceModifier, name)
+			: base(id, basePrice*priceModifier, name, "ticket")
 		{
 			this.seat = seat;
 			this.screenTime = screenTime;

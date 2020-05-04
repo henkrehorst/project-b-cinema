@@ -61,7 +61,8 @@ async function productAddPage() {
         // post product to backend
         const response = await chromelyRequest('/products#add', 'POST', {
             'name': productForm.get('name'),
-            'price': productForm.get('price')
+            'price': productForm.get('price'),
+            'type': productForm.get('product-type')
         })
         
         // redirect to overview page if product is created
@@ -70,7 +71,7 @@ async function productAddPage() {
         }
     }
 
-    document.querySelector("body > div > div > div > form > div:nth-child(3) > button").addEventListener('click', addProduct);
+    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', addProduct);
 }
 
 
@@ -84,6 +85,12 @@ async function productEditPage() {
     let product = productResponse.getData();
     document.getElementById('name_field').value = product.name;
     document.getElementById('price_field').value = product.price.toFixed(2);
+    let typeDropdown = document.querySelector("#product-type-field");
+    for(key in typeDropdown.options){
+        if(typeDropdown.options[key].value === product.type){
+            typeDropdown.options[key].selected = true;
+        }
+    }
     
     /**
      * function for updating product in backend
@@ -96,7 +103,8 @@ async function productEditPage() {
         const response = await chromelyRequest('/products#update', 'POST', {
             'id': getIdFromUrl(),
             'name': productForm.get('name'),
-            'price': productForm.get('price')
+            'price': productForm.get('price'),
+            'type': productForm.get('product-type')
         })
 
         // redirect to overview page if product is created
@@ -104,8 +112,8 @@ async function productEditPage() {
             window.location.href = '/admin/product.html';
         }
     }
-    
-    document.querySelector("body > div > div > div > form > div:nth-child(3) > button").addEventListener('click', updateProduct);
+
+    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', updateProduct);
 }
 
 
