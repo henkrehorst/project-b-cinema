@@ -3,43 +3,37 @@
  * @returns {Promise<void>}
  */
 async function productOverviewPage() {
-    //get all products from backend
-    const productResponse = await chromelyRequest('/products');
-    const products = productResponse.getData();
+    //get all upsells from backend
+    const upsellResponse = await chromelyRequest('/product#type','POST',{'type':'upsell'});
+    const upsells = upsellResponse.getData();
     
-    //display products in table
+    //display upsell products in table
     let productTable = "";
-    for(product in products){
+    for(upsell in upsells){
         productTable += `<tr>
-                <td>${products[product].name}</td>
-                <td>&euro; ${products[product].price.toFixed(2).replace('.',',')}</td>
-                <td><a href="/admin/product_edit.html?id=${products[product].Id}">Edit</a></td>
+                <td>${upsells[upsell].name}</td>
+                <td>&euro; ${upsells[upsell].price.toFixed(2).replace('.',',')}</td>
+                <td><a href="/admin/product_edit.html?id=${upsells[upsell].Id}">Edit</a></td>
             </tr>`;
     }
     document.querySelector("body > div > div > div > table > tbody").innerHTML = productTable;
+
+    //get all upsells from backend
+    const ticketResponse = await chromelyRequest('/product#type','POST',{'type':'ticket'});
+    const tickets = ticketResponse.getData();
     
-    // get default price ticket from backend
-    const ticketPriceResponse = await chromelyRequest('/product#ticketprice');
-    // show default ticket price
-    document.querySelector("body > div:nth-child(3) > div > div > table > tbody > tr > td:nth-child(2)").innerHTML =
-        `&euro; ${ticketPriceResponse.getData().toFixed(2).replace('.', ',')}`
-
-    /**
-     * show ticket price edit form
-     */
-    function showPriceEditForm() {
-        document.querySelector("body > div:nth-child(3) > div > div > table > tbody > tr").innerHTML = 
-            `<td>
-                <div class="form-group">
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">&euro;</div>
-                        </div>
-                        <input name="price" value="${ticketPriceResponse.getData().toFixed(2)}" type="number" step="0.01" class="form-control" id="price_field">
-                    </div>
-            </td><td><button onclick="updateTicketPrice()" class="btn-primary btn">Pas aan</button></td>`
+    //display tickets in table
+    productTable = "";
+    for(ticket in tickets){
+        productTable += `<tr>
+                <td>${tickets[ticket].name}</td>
+                <td>&euro; ${tickets[ticket].price.toFixed(2).replace('.',',')}</td>
+                <td><a href="/admin/product_edit.html?id=${tickets[ticket].Id}">Edit</a></td>
+            </tr>`;
     }
-
+    document.querySelector("body > div > div > div:nth-child(2) > table > tbody").innerHTML = productTable;
+    
+    
     // click event edit price button
     document.querySelector("body > div:nth-child(3) > div > div > table > tbody > tr > td:nth-child(3) > button")
         .addEventListener('click', showPriceEditForm);
