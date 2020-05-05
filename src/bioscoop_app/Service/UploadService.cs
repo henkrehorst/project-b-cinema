@@ -65,16 +65,12 @@ namespace bioscoop_app.Service
         }
 
         /// <summary>
-        /// Finds the file in the upload folder and overwrites all data.
+        /// Finds the file in the upload folder and deletes it.
         /// </summary>
         /// <param name="filename"></param>
-        public void UpdateFile(string filename)
+        public void DeleteFile(string filename)
         {
-            //convert base64
-            string convertBase64 = this._base64FileString.Replace($"data:{GetMimeType()};base64,", String.Empty);
-
-            File.WriteAllBytes($"{StorageService.GetUploadPath()}{filename}",
-                Convert.FromBase64String(convertBase64));
+            File.Delete($"{StorageService.GetUploadPath()}{filename}");
         }
 
         /// <summary>

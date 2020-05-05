@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Film</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
+</head>
+<body onload="stepOne()">
+<nav data-active-item="Films">
+    <div class="container">
+    </div>
+</nav>
+<div class="container">
+    <div class="row reservation_container">
+        <div class="col-md-8 reservation_boxes">
+            <div class="reservation_box_header">
+                <h3>Kies hieronder je tickets</h3>
+            </div>
+            <div class="product_container" id="product_view">
+                <div class="product_item">
+                    <div class="product_details">
+                        <p>Regular ticket</p>
+                        <p>&euro; 10,00</p>
+                    </div>
+                    <div class="price_control">
+                        <button type="button">-</button>
+                        <input type="number" step="1" value="0" name="amount">
+                        <button type="button">+</button>
+                    </div>
+                </div>
+                <div class="product_item">
+                    <div class="product_details">
+                        <p>Regular ticket</p>
+                        <p>&euro; 10,00</p>
+                    </div>
+                    <div class="price_control">
+                        <button type="button">-</button>
+                        <input type="number" step="1" value="0" name="amount">
+                        <button type="button">+</button>
+                    </div>
+                </div>
+                <div class="product_item">
+                    <div class="product_details">
+                        <p>Regular ticket</p>
+                        <p>&euro; 10,00</p>
+                    </div>
+                    <div class="price_control">
+                        <button type="button">-</button>
+                        <input type="number" step="1" value="0" name="amount">
+                        <button type="button">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 reservation_boxes">
+            <div class="reservation_box_header">
+                <h3>Jouw reservering</h3>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ticket</th>
+                    <th scope="col">Prijs</th>
+                </tr>
+                </thead>
+                <tbody id="reservation_view">
+                </tbody>
+            </table>
+            <a href="#" class="btn btn-success">KIES PLAATSEN</a>
+        </div>
+    </div>
+</div>
+<script src="./js/main.js"></script>
+<script src="./js/reservation_pages.js"></script>
+</body>
+</html>

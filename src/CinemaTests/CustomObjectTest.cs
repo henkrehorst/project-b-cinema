@@ -68,7 +68,7 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Product other = new Product(1, 10, "stub");
+            Product other = new Product(1, 10, "stub", "ticket");
 
             //act
             bool actual = randomTicket.Equals(other);
@@ -280,7 +280,7 @@ namespace CinemaTests
             //Arrange
             bool expected = false;
             Product a = new Ticket(54, 1.4, "kalskdjfi", null, null, 37);
-            Product b = new Product(12, "podasiuf");
+            Product b = new Product(12, "podasiuf", "ticket");
 
             //Act
             bool actual = a.GetHashCode() == b.GetHashCode();

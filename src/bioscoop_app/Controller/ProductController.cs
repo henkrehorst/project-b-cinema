@@ -63,6 +63,25 @@ namespace bioscoop_app.Controller
         }
 
         /// <summary>
+        /// Get products by type
+        /// </summary>
+        /// <param name="req">http POST request containing the type</param>
+        /// <returns>The products associated by the posted type</returns>
+        [HttpPost(Route = "/product#type")]
+        public ChromelyResponse GetProductByType(ChromelyRequest req)
+        {
+            JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            
+            var productRepository = new ProductRepository();
+
+            return new Response
+            {
+                data = JsonConvert.SerializeObject(productRepository.GetProductsByType(data.Value<string>("type"))),
+                status = 200
+            }.ChromelyWrapper(req.Id);
+        }
+
+        /// <summary>
         /// Adds the specified Product to the data file.
         /// </summary>
         /// <param name="req">http POST request containing the Product data</param>
@@ -135,9 +154,23 @@ namespace bioscoop_app.Controller
             {
                 return new Product(
                     data["price"].Value<double>(),
-                    data["name"].Value<string>()
+                    data["name"].Value<string>(),
+                    data["type"].Value<string>()
                     );
             }
+        }
+        
+        /// <param name="req">http POST request containing the desired Product id</param>
+        /// <returns>The product associated with the id.</returns>
+        [HttpPost(Route = "/product#id")]
+        public ChromelyResponse GetMovieById(ChromelyRequest req)
+        {
+            int id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
+            return new Response
+            {
+                status = 200,
+                data = JsonConvert.SerializeObject(new ProductRepository().Data[id])
+            }.ChromelyWrapper(req.Id);
         }
     }
 }
