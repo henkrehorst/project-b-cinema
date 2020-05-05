@@ -1,15 +1,16 @@
 ﻿using bioscoop_app.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CinemaTests.Helper
 {
     [TestClass]
-    class RoomLayoutServiceTest
+    public class RoomLayoutServiceTest
     {
-        private readonly bool[,] expected = new bool[14, 12]
+        private static readonly bool[,] expected = new bool[14, 12]
         {
             {false, false, true, true, true, true, true, true, true, true, false, false },
             {false, true, true, true, true, true, true, true, true, true, true, false },

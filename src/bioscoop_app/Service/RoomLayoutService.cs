@@ -17,7 +17,7 @@ namespace bioscoop_app.Service
         /// <returns>the requested layout</returns>
         public static bool[,] GetInitialAvailability(string roomName)
         {
-            bool[,] value = (bool[,]) typeof(RoomLayoutService).GetField(roomName).GetValue(null);
+            bool[,] value = (bool[,]) typeof(RoomLayoutService).GetField(roomName, BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null);
             return (value is object) ? value : throw new ArgumentException("Room not found");
         }
 
