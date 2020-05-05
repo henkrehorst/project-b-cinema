@@ -11,6 +11,7 @@ namespace bioscoop_app.Model
 		public int movie;
 		public DateTime startTime;
 		public DateTime endTime;
+		public string roomName;
 		public bool[,] availability;
 		public int availableTickets;
 
@@ -19,6 +20,7 @@ namespace bioscoop_app.Model
 			this.movie = movie;
 			this.startTime = startTime;
 			this.endTime = endTime;
+			this.roomName = roomName;
 			availability = RoomLayoutService.GetInitialAvailability(roomName);
 			foreach (bool val in availability)
 			{
@@ -27,12 +29,13 @@ namespace bioscoop_app.Model
 		}
 
 		[JsonConstructor]
-		public ScreenTime(int id, int movie, DateTime startTime, DateTime endTime, bool[,] availability, int availableTickets)
+		public ScreenTime(int id, int movie, DateTime startTime, DateTime endTime, string roomName, bool[,] availability, int availableTickets)
 		{
 			Id = id;
 			this.movie = movie;
 			this.startTime = startTime;
 			this.endTime = endTime;
+			this.roomName = roomName;
 			this.availability = availability;
 			this.availableTickets = availableTickets;
 		}
