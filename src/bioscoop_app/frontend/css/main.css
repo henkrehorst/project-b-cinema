@@ -230,6 +230,7 @@ nav .container ul li a:hover {
 
 #reservation_view{
     font-size: 12px;
+}
 
 /* Seat Overview Page */
 #cinema-grid {
@@ -259,7 +260,6 @@ nav .container ul li a:hover {
 .seat {
     width: 10px;
     height: 10px;
-    height: 100%;
     top: 0;
     position: absolute;
     background-color: #5488C8;
