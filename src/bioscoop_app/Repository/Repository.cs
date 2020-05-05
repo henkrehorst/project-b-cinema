@@ -13,7 +13,7 @@ namespace bioscoop_app.Repository
     /// Abstract class that contains base functionality for Repositories.
     /// </summary>
     /// <typeparam name="T">The Type this repository acts on. Must satisfy (T is DataType).</typeparam>
-    public abstract class Repository<T> where T : DataType
+    public class Repository<T> where T : DataType
     {
         protected const string FileExtension = ".json";
         protected Dictionary<int, T> data;
