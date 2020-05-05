@@ -50,7 +50,7 @@ async function screentimeEditPage() {
     document.querySelector("#end_time").value = screenTime.endTime;
     let roomDropdown = document.querySelector("#room_name");
     for (key in roomDropdown) {
-        if (roomDropdown.options[key].value === screenTime.room_name.toString()) {
+        if (roomDropdown.options[key].value === screenTime.room_name) {
             roomDropdown.options[key].selected = true;
         }
     }
@@ -76,7 +76,7 @@ async function screentimeEditPage() {
         }
     }
 
-    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', updateScreenTime);
+    document.querySelector("body > div > div > div > form > div:nth-child(5) > button").addEventListener('click', updateScreenTime);
 }
 
 /**
@@ -106,8 +106,8 @@ async function screentimeAddPage() {
             window.location.href = "/admin/screentime.html";
         }
     }
-    
-    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', addScreenTime);
+
+    document.querySelector("body > div > div > div > form > div:nth-child(5) > button").addEventListener('click', addScreenTime);
 }
 
 
