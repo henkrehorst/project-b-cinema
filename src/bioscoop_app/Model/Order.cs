@@ -11,20 +11,20 @@ namespace bioscoop_app.Model
 		public string cust_name;
 		public string cust_email;
 
-		public Order(List<Product> items, string code, string cust_name, string cust_email)
+		public Order(List<Product> items, string cust_name, string cust_email)
 		{
 			this.items = items;
-			this.code = code;
+			code = null;
 			this.cust_email = cust_email;
 			this.cust_name = cust_name;
 		}
 
 		[JsonConstructor]
-		public Order(int id, List<Product> items, string code, string cust_name, string cust_email)
+		public Order(int id, List<Product> items, string cust_name, string cust_email)
 		{
-			this.Id = id;
+			Id = id;
 			this.items = items;
-			this.code = code;
+			code = null;
 			this.cust_email = cust_email;
 			this.cust_name = cust_name;
 		}
