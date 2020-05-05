@@ -44,7 +44,7 @@ namespace bioscoop_app.Controller
             foreach(Ticket ticket in tickets)
             {
                 var repo = new Repository<ScreenTime>();
-                repo.Data[ticket.screenTime.Id].ReserveSeat(ticket);
+                repo.Data[ticket.screenTime].ReserveSeat(ticket);
                 repo.SaveChangesThenDiscard();
             }
         }

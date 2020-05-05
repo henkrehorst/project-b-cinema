@@ -46,8 +46,8 @@ namespace bioscoop_app.Model
 		/// <param name="ticket"></param>
 		public void ReserveSeat(Ticket ticket)
 		{
-			if (availability[ticket.seat.row, ticket.seat.seatnr] == false) throw new InvalidOperationException("Seat is not available");
-			availability[ticket.seat.row, ticket.seat.seatnr] = false;
+			if (availability[ticket.row, ticket.seatnr] == false) throw new InvalidOperationException("Seat is not available");
+			availability[ticket.row, ticket.seatnr] = false;
 			--availableTickets;
 		}
 	}
