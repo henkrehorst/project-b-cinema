@@ -12,10 +12,6 @@ namespace CinemaTests
     public class EqualsTicketCase
     {
         static Ticket randomTicket;
-        Mock<Seat> MockedSeatA;
-        Mock<Seat> MockedSeatB;
-        Mock<ScreenTime> MockedScreenTimeA;
-        Mock<ScreenTime> MockedScreenTimeB;
 
         [ClassInitialize]
         public static void TestFixtureSetup(TestContext context)
