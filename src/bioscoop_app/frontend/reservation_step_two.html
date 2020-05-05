@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/main.css"/>
 </head>
-<body onload="stepOne()">
+<body onload="stepTwo()">
 <nav data-active-item="Films">
     <div class="container">
     </div>
@@ -15,13 +15,20 @@
     <div class="row reservation_container">
         <div class="col-md-8 reservation_boxes">
             <div class="reservation_box_header">
-                <h3>Kies hieronder je tickets</h3>
+                <h3>Kies hieronder je plaatsen</h3>
             </div>
-            <div class="product_container" id="product_view">
+            <div id="cinema-grid">
+                <div id="cinema-room"></div>
             </div>
-            <h3 style="text-align: center">Extra producten</h3>
-            <div class="product_container" id="upsell_view">
+            <div class="controls">
+                <p class="screen-title">SCHERM 3</p>
+                <button class="zoom-out">Verkleinen</button>
+                <button class="zoom-in">Vergroten</button>
+                <button class="next-screen">Volgend Scherm</button>
             </div>
+
+            <p class="seat-description">0 stoelen geselecteerd.</p>
+            <p class="error-msg">Hier komen de error messages</p>
         </div>
         <div class="col-md-3 reservation_boxes">
             <div class="reservation_box_header">
@@ -58,11 +65,12 @@
                 </tr>
                 </thead>
             </table>
-            <a href="/reservation_step_two.html" class="btn btn-success">KIES PLAATSEN</a>
+            <a href="/reservation_step_three.html" class="btn btn-success">BEVESTIG RESERVERING</a>
         </div>
     </div>
 </div>
 <script src="./js/main.js"></script>
 <script src="./js/reservation_pages.js"></script>
+<script src="js/seat_overview.js"></script>
 </body>
 </html>
