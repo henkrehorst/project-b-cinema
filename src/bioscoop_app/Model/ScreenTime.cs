@@ -40,7 +40,11 @@ namespace bioscoop_app.Model
 			this.availableTickets = availableTickets;
 		}
 
-		public void ReserveTicket(Ticket ticket)
+		/// <summary>
+		/// Reserves the seat on the ticket.
+		/// </summary>
+		/// <param name="ticket"></param>
+		public void ReserveSeat(Ticket ticket)
 		{
 			if (availability[ticket.seat.row, ticket.seat.seatnr] == false) throw new InvalidOperationException("Seat is not available");
 			availability[ticket.seat.row, ticket.seat.seatnr] = false;
