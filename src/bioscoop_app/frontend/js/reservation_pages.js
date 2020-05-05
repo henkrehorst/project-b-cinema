@@ -32,6 +32,15 @@ async function stepOne() {
 
 
 /**
+ * function with all javascript running on step two of the reservation flow (seat selection step)
+ */
+async function stepTwo() {
+    //show reservation
+    showOrUpdateReservationCart();
+}
+
+
+/**
  * function for controlling the amount of price control
  * @param id
  * @param amount
