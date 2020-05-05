@@ -35,33 +35,6 @@ namespace bioscoop_app.Controller
             }.ChromelyWrapper(req.Id);
         }
 
-        /// <param name="req">http GET request</param>
-        /// <returns>Current ticket price.</returns>
-        [HttpGet(Route = "/product#ticketprice")]
-        public ChromelyResponse GetTicketPrice(ChromelyRequest req)
-        {
-            return new Response
-            {
-                status = 200,
-                data = JsonConvert.SerializeObject(Ticket.basePrice)
-            }.ChromelyWrapper(req.Id);
-        }
-
-        /// <summary>
-        /// Updates the basePrice of a Ticket to the specified value.
-        /// </summary>
-        /// <param name="req">http POST request containing the new basePrice</param>
-        /// <returns>Status 204</returns>
-        [HttpPost(Route = "/product#ticketprice")]
-        public ChromelyResponse SetTicketPrice(ChromelyRequest req)
-        {
-            Ticket.basePrice = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<double>("price");
-            return new Response
-            {
-                status = 204
-            }.ChromelyWrapper(req.Id);
-        }
-
         /// <summary>
         /// Get products by type
         /// </summary>
@@ -143,10 +116,11 @@ namespace bioscoop_app.Controller
             if (data.ContainsKey("seat") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
             {
                 return new Ticket(
-                    Ticket.GetModifier(data["price"].Value<double>()),
+                    data["price"].Value<double>(),
                     data["name"].Value<string>(),
-                    data["seat"].Value<Seat>(),
-                    data["screenTime"].Value<ScreenTime>(),
+                    data["row"].Value<int>(),
+                    data["seatnr"].Value<int>(),
+                    data["screenTime"].Value<int>(),
                     data["visitorAge"].Value<int>()
                     );
             }
