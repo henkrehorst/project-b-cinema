@@ -151,6 +151,7 @@ function showOrUpdateReservationCart() {
     let reservation = getReservationCookieValue();
     //display reservation in table
     let reservationView = "";
+    let totalCost = 0;
     
     for(order in reservation['order']){
         reservationView += 
@@ -159,6 +160,7 @@ function showOrUpdateReservationCart() {
                 <td>${reservation['products'][order].name}</td>
                 <td>&euro; ${(reservation['order'][order] * reservation['products'][order].price).toFixed(2).replace('.',',')}</td>
             </tr>`
+        totalCost += reservation['order'][order] * reservation['products'][order].price
     }
     
     if(reservationView === ""){
@@ -176,6 +178,7 @@ function showOrUpdateReservationCart() {
                 <td>${reservation['upsellProducts'][upsell].name}</td>
                 <td>&euro; ${(reservation['upsell'][upsell] * reservation['upsellProducts'][upsell].price).toFixed(2).replace('.',',')}</td>
             </tr>`
+        totalCost += reservation['upsell'][upsell] * reservation['upsellProducts'][upsell].price;
     }
 
     if(upsellView === ""){
@@ -183,6 +186,8 @@ function showOrUpdateReservationCart() {
     }
 
     document.getElementById('upsell_cart').innerHTML = upsellView;
+    //display total price
+    document.getElementById('total_cost').innerHTML = `&euro; ${totalCost.toFixed(2).replace('.',',')}`;
 }
 
 /**
