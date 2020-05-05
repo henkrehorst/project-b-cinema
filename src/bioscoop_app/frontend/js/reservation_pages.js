@@ -151,3 +151,19 @@ function showOrUpdateReservationCart() {
     
     document.getElementById('reservation_view').innerHTML = reservationView;
 }
+
+/**
+ * Function for getting the total count of tickets
+ */
+function getTotalTicketCount() {
+    // get orders
+    let orders = getReservationCookieValue().order;
+    // calculate ticket count
+    let ticketCount = 0;
+    
+    for(order in orders){
+           ticketCount += orders[order];
+    }
+    
+    return ticketCount;
+}
