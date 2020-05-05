@@ -51,6 +51,36 @@ async function stepTwo() {
     showOrUpdateReservationCart();
 }
 
+/**
+ * function with all javascript running on step three of the reservation flow (confirm)
+ */
+async function stepThree() {
+    //show shopping cart
+    showOrUpdateReservationCart();
+
+    /**
+     * function for finish reservation
+     */
+    async function finishReservation() {
+        //read form information
+        let confirmForm = new FormData(document.getElementById('checkout-form'));
+        console.log(confirmForm.get('name'),confirmForm.get('email'))
+        
+        //display reservation code after success
+        document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_confirm_form").innerHTML =
+        `<p>Hieronder staat je reserveringscode om je tickets mee op te halen,
+            deze is ook terug te vinden in je email.</p>
+        <div class="mt-5 reservation_code_box"><p>DGWE1123FGEWW</p></div>
+         <a href="/index.html" class="btn btn-success confirm_button">GA TERUG NAAR HET OVERZICHT</a>`;
+        
+        //change title
+        document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_box_header > h3").innerHTML =
+            "We hebben je reservering succesvol ontvangen";
+    }
+    
+    //add finish function on confirm button
+    document.getElementById('confirm_button').addEventListener('click', finishReservation);
+}
 
 /**
  * function for controlling the amount of price control

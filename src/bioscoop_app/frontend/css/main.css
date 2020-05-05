@@ -336,3 +336,33 @@ p.screen-title {
 #upsell_cart{
     font-size: 12px;
 }
+
+.reservation_confirm_form{
+    padding: 25px;
+    position: relative;
+}
+
+.confirm_button{
+    width: 100%;
+    margin-top: 35px;
+}
+
+.reservation_code_box{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90px;
+    font-size: 50px;
+    text-align: center;
+    border: 2.5px solid black;
+}
+
+.reservation_code_box p{
+    margin: 0;
+    font-size: 50px !important;
+}
+
+.reservation_confirm_form p{
+    font-size: 20px;
+}
