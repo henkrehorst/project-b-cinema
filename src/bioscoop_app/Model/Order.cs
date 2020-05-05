@@ -55,8 +55,7 @@ namespace bioscoop_app.Model
 			while (seq.MoveNext())
 			{
 				string a = seq.Current.ToString();
-				seq.MoveNext();
-				a += seq.Current;
+				a += seq.MoveNext() ? seq.Current : throw new IndexOutOfRangeException("missing 4 bits");
 				bytes[byteindex++] = Convert.ToByte(a, 16);
 			}
 
