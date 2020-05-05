@@ -11,5 +11,13 @@ namespace bioscoop_app.Repository
     /// </summary>
     class ProductRepository : Repository<Product>
     {
+        /// <param name="productType">The type of the product</param>
+        /// <returns>A dictionary of Products associated with the product type</returns>
+        public Dictionary<int, Product> GetProductsByType(string productType)
+        {
+            return Data.Where(item =>
+                    item.Value.type.Equals(productType))
+                .ToDictionary(item => item.Key, item => item.Value);
+        }
     }
 }

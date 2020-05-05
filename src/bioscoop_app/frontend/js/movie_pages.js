@@ -60,7 +60,7 @@ async function movieDetailPage() {
             screentimeTable += `<tr>
                 <td>${new Date(screenTimes[time].startTime).toLocaleString()}</td>
                 <td>${new Date(screenTimes[time].startTime).toLocaleString()}</td>
-                <td><a href="#">Reserveren</a></td>
+                <td><a href="/reservation_step_one.html?id=${screenTimes[time].Id}">Reserveren</a></td>
             </tr>`;
         }
         //close table
