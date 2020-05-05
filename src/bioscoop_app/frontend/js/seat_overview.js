@@ -343,3 +343,6 @@ let selectedSeats = []; // All newly selected seats will be stored inside this a
 let maxColLength = rooms[selectedRoom][0].length; // Defines the max amount of columns in a row (default row 0)
 
 loadSeatOverview();
+
+//met deze functie kun je het aantal tickets ophalen dat geselecteerd is
+console.log(getTotalTicketCount());
