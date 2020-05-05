@@ -31,7 +31,14 @@ namespace CinemaTests.Helper
         [TestMethod]
         public void GetInitialAvailabilityTest_auditorium1()
         {
-            Assert.AreEqual(expected, RoomLayoutService.GetInitialAvailability("auditorium1"));
+            bool[,] actual = RoomLayoutService.GetInitialAvailability("auditorium1");
+            var a = expected.GetEnumerator();
+            var b = actual.GetEnumerator();
+            while (a.MoveNext() && b.MoveNext())
+            {
+                Assert.AreEqual(a.Current, b.Current);
+            };
+            Assert.IsFalse(a.MoveNext() || b.MoveNext());
         }
 
         [TestMethod]
