@@ -42,8 +42,9 @@ namespace bioscoop_app.Controller
             screenTimeRepository.AddThenWrite(new ScreenTime(
                 data["movie_id"].Value<int>(),
                 data["start_time"].Value<DateTime>(),
-                data["end_time"].Value<DateTime>())
-            );
+                data["end_time"].Value<DateTime>(),
+                data["room_name"].Value<string>()
+            ));
 
             return new Response
             {
@@ -86,8 +87,9 @@ namespace bioscoop_app.Controller
                 screenTimeRepository.Update(data["id"].Value<int>(), new ScreenTime(
                     data["movie_id"].Value<int>(),
                     data["start_time"].Value<DateTime>(),
-                    data["end_time"].Value<DateTime>())
-                );
+                    data["end_time"].Value<DateTime>(),
+                    data["room_name"].Value<string>()
+                ));
                 screenTimeRepository.SaveChanges();
 
                 return new Response

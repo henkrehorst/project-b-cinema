@@ -28,8 +28,8 @@ namespace CinemaTests
         {
             MockedSeatA = new Mock<Seat>(-1, -1, -1);
             MockedSeatB = new Mock<Seat>(-1, -1, -1);
-            MockedScreenTimeA = new Mock<ScreenTime>(-1, new DateTime(), new DateTime());
-            MockedScreenTimeB = new Mock<ScreenTime>(-1, new DateTime(), new DateTime());
+            MockedScreenTimeA = new Mock<ScreenTime>(-1, new DateTime(), new DateTime(), "auditorium1");
+            MockedScreenTimeB = new Mock<ScreenTime>(-1, new DateTime(), new DateTime(), "auditorium1");
             MockedSeatA.Setup(x => x.Equals(MockedSeatB)).Returns(false);
             MockedSeatB.Setup(x => x.Equals(MockedSeatA)).Returns(false);
             MockedScreenTimeA.Setup(x => x.Equals(MockedScreenTimeB)).Returns(false);
@@ -220,7 +220,7 @@ namespace CinemaTests
         {
             //Arrange
             bool expected = true;
-            ScreenTime obj = new ScreenTime(5, new DateTime(), new DateTime());
+            ScreenTime obj = new ScreenTime(5, new DateTime(), new DateTime(), "auditorium1");
 
             //Act
             bool actual = obj.GetHashCode() == obj.GetHashCode();
@@ -234,7 +234,7 @@ namespace CinemaTests
         {
             //Arrange
             bool expected = false;
-            ScreenTime a = new ScreenTime(3, 4, new DateTime(), new DateTime());
+            ScreenTime a = new ScreenTime(3, new DateTime(), new DateTime(), "auditorium1");
             Seat b = new Seat(6, 7, 8);
 
             //Act
