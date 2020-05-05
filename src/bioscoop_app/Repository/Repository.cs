@@ -42,7 +42,7 @@ namespace bioscoop_app.Repository
         /// <summary>
         /// Initializes a repository with the data read from the corresponding data file.
         /// </summary>
-        protected Repository()
+        public Repository()
         {
             data = JsonConvert.DeserializeObject<Dictionary<int, T>>(
                 File.ReadAllText(StorageService.GetDataSourcePath() + typeof(T).Name + FileExtension)
