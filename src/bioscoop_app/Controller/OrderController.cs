@@ -1,4 +1,9 @@
-﻿using Chromely.Core.Network;
+﻿using bioscoop_app.Helper;
+using bioscoop_app.Model;
+using bioscoop_app.Repository;
+using Chromely.Core.Network;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +21,19 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/order#create")]
         public ChromelyResponse CreateOrder(ChromelyRequest req)
         {
-            throw new NotImplementedException();
+            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+
+            Order order = new Order(
+                    data["items"].Value<List<Product>>(),
+                    data["cust_name"].Value<string>(),
+                    data["cust_email"].Value<string>()
+                );
+            new Repository<Order>().AddThenWrite(order);
+            return new Response
+            {
+                status = 200,
+                data = JsonConvert.SerializeObject(order.code)
+            }.ChromelyWrapper(req.Id);
         }
     }
 }
