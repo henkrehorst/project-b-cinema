@@ -267,6 +267,10 @@ nav .container ul li a:hover {
     outline: 1px solid #000;
 }
 
+    .seat.show-preview {
+        background-color: #A4C8F8;
+    }
+
 .seat:hover {
     background-color: #A4C8F8;
 }
@@ -283,6 +287,10 @@ nav .container ul li a:hover {
     background-color: #FFC6A6;
 }
 
+    .seat.luxery.show-preview {
+        background-color: #FFC6A6;
+    }
+
 .seat.vip {
     background-color: #C00000;
 }
@@ -290,6 +298,10 @@ nav .container ul li a:hover {
 .seat.vip:hover {
     background-color: lightpink;
 }
+
+    .seat.vip.show-preview {
+        background-color: lightpink;
+    }
 
 .grid-number {
     position: absolute;
