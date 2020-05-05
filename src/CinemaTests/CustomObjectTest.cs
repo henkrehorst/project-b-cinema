@@ -12,28 +12,11 @@ namespace CinemaTests
     public class EqualsTicketCase
     {
         static Ticket randomTicket;
-        Mock<Seat> MockedSeatA;
-        Mock<Seat> MockedSeatB;
-        Mock<ScreenTime> MockedScreenTimeA;
-        Mock<ScreenTime> MockedScreenTimeB;
 
         [ClassInitialize]
         public static void TestFixtureSetup(TestContext context)
         {
-            randomTicket = new Ticket(1, 1, "randtick", null, null, 25);
-        }
-
-        [TestInitialize]
-        public void Setup()
-        {
-            MockedSeatA = new Mock<Seat>(-1, -1, -1);
-            MockedSeatB = new Mock<Seat>(-1, -1, -1);
-            MockedScreenTimeA = new Mock<ScreenTime>(-1, new DateTime(), new DateTime(), "auditorium1");
-            MockedScreenTimeB = new Mock<ScreenTime>(-1, new DateTime(), new DateTime(), "auditorium1");
-            MockedSeatA.Setup(x => x.Equals(MockedSeatB)).Returns(false);
-            MockedSeatB.Setup(x => x.Equals(MockedSeatA)).Returns(false);
-            MockedScreenTimeA.Setup(x => x.Equals(MockedScreenTimeB)).Returns(false);
-            MockedScreenTimeB.Setup(x => x.Equals(MockedScreenTimeA)).Returns(false);
+            randomTicket = new Ticket(1, 1, "randtick", 2, 3, 26, 25);
         }
 
         [TestMethod]
@@ -82,8 +65,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(1, 1, "aewreqwtsadf", null, null, 10);
-            Ticket two = new Ticket(1, 0.9, "aewreqwtsadf", null, null, 10);
+            Ticket one = new Ticket(1, 10, "randtick", 2, 3, 26, 25);
+            Ticket two = new Ticket(1, 9, "randtick", 2, 3, 26, 25);
 
             //act
             bool actual = one.Equals(two);
@@ -97,8 +80,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(1, 1, "John", null, null, 10);
-            Ticket two = new Ticket(1, 1, "Doe", null, null, 10);
+            Ticket one = new Ticket(1, 1, "John", 2, 3, 26, 25);
+            Ticket two = new Ticket(1, 1, "Doe", 2, 3, 26, 25);
 
             //act
             bool actual = one.Equals(two);
@@ -112,8 +95,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(1, 1, "adsfasdf", null, null, 10);
-            Ticket two = new Ticket(1, 1, "adsfasdf", null, null, 11);
+            Ticket one = new Ticket(1, 1, "randtick", 2, 3, 26, 25);
+            Ticket two = new Ticket(1, 1, "randtick", 2, 3, 26, 26);
 
             //act
             bool actual = one.Equals(two);
@@ -127,8 +110,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(1, 1, "asdfer", null, MockedScreenTimeA.Object, 10);
-            Ticket two = new Ticket(1, 1, "asdfer", null, MockedScreenTimeB.Object, 10);
+            Ticket one = new Ticket(1, 1, "randtick", 2, 3, 26, 25);
+            Ticket two = new Ticket(1, 1, "randtick", 2, 3, 27, 25);
 
             //act
             bool actual = one.Equals(two);
@@ -142,8 +125,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(1, 1, "safdaew", MockedSeatA.Object, null, 10);
-            Ticket two = new Ticket(1, 1, "safdaew", MockedSeatB.Object, null, 10);
+            Ticket one = new Ticket(1, 1, "randtick", 2, 3, 26, 25);
+            Ticket two = new Ticket(1, 1, "randtick", 2, 4, 26, 25);
 
             //act
             bool actual = one.Equals(two);
@@ -157,8 +140,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = false;
-            Ticket one = new Ticket(2, 1, "asdferdferdf", null, null, 10);
-            Ticket two = new Ticket(1, 1, "asdferdferdf", null, null, 10);
+            Ticket one = new Ticket(1, 1, "randtick", 2, 3, 26, 25);
+            Ticket two = new Ticket(2, 1, "randtick", 2, 3, 26, 25);
 
             //act
             bool actual = one.Equals(two);
@@ -172,8 +155,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = true;
-            Ticket one = new Ticket(1, 1, "sdafwqreqwasdf", null, null, 10);
-            Ticket two = new Ticket(1, 1, "sdafwqreqwasdf", null, null, 10);
+            Ticket one = new Ticket(1, 1, "randtick", 2, 3, 26, 25);
+            Ticket two = new Ticket(1, 1, "randtick", 2, 3, 26, 25);
 
             //act
             bool actual = one.Equals(two);
@@ -187,8 +170,8 @@ namespace CinemaTests
         {
             //arrange
             bool expected = true;
-            Ticket one = new Ticket(1, "asdfwertwasdg", null, null, 10);
-            Ticket two = new Ticket(1, "asdfwertwasdg", null, null, 10);
+            Ticket one = new Ticket(1, "randtick", 2, 3, 26, 25);
+            Ticket two = new Ticket(1, "randtick", 2, 3, 26, 25);
 
             //act
             bool actual = one.Equals(two);
@@ -279,7 +262,7 @@ namespace CinemaTests
         {
             //Arrange
             bool expected = false;
-            Product a = new Ticket(54, 1.4, "kalskdjfi", null, null, 37);
+            Product a = new Ticket(1, 1, "randtick", 2, 3, 26, 25);
             Product b = new Product(12, "podasiuf", "ticket");
 
             //Act
