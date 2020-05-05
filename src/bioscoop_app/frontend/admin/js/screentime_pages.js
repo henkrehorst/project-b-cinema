@@ -18,8 +18,9 @@ async function screentimeOverviewPage() {
                 <td>${movie.title}</td>
                 <td>${new Date(screenTimes[key].startTime).toLocaleString()}</td>
                 <td>${new Date(screenTimes[key].endTime).toLocaleString()}</td>
+                <td>${screenTimes[key].roomName}</td>
                 <td><a href='/admin/screentime_edit.html?id=${screenTimes[key].Id}'>Edit</a></td>
-            </tr>`;       
+            </tr>`;
     }
     
     //display table
@@ -47,6 +48,12 @@ async function screentimeEditPage() {
     
     document.querySelector("#start_time").value = screenTime.startTime;
     document.querySelector("#end_time").value = screenTime.endTime;
+    let roomDropdown = document.querySelector("#room_name");
+    for (key in roomDropdown) {
+        if (roomDropdown.options[key].value === screenTime.room_name.toString()) {
+            roomDropdown.options[key].selected = true;
+        }
+    }
 
     /**
      * function for updating screentime in backend
@@ -60,7 +67,8 @@ async function screentimeEditPage() {
             'id': getIdFromUrl(),
             'movie_id': screenTimeForm.get('movie'),
             'start_time': screenTimeForm.get('start_time'),
-            'end_time': screenTimeForm.get('end_time')
+            'end_time': screenTimeForm.get('end_time'),
+            'room_name': screenTimeForm.get('room_name')
         })
         
         if(response.getStatusCode() === 204){
@@ -90,7 +98,8 @@ async function screentimeAddPage() {
         const response = await chromelyRequest('/screentime/add', 'POST', {
             'movie_id': screenTimeForm.get('movie'),
             'start_time': screenTimeForm.get('start_time'),
-            'end_time': screenTimeForm.get('end_time')
+            'end_time': screenTimeForm.get('end_time'),
+            'room_name': screenTimeForm.get('room_name')
         })
         
         if(response.getStatusCode() === 204){
