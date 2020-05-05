@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
@@ -27,6 +29,31 @@ namespace bioscoop_app.Model
 			code = null;
 			this.cust_email = cust_email;
 			this.cust_name = cust_name;
+		}
+
+		private string GenerateCode()
+		{
+			int hash = GetHashCode();
+			string binHash = Convert.ToString(hash, 2);
+			long numerical = Convert.ToInt64(binHash + binHash, 2);
+			numerical += new Random().Next(int.MaxValue - 10 ^ 4, int.MaxValue);
+			string hex = Convert.ToString(numerical, 16);
+			IEnumerator<char> seq = hex.GetEnumerator();
+			byte[] bytes = new byte[4];
+			byte byteindex = 0;
+			while (seq.MoveNext())
+			{
+				string a = seq.Current.ToString();
+				seq.MoveNext();
+				a += seq.Current;
+				bytes[byteindex++] = Convert.ToByte(a, 16);
+			}
+			char[] chars = new char[4];
+			byte charindex = 0;
+			Array.ForEach(bytes, by => {
+				chars[charindex++] = Convert.ToChar(by);
+				});
+			return new string(chars);
 		}
 	}
 
