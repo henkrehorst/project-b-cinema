@@ -64,9 +64,17 @@ async function stepThree() {
     async function finishReservation() {
         //read form information
         let confirmForm = new FormData(document.getElementById('checkout-form'));
-        console.log(confirmForm.get('name'),confirmForm.get('email'))
-        
-        let reservationCode = 'DGWE1123FGEWW';
+        console.log(confirmForm.get('name'), confirmForm.get('email'))
+
+        let cookieval = getReservationCookieValue();
+        let order = {
+            'items': cookieval['order'] + cookieval['upsell'],
+            'cust_name': confirmForm.get('name'),
+            'cust_email': confirmForm.get('email')
+        };
+
+        let res = await chromelyRequest('/order#create', 'POST', order);
+        let reservationCode = (res.getStatusCode() === 200) ? res.getData() : -1;
         //display reservation code after success
         document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_confirm_form").innerHTML =
         `<p>Hieronder staat je reserveringscode om je tickets mee op te halen,
