@@ -111,7 +111,7 @@ namespace bioscoop_app.Controller
 
         /// <param name="data">Product as a JObject</param>
         /// <returns>Product as a Product or Ticket</returns>
-        public static Product ToProduct(JObject data)
+        private Product ToProduct(JObject data)
         {
             if (data.ContainsKey("seat") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
             {
