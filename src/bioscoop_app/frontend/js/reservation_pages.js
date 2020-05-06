@@ -9,7 +9,7 @@ async function stepOne() {
     const upsellResponse = await chromelyRequest('/product#type', 'POST', {'type': 'upsell'});
     let upsells = upsellResponse.getData();
     //prepare reservation cookie (shopping cart)
-    prepareReservationCookie(ticketProducts, upsells);
+    await prepareReservationCookie(ticketProducts, upsells);
     
     //display products
     displayProducts(ticketProducts, 'product_view','order')
