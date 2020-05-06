@@ -24,8 +24,16 @@ namespace bioscoop_app.Controller
         {
             var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
 
+            //parse items
+            var prods = data["items"].Value<List<JObject>>();
+            List<Product> products = new List<Product>();
+            foreach(JObject product in prods)
+            {
+                products.Append(ProductController.ToProduct(product));
+            }
+
             Order order = new Order(
-                    data["items"].Value<List<Product>>(),
+                    products,
                     data["cust_name"].Value<string>(),
                     data["cust_email"].Value<string>()
                 );
