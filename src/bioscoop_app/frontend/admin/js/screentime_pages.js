@@ -49,9 +49,10 @@ async function screentimeEditPage() {
     document.querySelector("#start_time").value = screenTime.startTime;
     document.querySelector("#end_time").value = screenTime.endTime;
     let roomDropdown = document.querySelector("#room_name");
-    for (key in roomDropdown) {
-        if (roomDropdown.options[key].value === screenTime.room_name) {
+    for (key in roomDropdown.options) {
+        if (roomDropdown.options[key].value === screenTime.roomName) {
             roomDropdown.options[key].selected = true;
+            break;
         }
     }
 
