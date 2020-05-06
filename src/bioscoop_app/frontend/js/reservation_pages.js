@@ -257,6 +257,7 @@ function generateTickets(selectedSeats) {
     let reservationCookie = getReservationCookieValue();
     if (selectedSeats.length === 0) {
         reservationCookie['tickets'] = [];
+        updateCreateReservationCookie(reservationCookie);
     } else {
         let seatPos = 0;
         let ticketArray = [];
@@ -274,7 +275,7 @@ function generateTickets(selectedSeats) {
                 seatPos++;
             }
             reservationCookie['tickets'] = ticketArray;
+            updateCreateReservationCookie(reservationCookie);
         }
-        updateCreateReservationCookie(reservationCookie);
     }
 }
