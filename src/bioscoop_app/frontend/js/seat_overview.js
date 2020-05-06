@@ -161,20 +161,33 @@ function loadSeatOverview() {
 
                 // Seat click event
                 elSeat.addEventListener('click', (event, selectedRow = row, selectedSeat = seat, type = seatType) => {
-                    let price = seatPrices[type - 1];
                     let selected = document.querySelector('.seat-' + selectedSeat + '.row-' + selectedRow);
 
                     if (selected.classList.contains('selected')) {
-                        selected.classList.remove('selected');
-
                         for (let i = 0; i < selectedSeats.length; i++) {
-                            if (selectedSeats[i].row == selectedRow && selectedSeats[i].seat == selectedSeat) {
-                                selectedSeats.splice(i, 1);
+                            document.querySelector('.row-' + selectedSeats[i].row + '.seat-' + selectedSeats[i].seat).classList.remove('selected')
+                        }
+
+                        selectedSeats = []
+                    }
+                    else if (!selectedSeats.length) {
+                        let ticketAmount = getTotalTicketCount();
+
+                        if (document.querySelector('.row-' + selectedRow + '.seat-' + (selectedSeat + ticketAmount - 1))) {
+                            for (let i = 0; i < ticketAmount; i++) {
+                                let elSeat = document.querySelector('.row-' + selectedRow + '.seat-' + (selectedSeat + i));
+                                let classes = elSeat.classList;
+                                let type = (classes.contains('vip') ? 3 : classes.contains('luxery') ? 2 : 1);
+
+                                elSeat.classList.add('selected');
+                                selectedSeats.push({ 'row': selectedRow, 'seat': (selectedSeat + i), 'type': (type == 1 ? 'normaal' : (type == 2 ? 'luxe' : 'VIP')), 'price': seatPrices[type - 1] });
                             }
                         }
-                    }
-                    else {
-                        if (!selectedSeats.length || selectedSeats[0].row == selectedRow) {
+                        else {
+                            sendError('Op de geselecteerde plaats is er niet genoeg ruimte voor ' + ticketAmount + ' stoelen.');
+                        }
+
+                        /*if (!selectedSeats.length || selectedSeats[0].row == selectedRow) {
                             if (isAdjacent(selectedSeat, selectedSeats)) {
                                 selected.classList.add('selected');
                                 selectedSeats.push({ 'row': selectedRow, 'seat': selectedSeat, 'type': (type == 1 ? 'normaal' : (type == 2 ? 'luxe' : 'VIP')), 'price': price });
@@ -185,7 +198,10 @@ function loadSeatOverview() {
                         }
                         else {
                             sendError('Je kan alleen stoelen van dezelfde rij selecteren!');
-                        }
+                        }*/
+                    }
+                    else {
+                        sendError('Je hebt al ergens stoelen geselecteerd!');
                     }
 
                     updateOrderText();
@@ -193,6 +209,7 @@ function loadSeatOverview() {
 
                 // Seat hover events
                 elSeat.addEventListener('mouseenter', (event) => {
+                    let ticketAmount = getTotalTicketCount();
                     let target = event.target;
                     let targetRow = 0;
                     let targetCol = 0;
@@ -219,7 +236,11 @@ function loadSeatOverview() {
                                     highlight.classList.add('highlighted');
 
                                     if(targetRow == row) gridRow.classList.add('highlighted');
-                                    else if(targetCol == column) gridCol.classList.add('highlighted');
+                                    else if (targetCol == column) gridCol.classList.add('highlighted');
+
+                                    if (targetRow == row && column < (targetCol + ticketAmount) && column >= targetCol) {
+                                        highlight.classList.add('show-preview');
+                                    }
                                 }
                             }
                         }
@@ -228,9 +249,14 @@ function loadSeatOverview() {
 
                 elSeat.addEventListener('mouseleave', (event) => {
                     let highlighted = document.querySelectorAll('.highlighted');
+                    let previews = document.querySelectorAll('.show-preview');
 
                     for (let i = 0; i < highlighted.length; i++) {
                         highlighted[i].classList.remove('highlighted');
+                    }
+
+                    for (let i = 0; i < previews.length; i++) {
+                        previews[i].classList.remove('show-preview');
                     }
                 });
             }
