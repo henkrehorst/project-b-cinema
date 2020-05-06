@@ -169,6 +169,7 @@ function loadSeatOverview() {
                         }
 
                         selectedSeats = []
+                        generateTickets(selectedSeats);
                     }
                     else if (!selectedSeats.length) {
                         let ticketAmount = getTotalTicketCount();
@@ -181,6 +182,7 @@ function loadSeatOverview() {
 
                                 elSeat.classList.add('selected');
                                 selectedSeats.push({ 'row': selectedRow, 'seat': (selectedSeat + i), 'type': (type == 1 ? 'normaal' : (type == 2 ? 'luxe' : 'VIP')), 'price': seatPrices[type - 1] });
+                                generateTickets(selectedSeats);
                             }
                         }
                         else {
