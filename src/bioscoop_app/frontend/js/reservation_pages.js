@@ -130,13 +130,16 @@ function productControl(id, amount, type= "order") {
  * @param ticketProducts
  * @param upsells
  */
-function prepareReservationCookie(ticketProducts, upsells) {
+async function prepareReservationCookie(ticketProducts, upsells) {
+    //get screentime from url id
+    const screentimeResponse = await chromelyRequest('/screentime#id','POST',{'id':getIdFromUrl()})
     //create json array for cookie
     let cookieValue = {
         'order':{},
         'products': ticketProducts,
         'upsellProducts': upsells,
-        'upsell':{}
+        'upsell':{},
+        'screentime': screentimeResponse.getData()
     };
     
     updateCreateReservationCookie(cookieValue);

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using bioscoop_app.Service;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace bioscoop_app.Model
 {
@@ -9,43 +11,45 @@ namespace bioscoop_app.Model
 		public int movie;
 		public DateTime startTime;
 		public DateTime endTime;
-		//public Room room;
-		//public List<List<bool>> availability;
+		public string roomName;
+		public bool[,] availability;
+		public int availableTickets;
 
-		public ScreenTime(int movie, DateTime startTime, DateTime endTime/*, Room room, List<List<bool>> availability*/)
+		public ScreenTime(int movie, DateTime startTime, DateTime endTime, string roomName)
 		{
 			this.movie = movie;
 			this.startTime = startTime;
 			this.endTime = endTime;
-			//this.room = room;
-			//this.availability = (availability is null) ? AvailabilityMap(room.layout) : availability;
+			this.roomName = roomName;
+			availability = RoomLayoutService.GetInitialAvailability(roomName);
+			foreach (bool val in availability)
+			{
+				availableTickets += val ? 1 : 0;
+			}
 		}
 
 		[JsonConstructor]
-		public ScreenTime(int id, int movie, DateTime startTime, DateTime endTime /*,Room room, List<List<bool>> availability*/)
+		public ScreenTime(int id, int movie, DateTime startTime, DateTime endTime, string roomName, bool[,] availability, int availableTickets)
 		{
-			this.Id = id;
+			Id = id;
 			this.movie = movie;
 			this.startTime = startTime;
 			this.endTime = endTime;
-			//this.room = room;
-			//this.availability = (availability is null) ? AvailabilityMap(room.layout) : availability;
+			this.roomName = roomName;
+			this.availability = availability;
+			this.availableTickets = availableTickets;
 		}
 
-		// private List<List<bool>> AvailabilityMap(List<List<Seat>> layout)
-		// {
-		// 	List<List<bool>> availability = new List<List<bool>>();
-		// 	foreach (List<Seat> row in layout)
-		// 	{
-		// 		List<bool> boolrow = new List<bool>();
-		// 		foreach (Seat seat in row)
-		// 		{
-		// 			boolrow.Add(seat is null);
-		// 		}
-		// 		availability.Add(boolrow);
-		// 	}
-		// 	return availability;
-		// }
+		/// <summary>
+		/// Reserves the seat on the ticket.
+		/// </summary>
+		/// <param name="ticket"></param>
+		public void ReserveSeat(Ticket ticket)
+		{
+			if (availability[ticket.row, ticket.seatnr] == false) throw new InvalidOperationException("Seat is not available");
+			availability[ticket.row, ticket.seatnr] = false;
+			--availableTickets;
+		}
 	}
 
 }

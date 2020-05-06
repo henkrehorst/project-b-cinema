@@ -27,7 +27,7 @@ namespace bioscoop_app.Service
             // Call dynamic the SetupDataSource method for each repository class
             foreach (Type repository in repositoryList)
             {
-                if (!repository.GetTypeInfo().IsAbstract)
+                if (repository.Name != "Repository`1")
                 {
                     var setupMethod = repository.GetMethod("SetupDataSource",
                         BindingFlags.FlattenHierarchy

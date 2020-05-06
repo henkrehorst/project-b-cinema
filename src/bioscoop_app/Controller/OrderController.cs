@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace bioscoop_app.Controller
@@ -28,12 +29,24 @@ namespace bioscoop_app.Controller
                     data["cust_name"].Value<string>(),
                     data["cust_email"].Value<string>()
                 );
+            ReserveTickets(order.items);
             new Repository<Order>().AddThenWrite(order);
             return new Response
             {
                 status = 200,
                 data = JsonConvert.SerializeObject(order.code)
             }.ChromelyWrapper(req.Id);
+        }
+
+        private void ReserveTickets(List<Product> items)
+        {
+            List<Ticket> tickets = (List<Ticket>) items.Where(p => p.GetType() == typeof(Ticket));
+            foreach(Ticket ticket in tickets)
+            {
+                var repo = new Repository<ScreenTime>();
+                repo.Data[ticket.screenTime].ReserveSeat(ticket);
+                repo.SaveChangesThenDiscard();
+            }
         }
     }
 }
