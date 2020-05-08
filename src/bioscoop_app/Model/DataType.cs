@@ -12,7 +12,7 @@ namespace bioscoop_app.Model
     /// </summary>
     public abstract class DataType : CustomObject
     {
-        private int id;
+        protected int id;
 
         /// <summary>
         /// The id by which you can fetch the instance from the database.

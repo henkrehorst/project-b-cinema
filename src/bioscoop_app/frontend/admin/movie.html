@@ -7,22 +7,22 @@
     <link rel="stylesheet" href="./css/main.css"/>
     <title>Bioscoop app</title>
 </head>
-<body onload="screentimeOverviewPage()">
-<nav data-active-item="Screentime">
+<body onload="moviesOverviewPage()">
+<nav data-active-item="Films">
     <div class="container">
     </div>
 </nav>
 <div class="container">
-    <h3 style="padding: 20px 0;">Screentimes</h3>
+    <h3 style="padding: 20px 0;">Films</h3>
     <div class="row">
         <div class="col-md-9">
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Film</th>
-                    <th>Start tijd</th>
-                    <th>Eind tijd</th>
-                    <th>Zaal</th>
+                    <th>Naam</th>
+                    <th>Genre</th>
+                    <th>Duur</th>
+                    <th>Rating</th>
                     <th>Edit</th>
                 </tr>
                 </thead>
@@ -30,11 +30,11 @@
                 
                 </tbody>
             </table>
-            <a class="btn-primary btn" href="/admin/screentime_add.html">Voeg een nieuwe screentime toe</a>
+            <a class="btn-primary btn" href="/admin/movie_add.html">Voeg een nieuwe film toe</a>
         </div>
     </div>
 </div>
 <script src="/admin/js/main.js"></script>
-<script src="/admin/js/screentime_pages.js"></script>
+<script src="/admin/js/movie_pages.js"></script>
 </body>
 </html>

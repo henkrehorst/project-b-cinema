@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Film</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
+</head>
+<body onload="stepOne()">
+<nav data-active-item="Films">
+    <div class="container">
+    </div>
+</nav>
+<div class="container">
+    <div class="row reservation_container">
+        <div class="col-md-8 reservation_boxes">
+            <div class="reservation_box_header">
+                <h3>Kies hieronder je tickets</h3>
+            </div>
+            <div class="product_container" id="product_view">
+            </div>
+            <h3 style="text-align: center">Extra producten</h3>
+            <div class="product_container" id="upsell_view">
+            </div>
+        </div>
+        <div class="col-md-3 reservation_boxes">
+            <div class="reservation_box_header">
+                <h3>Jouw reservering</h3>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ticket</th>
+                    <th scope="col">Prijs</th>
+                </tr>
+                </thead>
+                <tbody id="reservation_view">
+                </tbody>
+            </table>
+
+            <table class="table mt-4 table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Extra product</th>
+                    <th scope="col">Prijs</th>
+                </tr>
+                </thead>
+                <tbody id="upsell_cart">
+                </tbody>
+            </table>
+            <table class="table mt-4 table-striped">
+                <thead>
+                <tr>
+                    <th colspan="" scope="col">TOTAAL:</th>
+                    <th id="total_cost"></th>
+                </tr>
+                </thead>
+            </table>
+            <a href="/reservation_step_two.html" class="btn btn-success">KIES PLAATSEN</a>
+        </div>
+    </div>
+</div>
+<script src="./js/main.js"></script>
+<script src="./js/reservation_pages.js"></script>
+</body>
+</html>
