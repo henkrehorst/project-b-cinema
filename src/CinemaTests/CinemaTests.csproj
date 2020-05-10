@@ -21,7 +21,6 @@
   <ItemGroup>
     <Folder Include="Controller\" />
     <Folder Include="Helper\" />
-    <Folder Include="Model\" />
     <Folder Include="Service\" />
     <Folder Include="Repository\" />
   </ItemGroup>
