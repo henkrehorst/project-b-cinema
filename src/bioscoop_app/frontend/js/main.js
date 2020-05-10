@@ -9,6 +9,8 @@ function fillNavbar() {
         <ul>
           <li class=\"menu-item\"><a href="./index.html">Films</a></li>
           <li class=\"menu-item\"><a href="#">Reserveringen</a></li>
+          <li class=\"menu-item\"><a href="/ticket-voorbeeld.html">Ticket pagina</a></li>
+          <li class=\"menu-item\"><a href="/orderpage-voorbeeld.html">Order page</a></li>
           <li class=\"menu-item\"><a href="./admin/admin.html">Beheerder</a></li>
         </ul>`;
 

@@ -23,6 +23,12 @@
     <None Update="chromelyconfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="frontend\orderpage-voorbeeld.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\ticket-voorbeeld.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="frontend\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
