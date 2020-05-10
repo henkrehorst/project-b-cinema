@@ -184,12 +184,12 @@ namespace CinemaTests
     [TestClass]
     public class GetHashCodeTests {
         [TestMethod]
-        public void equalInst()
+        public void EqualInst()
         {
             // Arrange
             bool expected = true;
-            DataType a = new Seat(3, 6, 9, 12);
-            DataType b = new Seat(3, 6, 9, 12);
+            DataType a = new Movie(1, "test", "adfa", 5.6, 120, "dasfjlk");
+            DataType b = new Movie(1, "test", "adfa", 5.6, 120, "dasfjlk");
 
             // Act
             bool actual = a.GetHashCode() == b.GetHashCode();
@@ -199,7 +199,7 @@ namespace CinemaTests
         }
 
         [TestMethod]
-        public void sameInst()
+        public void SameInst()
         {
             //Arrange
             bool expected = true;
@@ -213,12 +213,12 @@ namespace CinemaTests
         }
 
         [TestMethod]
-        public void diffType()
+        public void DiffType()
         {
             //Arrange
             bool expected = false;
             ScreenTime a = new ScreenTime(3, new DateTime(), new DateTime(), "auditorium1");
-            Seat b = new Seat(6, 7, 8);
+            Movie b = new Movie(6, "saf;ljka", "sdlkfja;", 5.4, 100, "jkl;huoyp");
 
             //Act
             bool actual = a.GetHashCode() == b.GetHashCode();
@@ -228,12 +228,12 @@ namespace CinemaTests
         }
 
         [TestMethod]
-        public void diffInst_swap()
+        public void DiffInst_swap()
         {
             //Arrange
             bool expected = false;
             Movie a = new Movie(34, "jkl;", "asdf", 9.8, 124, "qwert");
-            Movie b = new Movie(65, "asdf", "jkl;", 9.8, 124, "qwert");
+            Movie b = new Movie(34, "asdf", "jkl;", 9.8, 124, "qwert");
 
             //Act
             bool actual = a.GetHashCode() == b.GetHashCode();
@@ -243,7 +243,7 @@ namespace CinemaTests
         }
 
         [TestMethod]
-        public void diffInst_newId()
+        public void DiffInst_newId()
         {
             //Arrange
             bool expected = false;
@@ -258,7 +258,7 @@ namespace CinemaTests
         }
 
         [TestMethod]
-        public void polymorph()
+        public void Polymorph()
         {
             //Arrange
             bool expected = false;
@@ -267,23 +267,6 @@ namespace CinemaTests
 
             //Act
             bool actual = a.GetHashCode() == b.GetHashCode();
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void fieldEqZeroSignature()
-        {
-            // A number field equal to zero should change the hashcode
-            //Arrange
-            bool expected = false;
-            DataType a = new Movie(1, "dasfda", "dlaskd;hfu", 3.7, 177, "dasdfioyywer");
-            DataType b = new Movie("dasfda", "dlaskd;hfu", 3.7, 177, "dasdfioyywer");
-
-            //Act
-            //int hasha = a.GetHashCode();
-            //int hashb = b.GetHashCode();
-            bool actual = b.GetHashCode() == 0;//b.GetHashCode();
 
             //Assert
             Assert.AreEqual(expected, actual);
