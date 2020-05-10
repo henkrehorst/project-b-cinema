@@ -23,34 +23,70 @@ namespace CinemaTests.Model
             c = new Movie(2, "filmnaam", "avondtuur", 6.0, 85, "moviecover");
         }
 
-        //[TestMethod]
-        public static void equalself()
+        [TestMethod]
+        public static void Equalself()
         {
-            throw new NotImplementedException();
+            //arrange 
+            bool expected = true;
+
+
+            //act
+            bool actual = a.Equals(a);
+            //assert
+            Assert.AreEqual(expected, actual);
+
 
         }
-        //[TestMethod]
-        public static void equaltrue()
+        [TestMethod]
+        public static void Equaltrue()
         {
-            throw new NotImplementedException();
+            //arrange 
+            bool expected = true;
+
+
+            //act
+            bool actual = a.Equals(b);
+            //assert
+            Assert.AreEqual(expected, actual);
 
         }
-        //[TestMethod]
-        public static void equalfalse()
+        [TestMethod]
+        public static void Equalfalse()
         {
-            throw new NotImplementedException();
+            //arrange 
+            bool expected = true;
+
+
+            //act
+            bool actual = a.Equals(c);
+            //assert
+            Assert.AreEqual(expected, actual);
 
         }
-        //[TestMethod]
-        public static void equalnull()
+        [TestMethod]
+        public static void Equalnull()
         {
-            throw new NotImplementedException();
+            //arrange 
+            bool expected = true;
+
+
+            //act
+            bool actual = a.Equals(null);
+            //assert
+            Assert.AreEqual(expected, actual);
 
         }
-        //[TestMethod]
-        public static void equaltypeerror()
+        [TestMethod]
+        public static void Equaltypeerror()
         {
-            throw new NotImplementedException();
+            //arrange 
+            bool expected = true;
+            bool d = true;
+
+            //act
+            bool actual = a.Equals(d);
+            //assert
+            Assert.AreEqual(expected, actual);
 
         }
     }
