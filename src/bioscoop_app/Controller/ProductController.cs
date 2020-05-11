@@ -128,8 +128,7 @@ namespace bioscoop_app.Controller
             {
                 return new Product(
                     data["price"].Value<double>(),
-                    data["name"].Value<string>(),
-                    data["type"].Value<string>()
+                    data["name"].Value<string>()
                     );
             }
         }

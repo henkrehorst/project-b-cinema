@@ -25,7 +25,7 @@ namespace bioscoop_app.Controller
             var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
 
             //parse items
-            var prods = data["items"].Value<List<JObject>>();
+            var prods = data["items"].Value<JArray>();
             List<Product> products = new List<Product>();
             foreach(JObject product in prods)
             {
