@@ -111,7 +111,7 @@ namespace bioscoop_app.Controller
 
         /// <param name="data">Product as a JObject</param>
         /// <returns>Product as a Product or Ticket</returns>
-        private Product ToProduct(JObject data)
+        public static Product ToProduct(JObject data)
         {
             if (data.ContainsKey("seat") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
             {
@@ -128,8 +128,7 @@ namespace bioscoop_app.Controller
             {
                 return new Product(
                     data["price"].Value<double>(),
-                    data["name"].Value<string>(),
-                    data["type"].Value<string>()
+                    data["name"].Value<string>()
                     );
             }
         }

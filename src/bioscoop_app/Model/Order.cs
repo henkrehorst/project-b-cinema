@@ -35,7 +35,7 @@ namespace bioscoop_app.Model
 		/// <summary>
 		/// Generates a random and unique code for this Order.
 		/// </summary>
-		/// <returns>A 4 character string representing the code.</returns>
+		/// <returns>An 8 character string representing the code.</returns>
 		private string GenerateCode()
 		{
 			//Create a random and unique unique long and converts to hexadecimal string
@@ -50,22 +50,22 @@ namespace bioscoop_app.Model
 
 			//Convert the hexadecimal string to a byte array with the size of a long
 			IEnumerator<char> seq = hex.GetEnumerator();
-			byte[] bytes = new byte[4];
+			byte[] bytes = new byte[8];
 			byte byteindex = 0;
 			while (seq.MoveNext())
 			{
 				string a = seq.Current.ToString();
-				a += seq.MoveNext() ? seq.Current : throw new IndexOutOfRangeException("missing 4 bits");
+				a += seq.MoveNext() ? seq.Current.ToString() : 0.ToString();
 				bytes[byteindex++] = Convert.ToByte(a, 16);
 			}
 
 			//Convert the byte array to a char array with the size of a long,
 			//then return the char array as a string.
-			char[] chars = new char[4];
+			char[] chars = new char[8];
 			byte charindex = 0;
 			Array.ForEach(bytes, by => {
 				//Randomizes non-displayable chars.
-				by = (by >= Convert.ToByte("20", 16) && by < Convert.ToByte("7F", 16)) ? by : Convert.ToByte(new Random().Next(32, 126));
+				by = (by >= Convert.ToByte("30", 16) && by < Convert.ToByte("7A", 16)) ? by : Convert.ToByte(new Random().Next(32, 126));
 				chars[charindex++] = Convert.ToChar(by);
 				});
 			return new string(chars);

@@ -24,8 +24,16 @@ namespace bioscoop_app.Controller
         {
             var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
 
+            //parse items
+            var prods = data["items"].Value<JArray>();
+            List<Product> products = new List<Product>();
+            foreach(JObject product in prods)
+            {
+                products.Append(ProductController.ToProduct(product));
+            }
+
             Order order = new Order(
-                    data["items"].Value<List<Product>>(),
+                    products,
                     data["cust_name"].Value<string>(),
                     data["cust_email"].Value<string>()
                 );
@@ -40,7 +48,8 @@ namespace bioscoop_app.Controller
 
         private void ReserveTickets(List<Product> items)
         {
-            List<Ticket> tickets = (List<Ticket>) items.Where(p => p.GetType() == typeof(Ticket));
+            var tickets = items.Where(p => p.GetType() == typeof(Ticket))
+                .Select(t => t);
             foreach(Ticket ticket in tickets)
             {
                 var repo = new Repository<ScreenTime>();
