@@ -48,7 +48,8 @@ namespace bioscoop_app.Controller
 
         private void ReserveTickets(List<Product> items)
         {
-            List<Ticket> tickets = (List<Ticket>) items.Where(p => p.GetType() == typeof(Ticket));
+            var tickets = items.Where(p => p.GetType() == typeof(Ticket))
+                .Select(t => t);
             foreach(Ticket ticket in tickets)
             {
                 var repo = new Repository<ScreenTime>();
