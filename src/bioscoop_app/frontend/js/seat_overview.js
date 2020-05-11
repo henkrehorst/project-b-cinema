@@ -35,12 +35,12 @@ function updateOrderText() {
     let totalPrice = 0;
     let room = rooms[selectedRoom];
 
-    for (let i = 0; i < selectedSeats.length; i++) {
-        orderedText += '\nRij ' + (room.length - selectedSeats[i].row) + ', stoel ' + (selectedSeats[i].seat + 1) + ' (' + selectedSeats[i].type + ' ' + selectedSeats[i].price + '$).';
-        totalPrice += selectedSeats[i].price;
-    }
+    // for (let i = 0; i < selectedSeats.length; i++) {
+    //     orderedText += '\nRij ' + (room.length - selectedSeats[i].row) + ', stoel ' + (selectedSeats[i].seat + 1) + ' (' + selectedSeats[i].type + ' ' + selectedSeats[i].price + '$).';
+    //     totalPrice += selectedSeats[i].price;
+    // }
 
-    let seatDescription = (selectedSeats.length) + ' stoel' + (selectedSeats.length != 1 ? 'en ' : ' ') + (selectedSeats.length > 0 ? 'geselecteerd: ' : 'geselecteerd.') + orderedText + '\nTotale prijs: \u20AC' + (Math.round(totalPrice * 100) / 100);
+    let seatDescription = (selectedSeats.length) + ' stoel' + (selectedSeats.length != 1 ? 'en ' : ' ') + (selectedSeats.length > 0 ? 'geselecteerd: ' : 'geselecteerd.') + orderedText /* + '\nTotale prijs: \u20AC' + (Math.round(totalPrice * 100) / 100*/;
     document.querySelector('.seat-description').innerText = seatDescription;
 }
 
@@ -169,6 +169,7 @@ function loadSeatOverview() {
                         }
 
                         selectedSeats = []
+                        generateTickets(selectedSeats);
                     }
                     else if (!selectedSeats.length) {
                         let ticketAmount = getTotalTicketCount();
@@ -181,6 +182,7 @@ function loadSeatOverview() {
 
                                 elSeat.classList.add('selected');
                                 selectedSeats.push({ 'row': selectedRow, 'seat': (selectedSeat + i), 'type': (type == 1 ? 'normaal' : (type == 2 ? 'luxe' : 'VIP')), 'price': seatPrices[type - 1] });
+                                generateTickets(selectedSeats);
                             }
                         }
                         else {
@@ -358,9 +360,17 @@ let rooms = [
         [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
     ]
 ];
+
+// Current selected room (0 is small, 1 is medium and 2 is the big room)
+let selectedRoom = 2;
+const roomName = getReservationCookieValue().screentime.roomName;
+//select the correct room layout
+if(roomName === 'auditorium1') selectedRoom = 0;
+else if(roomName === 'auditorium2') selectedRoom = 1;
+else if(roomName === 'auditorium3') selectedRoom = 2;
+
 let gridContainer = document.querySelector('#cinema-grid'); // The container that surrounds the grid and seats
 let container = document.querySelector('#cinema-room'); // The container that surrounds the seats overview
-let selectedRoom = 2; // Current selected room (0 is small, 1 is medium and 2 is the big room)
 let blockSize = 20; // Starting size of each seat block
 let padding = 20; // Padding that surrounds the cinema room container
 let seatPrices = [7.99, 12.99, 17.99]; // Prices of each seat
@@ -369,6 +379,3 @@ let selectedSeats = []; // All newly selected seats will be stored inside this a
 let maxColLength = rooms[selectedRoom][0].length; // Defines the max amount of columns in a row (default row 0)
 
 loadSeatOverview();
-
-//met deze functie kun je het aantal tickets ophalen dat geselecteerd is
-console.log(getTotalTicketCount());
