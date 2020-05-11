@@ -15,8 +15,6 @@ namespace CinemaTests.Model
         private static Movie a;
         private static Movie b;
         private static Movie c;
-        private static object input2;
-        private static object input1;
 
         [TestInitialize]
         public static void setup()
@@ -93,27 +91,27 @@ namespace CinemaTests.Model
 
         }
         [TestMethod]
-        public static void Hashcodeself()
+        public static void HashcodeEquals()
         {
             //arrange 
             bool expected = true;
 
 
             //act
-            bool actual = input1.GetHashCode() == input2.GetHashCode();
+            bool actual = a.GetHashCode() == b.GetHashCode();
             //assert
             Assert.AreEqual(expected, actual);
 
 
         }
         [TestMethod]
-        public static void Hashcodedifferent()
+        public static void HashcodeDifferent()
         {
             //arrange 
             bool expected = true;
 
             //act
-            bool actual = input1.GetHashCode() == input2.GetHashCode();
+            bool actual = a.GetHashCode() == c.GetHashCode();
 
             //assert
             Assert.AreEqual(expected, actual);
