@@ -89,5 +89,33 @@ namespace CinemaTests.Model
             Assert.AreEqual(expected, actual);
 
         }
+        [TestMethod]
+        public static void hashcodeself()
+        {
+            //arrange 
+            bool expected = true;
+
+
+            //act
+            bool actual = a.Equals(a);
+            //assert
+            Assert.AreEqual(expected, actual);
+
+
+        }
+        [TestMethod]
+        public static void Hashcodedifferent()
+        {
+            //arrange 
+            bool expected = true;
+
+
+            //act
+            bool actual = a.Equals(b);
+            //assert
+            Assert.AreEqual(expected, actual);
+
+
+        }
     }
 }
