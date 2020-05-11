@@ -40,7 +40,7 @@ namespace bioscoop_app
 		/// Uses hashes and primes to generate a semi-unique hashcode for this object.
 		/// </summary>
 		/// <returns>Generated hashcode as an int.</returns>
-		public override int GetHashCode()
+		public override int GetHashCode(Model.Movie a)
 		{
 			unchecked
 			{
