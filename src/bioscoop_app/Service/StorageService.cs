@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using bioscoop_app.Model;
+using bioscoop_app.Repository;
 
 namespace bioscoop_app.Service
 {
@@ -38,6 +41,9 @@ namespace bioscoop_app.Service
                     if (setupMethod != null) setupMethod.Invoke(repository, null);
                 }
             }
+            
+            //setup data source orders
+            Repository<Order>.SetupDataSource();
         }
 
         /// <summary>
