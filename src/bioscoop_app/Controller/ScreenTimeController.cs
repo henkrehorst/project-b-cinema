@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net.NetworkInformation;
 using bioscoop_app.Helper;
 using bioscoop_app.Model;
 using bioscoop_app.Repository;
@@ -63,6 +64,44 @@ namespace bioscoop_app.Controller
                 status = 200,
                 data = JsonConvert.SerializeObject(new ScreenTimeRepository().Data[id])
             }.ChromelyWrapper(req.Id);
+        }
+
+        /// <summary>
+        /// Checks if the availability of tickets for the screentime has changed.
+        /// </summary>
+        /// <param name="req">Request containing the screentime id and last known availability.</param>
+        /// <returns>
+        /// Status 204 if the availability is unchanged.
+        /// Status 200 with the new availability if the availability has been modified.
+        /// </returns>
+        [HttpPost(Route = "/screentime#checkifchanged")]
+        public ChromelyResponse CheckIfChanged(ChromelyRequest req)
+        {
+            JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            int id = data.Value<int>("id");
+            int client_val = data.Value<int>("availability");
+            Repository<ScreenTime> repository = new Repository<ScreenTime>();
+            if(repository.Data[id].availableTickets == client_val)
+            {
+                return new Response
+                {
+                    status = 204
+                }.ChromelyWrapper(req.Id);
+            }
+            else
+            {
+                ScreenTime st = repository.Data[id];
+                return new Response
+                {
+                    status = 200,
+                    statusText = "DATA_MODIFIED",
+                    data = JsonConvert.SerializeObject(new
+                    {
+                        st.availableTickets,
+                        st.availability
+                    })
+                }.ChromelyWrapper(req.Id);
+            }
         }
 
         /// <summary>
