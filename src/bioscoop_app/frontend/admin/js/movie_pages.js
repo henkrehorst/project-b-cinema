@@ -16,6 +16,7 @@ async function moviesOverviewPage() {
                 <td>${movies[movie].genre}</td>
                 <td>${movies[movie].duration}</td>
                 <td>${movies[movie].rating}</td>
+                 <td>${movies[movie].samenvatting}</td>
                 <td><a href='/admin/movie_edit.html?id=${movies[movie].Id}'>Edit</a></td>
             </tr>`;
     }
@@ -38,6 +39,7 @@ async function movieEditPage() {
     document.getElementById('genre').value = movie.genre;
     document.getElementById('duration').value = movie.duration;
     document.getElementById('rating').value = movie.rating;
+     document.getElementById('samenvatting').value = movie.samenvatting;
     //show preview cover image
     document.querySelector("body > div > div > .cover-image-preview").innerHTML +=
         `<img src="local://frontend/uploads/${movie.coverImage}" alt="cover image" />`
@@ -58,6 +60,7 @@ async function movieEditPage() {
             'duration': movieForm.get('duration'),
             'genre': movieForm.get('genre'),
             'rating': movieForm.get('rating'),
+            'samenvatting': movieForm.get('samenvatting'),
             'cover_image': cover_image
         })
 
@@ -90,6 +93,8 @@ async function movieAddPage() {
                 'duration': movieForm.get('duration'),
                 'genre': movieForm.get('genre'),
                 'rating': movieForm.get('rating'),
+                'samenvatting': movieForm.get('samenvatting'),
+
                 'cover_image': cover_image
             })
             

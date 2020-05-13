@@ -73,6 +73,7 @@ namespace bioscoop_app.Controller
                 data["title"].Value<string>(),
                 data["genre"].Value<string>(),
                 data["rating"].Value<double>(),
+                data["samenvatting"].Value<string>(),
                 data["duration"].Value<int>(),
                 fileName
             ));
@@ -116,6 +117,7 @@ namespace bioscoop_app.Controller
                     data["title"].Value<string>(),
                     data["genre"].Value<string>(),
                     data["rating"].Value<double>(),
+                    data["samenvatting"].Value<string>(),
                     data["duration"].Value<int>(),
                     filename
                 ));

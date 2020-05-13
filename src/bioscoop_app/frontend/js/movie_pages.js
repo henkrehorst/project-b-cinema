@@ -44,6 +44,7 @@ async function movieDetailPage() {
                 <tr><th>Genre</th><td>${movie.genre}</td></tr>
                 <tr><th>Duur</th><td>${movie.duration}</td></tr>
                 <tr><th>Rating</th><td>${movie.rating}</td></tr>
+                <tr><th>Samenvatting</th><td>${movie.samenvatting}</td></tr>
         </table>`;
 
     //display movie screentimes
