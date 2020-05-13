@@ -4,13 +4,14 @@
 function fillNavbar() {
     document.querySelector("body > nav > div").innerHTML =
         `<ul>
-           <li><a href=\"/\">De kijkdoos</a></li>
+          <li><a href="/">De kijkdoos</a></li>
         </ul>
         <ul>
-          <li class=\"menu-item\"><a href="./index.html">Films</a></li>
-          <li class=\"menu-item\"><a href="#">Reserveringen</a></li>
-          <li class=\"menu-item\"><a href="./medewerkers/medewerker.html">Medewerkers</a></li>
-          <li class=\"menu-item\"><a href="./admin/admin.html">Beheerder</a></li>
+          
+          <li class="menu-item"><a href="/medewerkers/reservering.html">Reserveringen</a></li>
+        
+        
+          
         </ul>`;
 
     //set active item
