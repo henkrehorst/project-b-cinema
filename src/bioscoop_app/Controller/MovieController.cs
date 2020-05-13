@@ -49,6 +49,19 @@ namespace bioscoop_app.Controller
 
 =======
 
+<<<<<<< Updated upstream
+=======
+            movieRepository.Add(new Movie(
+                data["title"].Value<string>(),
+                data["genre"].Value<string>(),
+                data["rating"].Value<double>(),
+                data["samenvatting"].Value<string>(),
+                data["duration"].Value<int>(),
+                fileName
+            ));
+            
+            movieRepository.SaveChangesThenDiscard();
+>>>>>>> Stashed changes
 
             Dictionary<string, string> errorMessage = new Dictionary<string, string>();
 
@@ -64,10 +77,22 @@ namespace bioscoop_app.Controller
 
             if (String.IsNullOrWhiteSpace(data["rating"].Value<string>()))
             {
+<<<<<<< Updated upstream
                 errorMessage.Add("rating", "Er zit niks in de rating");
             }
 
             if (String.IsNullOrWhiteSpace(data["duration"].Value<string>()))
+=======
+                repository.Update(data.Value<int>("id"), new Movie(
+                    data["title"].Value<string>(),
+                    data["genre"].Value<string>(),
+                    data["rating"].Value<double>(),
+                    data["samenvatting"].Value<string>(),
+                    data["duration"].Value<int>(),
+                    filename
+                ));
+            } catch(InvalidOperationException except)
+>>>>>>> Stashed changes
             {
                 errorMessage.Add("duration", "Er zit niks in de duration");
             }
