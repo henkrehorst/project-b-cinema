@@ -7,15 +7,34 @@
     <link rel="stylesheet" href="./css/main.css"/>
     <title>Bioscoop app</title>
 </head>
-<body>
-<nav>
+<body onload="moviesOverviewPage()">
+<nav data-active-item="Films">
     <div class="container">
     </div>
 </nav>
-<div class="container mt-4">
-    <h1>Overzicht reserveringen</h1>
+<div class="container">
+    <h3 style="padding: 20px 0;">Films</h3>
+    <div class="row">
+        <div class="col-md-9">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>E-mail</th>
+                    <th>Producten</th>
+                 
+                    
+                </tr>
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table>
+            <a class="btn-primary btn" href="/medewerkers/reservering_add.html">Voeg een reservering toe</a>
+        </div>
+    </div>
 </div>
-
+<script src="/medewerkers/js/main.js"></script>
 <script src="./js/main.js"></script>
 </body>
 </html>

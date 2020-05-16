@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" type="text/css" href="/admin/css/style.css">-->
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
+    <title>Bioscoop app</title>
+</head>
+<body onload="reserveringAddPage()">
+<nav data-active-item="Films">
+    <div class="container">
+    </div>
+</nav>
+<div class="container">
+    <h3 style="padding: 20px 0;">Voeg een nieuwe Reservering toe</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <form>
+                <div class="form-group">
+                    <label for="naam">Naam</label>
+                    <input name="naam" id="naam" type="text" placeholder="naam" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input name="email" type="text" placeholder="email" class="form-control" id="email">
+                </div>
+                 <div class="form-group">
+                    <label for="producten">Producten</label>
+                    <input name="producten" id="producten" type="text" placeholder="producten" class="form-control"/>
+                </div>
+                
+
+              
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary">Voeg film toe</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 cover-image-preview"></div>
+    </div>
+</div>
+
+<script src="./js/main.js"></script>
+<script src="/medewerkers/js/reservering.js"></script>
+</body>
+</html>
