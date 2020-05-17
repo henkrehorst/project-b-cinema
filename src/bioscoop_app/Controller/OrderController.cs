@@ -24,7 +24,23 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/order#fetch")]
         public ChromelyResponse FetchOrder(ChromelyRequest req)
         {
-            throw new NotImplementedException();
+            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+
+            try
+            {
+                return new Response
+                {
+                    status = 200,
+                    data = JsonConvert.SerializeObject(new Repository<Order>().Data[data["code"].Value<int>()])
+                }.ChromelyWrapper(req.Id);
+            } catch (KeyNotFoundException)
+            {
+                return new Response
+                {
+                    status = 204,
+                    statusText = "No order was found for the given code."
+                }.ChromelyWrapper(req.Id);
+            }
         }
 
         /// <summary>
