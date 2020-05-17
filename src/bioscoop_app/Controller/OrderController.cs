@@ -11,8 +11,22 @@ using System.Text;
 
 namespace bioscoop_app.Controller
 {
+    /// <summary>
+    /// Controller for the requests related to orders.
+    /// </summary>
     class OrderController : ChromelyController
     {
+        /// <summary>
+        /// Searches the order with the specified code in the data, and returns it.
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns>HttpStatus 200 and the order data if found, 204 if not found</returns>
+        [HttpPost(Route = "/order#fetch")]
+        public ChromelyResponse FetchOrder(ChromelyRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Creates an order with the provided products and customer data.
         /// Writes the order to the data file then returns it to the front-end.
