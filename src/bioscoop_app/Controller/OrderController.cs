@@ -156,7 +156,25 @@ namespace bioscoop_app.Controller
         /// <returns>Status 200 if the order was cancelled, 400 if the order was not found.</returns>
         public ChromelyResponse CancelOrder(ChromelyRequest req)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            Repository<Order> repository = new Repository<Order>();
+            int orderId = data["id"].Value<int>();
+            try
+            {
+                SetSeatsAvailability(filterTickets(repository.Data[orderId].items), true);
+            } catch (KeyNotFoundException)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "Order was not cancelled because it was not found."
+                }.ChromelyWrapper(req.Id);
+            }
+            return new Response
+            {
+                status = 200
+            }.ChromelyWrapper(req.Id);
         }
 
         /// <summary>
