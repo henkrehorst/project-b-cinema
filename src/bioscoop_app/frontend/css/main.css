@@ -303,6 +303,20 @@ nav .container ul li a:hover {
         background-color: lightpink;
     }
 
+    .seat.not-available {
+        align-content: center;
+        background-image: url("/assets/img/cant_select.png");
+        background-position: center;
+        background-size: 200%;
+        background-color: #3468A8;
+    }
+        .seat.not-available.luxery {
+            background-color: #C77626;
+        }
+        .seat.not-available.vip {
+            background-color: #A00000;
+        }
+
 .grid-number {
     position: absolute;
     font-size: 0.75em;

@@ -142,6 +142,7 @@ function loadSeatOverview() {
             let seatType = room[row][seat];
 
             if (seatType != 0) {
+                let isAvailable = availability[row][seat];
                 let elSeat = document.createElement('div');
                 elSeat.classList.add('seat', 'row-' + row, 'seat-' + seat, seatTypes[seatType - 1]);
                 setStyle(elSeat, {
@@ -156,6 +157,10 @@ function loadSeatOverview() {
                         elSeat.classList.add('selected');
                     }
                 }
+
+                if (!isAvailable) {
+                    elSeat.classList.add('not-available');
+                }
                 
                 container.appendChild(elSeat);
 
@@ -163,6 +168,7 @@ function loadSeatOverview() {
                 elSeat.addEventListener('click', (event, selectedRow = row, selectedSeat = seat, type = seatType) => {
                     let selected = document.querySelector('.seat-' + selectedSeat + '.row-' + selectedRow);
 
+                    // Deselect all selected seats
                     if (selected.classList.contains('selected')) {
                         for (let i = 0; i < selectedSeats.length; i++) {
                             document.querySelector('.row-' + selectedSeats[i].row + '.seat-' + selectedSeats[i].seat).classList.remove('selected')
@@ -171,18 +177,31 @@ function loadSeatOverview() {
                         selectedSeats = []
                         generateTickets(selectedSeats);
                     }
+                    // Select seat
                     else if (!selectedSeats.length) {
                         let ticketAmount = getTotalTicketCount();
 
                         if (document.querySelector('.row-' + selectedRow + '.seat-' + (selectedSeat + ticketAmount - 1))) {
-                            for (let i = 0; i < ticketAmount; i++) {
-                                let elSeat = document.querySelector('.row-' + selectedRow + '.seat-' + (selectedSeat + i));
-                                let classes = elSeat.classList;
-                                let type = (classes.contains('vip') ? 3 : classes.contains('luxery') ? 2 : 1);
+                            let canPlace = true;
 
-                                elSeat.classList.add('selected');
-                                selectedSeats.push({ 'row': selectedRow, 'seat': (selectedSeat + i), 'type': (type == 1 ? 'normaal' : (type == 2 ? 'luxe' : 'VIP')), 'price': seatPrices[type - 1] });
-                                generateTickets(selectedSeats);
+                            for (let i = 0; i < ticketAmount; i++) {
+                                if (!availability[row][seat + i]) {
+                                    sendError('U kunt hier niet ' + ticketAmount + ' stoelen naast elkaar plaatsen vanwege al gereserveerde stoelen.');
+                                    canPlace = false;
+                                    break
+                                }
+                            }
+
+                            if (canPlace) {
+                                for (let i = 0; i < ticketAmount; i++) {
+                                    let elSeat = document.querySelector('.row-' + selectedRow + '.seat-' + (selectedSeat + i));
+                                    let classes = elSeat.classList;
+                                    let type = (classes.contains('vip') ? 3 : classes.contains('luxery') ? 2 : 1);
+
+                                    elSeat.classList.add('selected');
+                                    selectedSeats.push({ 'row': selectedRow, 'seat': (selectedSeat + i), 'type': (type == 1 ? 'normaal' : (type == 2 ? 'luxe' : 'VIP')), 'price': seatPrices[type - 1] });
+                                    generateTickets(selectedSeats);
+                                }
                             }
                         }
                         else {
@@ -377,5 +396,16 @@ let seatPrices = [7.99, 12.99, 17.99]; // Prices of each seat
 let seatTypes = ['normal', 'luxery', 'vip']; // Type of each seat (Can be merged with the array above but I'm to lazy)
 let selectedSeats = []; // All newly selected seats will be stored inside this array
 let maxColLength = rooms[selectedRoom][0].length; // Defines the max amount of columns in a row (default row 0)
+let availability = getReservationCookieValue().screentime.availability;
+
+for (let row = 0; row < rooms[selectedRoom].length; row++) {
+    for (let col = 0; col < maxColLength; col++) {
+        if (Math.round(Math.random() * 2) == 1) {
+            availability[row][col] = false;
+        }
+    }
+}
 
 loadSeatOverview();
+
+console.log(getReservationCookieValue());
