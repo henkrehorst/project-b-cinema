@@ -2,55 +2,55 @@
  * function with all javascript running on the movie overview admin page
  * @returns {Promise<void>}
  */
-async function moviesOverviewPage() {
+async function reserveringenOverviewPage() {
     // get all movies
-    const moviesResponse = await chromelyRequest('/movies');
-    console.log(moviesResponse);
-    let movies = moviesResponse.getData();
-    let movieTable = "";
+    const reserveringenResponse = await chromelyRequest('/reserveringen');
+    console.log(reserveringenResponse);
+    let reserveringen = reserveringenResponse.getData();
+    let reserveringTable = "";
 
     // create a table with screentimes
-    for(movie in movies){
-        movieTable += `<tr>
-                <td>${movies[movie].naam}</td>
-                <td>${movies[movie].email}</td>
-                <td>${movies[movie].producten}</td>
-                <td><a href='/medewerkers/reservering_edit.html?id=${movies[movie].Id}'>Edit</a></td>
+    for(reservering in reserveringen){
+        reserveringTable += `<tr>
+                <td>${reserveringen[reservering].naam}</td>
+                <td>${reserveringen[reservering].email}</td>
+                <td>${reserveringen[reservering].producten}</td>
+                <td><a href='/medewerkers/reservering_edit.html?id=${reserveringen[reservering].Id}'>Edit</a></td>
             </tr>`;
     }
 
     //display table
-    document.querySelector("body > div > div > div > table > tbody").innerHTML += movieTable;
+    document.querySelector("body > div > div > div > table > tbody").innerHTML += reserveringTable;
 }
 
 /**
  * function with all javascript running on the movie edit page
  * @returns {Promise<void>}
  */
-async function movieEditPage() {
+async function reserveringEditPage() {
     //get movie by id
-    const movieResponse = await chromelyRequest('/movies#id','POST',{'id': getIdFromUrl()});
-    let movie = movieResponse.getData();
+    const reserveringResponse = await chromelyRequest('/reserveringen#id','POST',{'id': getIdFromUrl()});
+    let reservering = reserveringResponse.getData();
     
     //fill form with movie data
-    document.getElementById('naam').value = movie.naam;
-    document.getElementById('email').value = movie.email;
-    document.getElementById('producten').value = movie.producten;
+    document.getElementById('naam').value = reservering.naam;
+    document.getElementById('email').value = reservering.email;
+    document.getElementById('producten').value = reservering.producten;
     
     /**
      * function for posting movie to backend
      */
-    async function updateMovie() {
+    async function updateReservering() {
         // get movie form data
-        const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
+        const reserveringForm = new FormData(document.querySelector("body > div > div > div > form"));
        
 
         // post movie to backend
-        const response = await chromelyRequest('/movies#update', 'POST', {
+        const response = await chromelyRequest('/reserveringen#update', 'POST', {
             'id': getIdFromUrl(),
-            'naam': movieForm.get('naam'),
-            'email': movieForm.get('email'),
-            'producten': movieForm.get('producten'),
+            'naam': reserveringForm.get('naam'),
+            'email': reserveringForm.get('email'),
+            'producten': reserveringForm.get('producten'),
             
         })
 
@@ -60,7 +60,7 @@ async function movieEditPage() {
         }
     }
 
-    document.querySelector("body > div > div > div > form > div > button").addEventListener('click', updateMovie);
+    document.querySelector("body > div > div > div > form > div > button").addEventListener('click', updateReservering);
 }
 
 /**
@@ -71,16 +71,16 @@ async function reserveringAddPage() {
     /**
      * function for posting movie to backend
      */
-    async function addMovie() {
+    async function addReservering() {
         // get movie form data
-        const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
+        const reserveringForm = new FormData(document.querySelector("body > div > div > div > form"));
         
             
         // post movie to backend
-        const response = await chromelyRequest('/movies/add', 'POST', {
-                'naam': movieForm.get('naam'),
-                'email': movieForm.get('email'),
-                'producten': movieForm.get('producten'),
+        const response = await chromelyRequest('/reserveringen/add', 'POST', {
+                'naam': reserveringForm.get('naam'),
+                'email': reserveringForm.get('email'),
+                'producten': reserveringForm.get('producten'),
                
             })
             
@@ -90,7 +90,7 @@ async function reserveringAddPage() {
             }
     }
 
-    document.querySelector("body > div > div > div > form > div > button").addEventListener('click', addMovie);
+    document.querySelector("body > div > div > div > form > div > button").addEventListener('click', addReservering);
 }
 
 /**
@@ -121,7 +121,7 @@ async function getBase64String(file) {
  */
 async function coverImagePreview() {
     // get movie form data
-    const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
+    const reserveringForm = new FormData(document.querySelector("body > div > div > div > form"));
    
    
 }

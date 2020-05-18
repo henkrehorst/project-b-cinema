@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="./css/main.css"/>
     <title>Bioscoop app</title>
 </head>
-<body onload="reserveringAddPage()">
+<body onload="reserveringEditPage()">
 <nav data-active-item="Films">
     <div class="container">
     </div>
 </nav>
 <div class="container">
-    <h3 style="padding: 20px 0;">Voeg een nieuwe Reservering toe</h3>
+    <h3 style="padding: 20px 0;">Pas film aan</h3>
     <div class="row">
         <div class="col-md-6">
-            <form>
+             <form>
                 <div class="form-group">
                     <label for="naam">Naam</label>
                     <input name="naam" id="naam" type="text" placeholder="naam" class="form-control"/>
@@ -37,11 +37,14 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-6 cover-image-preview"></div>
+        <div class="col-md-6 cover-image-preview">
+            <p>Cover image preview</p>
+            
+        </div>
     </div>
 </div>
 
 <script src="./js/main.js"></script>
-<script src="./js/reservering.js"></script>
+<script src="medewerkers/js/reservering.js"></script>
 </body>
 </html>

@@ -13,34 +13,34 @@ namespace bioscoop_app.Controller
     /// <summary>
     /// Class that controls the routes related to Movie.
     /// </summary>
-    public class MovieController : ChromelyController
+    public class ReserveringController : ChromelyController
     {
         /// <param name="request">http GET request</param>
         /// <returns>All Movies in the data file.</returns>
-        [HttpGet(Route = "/movies")]
-        public ChromelyResponse GetMovies(ChromelyRequest request)
+        [HttpGet(Route = "/reserveringen")]
+        public ChromelyResponse Getreserveringen(ChromelyRequest request)
         {
-            var movieRepository = new MovieRepository();
+            var reserveringRepository = new ReserveringRepository();
 
-            var movies = movieRepository.Data;
+            var reserveringen = reserveringRepository.Data;
 
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(movies)
+                data = JsonConvert.SerializeObject(reserveringen)
             }.ChromelyWrapper(request.Id);
         }
 
         /// <param name="req">http POST request containing the desired Movie's id</param>
         /// <returns>The Movie associated with the id.</returns>
-        [HttpPost(Route = "/movies#id")]
-        public ChromelyResponse GetMovieById(ChromelyRequest req)
+        [HttpPost(Route = "/reserveringen#id")]
+        public ChromelyResponse GetReserveringenById(ChromelyRequest req)
         {
             int id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(new MovieRepository().Data[id])
+                data = JsonConvert.SerializeObject(new ReserveringRepository().Data[id])
             }.ChromelyWrapper(req.Id);
         }
 
@@ -49,25 +49,25 @@ namespace bioscoop_app.Controller
         /// </summary>
         /// <param name="request">http POST request containing the movie</param>
         /// <returns>Status 204 indicating the movie was added successfully</returns>
-        [HttpPost(Route = "/movies/add")]
-        public ChromelyResponse AddMovie(ChromelyRequest request)
+        [HttpPost(Route = "/reserveringen/add")]
+        public ChromelyResponse AddReservering(ChromelyRequest request)
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
-            var movieRepository = new MovieRepository();
-            string fileName = "";
-            
+            var reserveringRepository = new ReserveringRepository();
+
+
             //get base64 image string
-            
 
 
-            movieRepository.Add(new Movie(
+
+            reserveringRepository.Add(new Reservering(
                 data["naam"].Value<string>(),
                 data["email"].Value<string>(),
-                data["producten"].Value<double>(),
-                fileName
+                data["producten"].Value<string>()
+               
             ));
-            
-            movieRepository.SaveChangesThenDiscard();
+
+            reserveringRepository.SaveChangesThenDiscard();
 
             return new Response
             {
@@ -80,35 +80,24 @@ namespace bioscoop_app.Controller
         /// </summary>
         /// <param name="req">http POST request containing the id and data</param>
         /// <returns>Status code indicating success or failure.</returns>
-        [HttpPost(Route = "/movies#update")]
-        public ChromelyResponse UpdateMovie(ChromelyRequest req)
+        [HttpPost(Route = "/reserveringen#update")]
+        public ChromelyResponse UpdateReservering(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            Repository<Movie> repository = new MovieRepository();
+            Repository<Reservering> repository = new ReserveringRepository();
             
-            string filestring = data["cover_image"].Value<string>();
-            string filename = repository.Data[data.Value<int>("id")].coverImage;
+           
             
-            if (filestring.Length > 0)
-            {
-                var uploadService = new UploadService(filestring);
-                if (uploadService.CheckIsImage())
-                {
-                    uploadService.DeleteFile(filename);
-                    uploadService.CreateFileInUploadFolder();
-                    filename = uploadService.GetFileName();
-                }
-            }
+            
+           
             
             try
             {
-                repository.Update(data.Value<int>("id"), new Movie(
-                    data["title"].Value<string>(),
-                    data["genre"].Value<string>(),
-                    data["rating"].Value<double>(),
-                    data["samenvatting"].Value<string>(),
-                    data["duration"].Value<int>(),
-                    filename
+                repository.Update(new Reservering(
+                   data["naam"].Value<string>(),
+                   data["email"].Value<string>(),
+                   data["producten"].Value<string>()
+                  
                 ));
             } catch(InvalidOperationException except)
             {
