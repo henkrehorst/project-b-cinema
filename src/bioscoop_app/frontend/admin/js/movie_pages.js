@@ -52,6 +52,9 @@ async function movieEditPage() {
         const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
         //covert cover image to string
         let cover_image = await getBase64String(movieForm.get('cover_image'))
+        //get values of checked kijkwijzers
+        let kijkwijzers = Object.values(document.querySelectorAll("#kijkwijzerFields > li > input:checked"))
+            .map(item => {return parseInt(item.value)})
 
         // post movie to backend
         const response = await chromelyRequest('/movies#update', 'POST', {
@@ -61,7 +64,8 @@ async function movieEditPage() {
             'genre': movieForm.get('genre'),
             'rating': movieForm.get('rating'),
             'samenvatting': movieForm.get('samenvatting'),
-            'cover_image': cover_image
+            'cover_image': cover_image,
+            'kijkwijzers': kijkwijzers
         })
 
         // if response = 200: redirect to movie overview page
@@ -71,6 +75,22 @@ async function movieEditPage() {
     }
 
     document.querySelector("body > div > div > div > form > div > button").addEventListener('click', updateMovie);
+    
+    if(movie.kijkwijzer === null) movie.kijkwijzer = [];
+
+    //fill kijkwijzers fields
+    let kijkwijzersFields = "";
+    Object.values(await getKijkwijzers()).map((item, key) => {
+        kijkwijzersFields +=
+            `<li>
+               <input type="checkbox" id="kijkwijzer${key}" value="${item.Id}"
+               ${movie.kijkwijzer.includes(item.Id) ? 'checked': ''} />
+               <label for="kijkwijzer${key}"><img src="./../assets/kijkwijzers/${item.symbool}" />
+               </label>
+            </li>`;
+    })
+    //display kijkwijzers
+    document.getElementById('kijkwijzerFields').innerHTML = kijkwijzersFields;
 }
 
 /**
