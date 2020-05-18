@@ -104,7 +104,7 @@ namespace bioscoop_app.Controller
                         data["cust_name"].Value<string>(),
                         data["cust_email"].Value<string>()
                     );
-                if (input.items.SequenceEqual(repository.Data[orderId].items))
+                if (!input.items.SequenceEqual(repository.Data[orderId].items))
                 {
                     //Backend magic to change availability of items
                     List<Ticket> inputTickets = filterTickets(input.items);
