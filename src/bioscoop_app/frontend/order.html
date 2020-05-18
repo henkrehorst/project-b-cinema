@@ -8,6 +8,19 @@
     <link rel="stylesheet" href="./css/main.css" />
 </head>
 <body>
+    <nav data-active-item="Reserveringen">
+        <div class="container">
+        </div>
+    </nav>
+    <form id="code_input">
+        <div class="form-group mt-5">
+            <label for="code-field">Voer hier de code van uw order in:</label>
+            <input name="code" type="text" placeholder="00000000" class="form-control" id="code-field" required>
+        </div>
+        <div class="form-group">
+            <button type="button" id="getorder" class="btn btn-success confirm_button">Ga door</button>
+        </div>
+    </form>
     <script src="./js/main.js"></script>
     <script src="js/order.js"></script>
 </body>
