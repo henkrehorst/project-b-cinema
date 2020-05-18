@@ -149,6 +149,16 @@ namespace bioscoop_app.Controller
             }.ChromelyWrapper(req.Id);
         }
 
+        /// <summary>
+        /// Route to cancel an order.
+        /// </summary>
+        /// <param name="req">HttpPost request containing the order id.</param>
+        /// <returns>Status 200 if the order was cancelled, 400 if the order was not found.</returns>
+        public ChromelyResponse CancelOrder(ChromelyRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
         private void SetSeatsAvailability(List<Ticket> tickets, bool value)
         {
             Repository<ScreenTime> repo = new Repository<ScreenTime>();
