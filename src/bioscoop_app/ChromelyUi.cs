@@ -16,6 +16,7 @@ namespace bioscoop_app
             container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(ProductController));
             container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(ScreenTimeController));
             container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(OrderController));
+            container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(KijkwijzerController));
         }
     }
 }
