@@ -104,7 +104,7 @@ namespace bioscoop_app.Controller
                         data["cust_name"].Value<string>(),
                         data["cust_email"].Value<string>()
                     );
-                if (!input.items.SequenceEqual(repository.Data[orderId].items))
+                if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
                 {
                     //Backend magic to change availability of items
                     List<Ticket> inputTickets = filterTickets(input.items);
@@ -119,7 +119,8 @@ namespace bioscoop_app.Controller
                         // Cancel ticket reservation
                         SetSeatsAvailability(existingTickets, true);
                     }
-                    if (inputTickets.Any() && existingTickets.Any() && !inputTickets.SequenceEqual(existingTickets))
+                    if (inputTickets.Any() && existingTickets.Any() &&
+                        !inputTickets.OrderBy(t => t.Id).SequenceEqual(existingTickets.OrderBy(t => t.Id)))
                     {
                         //fix ticket difference in data
                         List<Ticket> reserve = inputTickets.Except(existingTickets).ToList(); //A - B
