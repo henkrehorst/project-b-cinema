@@ -46,6 +46,41 @@ namespace bioscoop_app.Controller
             }.ChromelyWrapper(req.Id);
         }
 
+        /// <summary>
+        /// Updates the order associated with the specified id, with the specified data.
+        /// </summary>
+        /// <param name="req">http POST request containing the id and data</param>
+        /// <returns>Status code indicating success or failure.</returns>
+        [HttpPost(Route = "/reserveringen#update")]
+        public ChromelyResponse UpdateOrder(ChromelyRequest req)
+        {
+            throw new NotImplementedException();
+            JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            Repository<Order> repository = new Repository<Order>();
+            try
+            {
+                /*repository.Update(
+                    data["id"].Value<int>(),
+                    new Order(
+                        )
+                    );*/
+            }
+            catch (InvalidOperationException except)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = except.Message
+                }.ChromelyWrapper(req.Id);
+            }
+            repository.SaveChangesThenDiscard();
+            return new Response
+            {
+                status = 200,
+                data = req.PostData.ToJson()
+            }.ChromelyWrapper(req.Id);
+        }
+
         private void ReserveTickets(List<Product> items)
         {
             var tickets = items.Where(p => p.GetType() == typeof(Ticket))
