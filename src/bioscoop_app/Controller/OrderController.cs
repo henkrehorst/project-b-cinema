@@ -159,6 +159,11 @@ namespace bioscoop_app.Controller
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Sets the availability of the seat specified on the ticket to the supplied value.
+        /// </summary>
+        /// <param name="tickets">Ticket containing the seat and screentime id</param>
+        /// <param name="value">The value to set the availability to.</param>
         private void SetSeatsAvailability(List<Ticket> tickets, bool value)
         {
             Repository<ScreenTime> repo = new Repository<ScreenTime>();
@@ -169,6 +174,11 @@ namespace bioscoop_app.Controller
             repo.SaveChangesThenDiscard();
         }
 
+        /// <summary>
+        /// Parses the items in the order to a list of products.
+        /// </summary>
+        /// <param name="dataSeq">Data as a JArray.</param>
+        /// <returns>Data as a List of Product Objects.</returns>
         private List<Product> ParseItems(JArray dataSeq)
         {
             List<Product> products = new List<Product>();
