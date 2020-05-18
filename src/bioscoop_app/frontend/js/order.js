@@ -1,4 +1,7 @@
-﻿document.getElementById("getorder").addEventListener("click", () => {
+﻿/**
+ * Eventlistener to fetch the order by the input code.
+ */
+document.getElementById("getorder").addEventListener("click", () => {
     let code = document.getElementById("code-field").value;
     let res = await chromelyRequest("/order#fetch", "POST", { "code": code });
     if (res.getStatusCode == 200) {
