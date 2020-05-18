@@ -28,10 +28,16 @@ namespace bioscoop_app.Controller
 
             try
             {
+                string code = data["code"].Value<string>();
+                var orders = new Repository<Order>().Data.Values.AsQueryable<Order>();
+                IEnumerable<Order> queryResult = from order in orders
+                              where order.code == code
+                              select order;
+                Order result = queryResult.First();
                 return new Response
                 {
                     status = 200,
-                    data = JsonConvert.SerializeObject(new Repository<Order>().Data[data["code"].Value<int>()])
+                    data = JsonConvert.SerializeObject(result)
                 }.ChromelyWrapper(req.Id);
             } catch (KeyNotFoundException)
             {
