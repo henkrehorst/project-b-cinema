@@ -154,6 +154,7 @@ namespace bioscoop_app.Controller
         /// </summary>
         /// <param name="req">HttpPost request containing the order id.</param>
         /// <returns>Status 200 if the order was cancelled, 400 if the order was not found.</returns>
+        [HttpPost(Route = "/order#cancel")]
         public ChromelyResponse CancelOrder(ChromelyRequest req)
         {
             //throw new NotImplementedException();
