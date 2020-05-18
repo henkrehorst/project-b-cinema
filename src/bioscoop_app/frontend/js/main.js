@@ -8,7 +8,7 @@ function fillNavbar() {
         </ul>
         <ul>
           <li class=\"menu-item\"><a href="./index.html">Films</a></li>
-          <li class=\"menu-item\"><a href="#">Reserveringen</a></li>
+          <li class=\"menu-item\"><a href="./order.html">Reserveringen</a></li>
           <li class=\"menu-item\"><a href="./medewerkers/medewerker.html">Medewerkers</a></li>
           <li class=\"menu-item\"><a href="./admin/admin.html">Beheerder</a></li>
         </ul>`;
