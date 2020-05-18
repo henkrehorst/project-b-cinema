@@ -13,4 +13,5 @@
 
 function displayOrderState(data) {
     //display order
+    console.log(JSON.stringify(data));
 }
