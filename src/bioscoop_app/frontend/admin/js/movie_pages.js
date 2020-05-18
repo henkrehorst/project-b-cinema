@@ -187,5 +187,3 @@ async function getKijkwijzers() {
     const KijkwijzerResponse = await chromelyRequest('/kijkwijzer');
     return KijkwijzerResponse.getData();
 }
-
-getKijkwijzers()
