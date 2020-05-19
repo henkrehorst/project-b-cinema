@@ -288,5 +288,71 @@ namespace CinemaTests
             //Assert
             Assert.AreEqual(expected, actual);
         }
+
+        //KIJKWIJZER
+        [TestMethod]
+        public void diffInst_swap2()
+        {
+            //Arrange
+            bool expected = false;
+            Kijkwijzer a = new Kijkwijzer(34, "jkl;", "asdf", 9.8, "Samenvatting", 124, "qwert", new[] { 1, 1 });
+            Kijkwijzer b = new Kijkwijzer(65, "asdf", "jkl;", 9.8, "Samenvatting", 124, "qwert", new[] { 1, 1 });
+
+            //Act
+            bool actual = a.GetHashCode() == b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual, "Different instances should not have the same hashcode.");
+        }
+
+        [TestMethod]
+        public void diffInst_newId2()
+        {
+            //Arrange
+            bool expected = false;
+            Kijkwijzer a = new Kijkwijzer(34, "jkl;", "asdf", 9.8, "Samenvatting", 124, "qwert", new[] { 1, 1 });
+            Kijkwijzer b = new Kijkwijzer(65, "jkl", "asdf;", 9.8, "Samenvatting", 124, "qwert", new[] { 1, 1 });
+
+            //Act
+            bool actual = a.GetHashCode() == b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual, "Different instances should not have the same hashcode.");
+        }
+
+        [TestMethod]
+        public void polymorph2()
+        {
+            //Arrange
+            bool expected = false;
+            Product a = new Ticket(1, 1, "randtick", 2, 3, 26, 25);
+            Product b = new Product(12, "podasiuf", "ticket");
+
+            //Act
+            bool actual = a.GetHashCode() == b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void fieldEqZeroSignature2()
+        {
+            // A number field equal to zero should change the hashcode
+            //Arrange
+            bool expected = false;
+            DataType a = new Kijkwijzer(1, "dasfda", "dlaskd;hfu", 3.7, "Samenvatting", 177, "dasdfioyywer", new[] { 1, 1 });
+            DataType b = new Kijkwijzer("dasfda", "dlaskd;hfu", 3.7, "Samenvatting", 177, "dasdfioyywer", new[] { 1, 1 });
+
+            //Act
+            //int hasha = a.GetHashCode();
+            //int hashb = b.GetHashCode();
+            bool actual = b.GetHashCode() == 0;//b.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+
+
     }
 }
