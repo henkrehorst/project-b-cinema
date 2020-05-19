@@ -40,4 +40,5 @@ function createCancelOrderButton() {
             Console.log(res.getStatusCode());
         }
     });
+    document.getElementById("cancel_container").appendChild(btn);
 }
