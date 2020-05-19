@@ -44,6 +44,8 @@ namespace bioscoop_app.Service
             
             //setup data source orders
             Repository<Order>.SetupDataSource();
+            //setup data source kijkwijzers
+            Repository<Kijkwijzer>.SetupDataSource();
         }
 
         /// <summary>

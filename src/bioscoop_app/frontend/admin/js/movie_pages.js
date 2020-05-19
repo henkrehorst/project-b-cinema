@@ -10,7 +10,7 @@ async function moviesOverviewPage() {
     let movieTable = "";
 
     // create a table with screentimes
-    for(movie in movies){
+    for (movie in movies) {
         movieTable += `<tr>
                 <td>${movies[movie].title}</td>
                 <td>${movies[movie].genre}</td>
@@ -31,19 +31,19 @@ async function moviesOverviewPage() {
  */
 async function movieEditPage() {
     //get movie by id
-    const movieResponse = await chromelyRequest('/movies#id','POST',{'id': getIdFromUrl()});
+    const movieResponse = await chromelyRequest('/movies#id', 'POST', {'id': getIdFromUrl()});
     let movie = movieResponse.getData();
-    
+
     //fill form with movie data
     document.getElementById('title').value = movie.title;
     document.getElementById('genre').value = movie.genre;
     document.getElementById('duration').value = movie.duration;
     document.getElementById('rating').value = movie.rating;
-     document.getElementById('samenvatting').value = movie.samenvatting;
+    document.getElementById('samenvatting').value = movie.samenvatting;
     //show preview cover image
     document.querySelector("body > div > div > .cover-image-preview").innerHTML +=
         `<img src="local://frontend/uploads/${movie.coverImage}" alt="cover image" />`
-    
+
     /**
      * function for posting movie to backend
      */
@@ -52,6 +52,9 @@ async function movieEditPage() {
         const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
         //covert cover image to string
         let cover_image = await getBase64String(movieForm.get('cover_image'))
+        //get values of checked kijkwijzers
+        let kijkwijzers = Object.values(document.querySelectorAll("#kijkwijzerFields > li > input:checked"))
+            .map(item => {return parseInt(item.value)})
 
         // post movie to backend
         const response = await chromelyRequest('/movies#update', 'POST', {
@@ -61,16 +64,33 @@ async function movieEditPage() {
             'genre': movieForm.get('genre'),
             'rating': movieForm.get('rating'),
             'samenvatting': movieForm.get('samenvatting'),
-            'cover_image': cover_image
+            'cover_image': cover_image,
+            'kijkwijzers': kijkwijzers
         })
 
         // if response = 200: redirect to movie overview page
-        if(response.getStatusCode() === 200){
+        if (response.getStatusCode() === 200) {
             window.location.href = "/admin/movie.html"
         }
     }
 
     document.querySelector("body > div > div > div > form > div > button").addEventListener('click', updateMovie);
+    
+    if(movie.kijkwijzer === null) movie.kijkwijzer = [];
+
+    //fill kijkwijzers fields
+    let kijkwijzersFields = "";
+    Object.values(await getKijkwijzers()).map((item, key) => {
+        kijkwijzersFields +=
+            `<li>
+               <input type="checkbox" id="kijkwijzer${key}" value="${item.Id}"
+               ${movie.kijkwijzer.includes(item.Id) ? 'checked': ''} />
+               <label for="kijkwijzer${key}"><img src="./../assets/kijkwijzers/${item.symbool}" />
+               </label>
+            </li>`;
+    })
+    //display kijkwijzers
+    document.getElementById('kijkwijzerFields').innerHTML = kijkwijzersFields;
 }
 
 /**
@@ -86,25 +106,41 @@ async function movieAddPage() {
         const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
         //covert cover image to string
         let cover_image = await getBase64String(movieForm.get('cover_image'))
-            
+        //get values of checked kijkwijzers
+        let kijkwijzers = Object.values(document.querySelectorAll("#kijkwijzerFields > li > input:checked"))
+            .map(item => {return parseInt(item.value)})
+
         // post movie to backend
         const response = await chromelyRequest('/movies/add', 'POST', {
-                'title': movieForm.get('title'),
-                'duration': movieForm.get('duration'),
-                'genre': movieForm.get('genre'),
-                'rating': movieForm.get('rating'),
-                'samenvatting': movieForm.get('samenvatting'),
+            'title': movieForm.get('title'),
+            'duration': movieForm.get('duration'),
+            'genre': movieForm.get('genre'),
+            'rating': movieForm.get('rating'),
+            'samenvatting': movieForm.get('samenvatting'),
+            'cover_image': cover_image,
+            'kijkwijzers': kijkwijzers
+        })
 
-                'cover_image': cover_image
-            })
-            
-            // if response = 204: redirect to movie overview page
-            if(response.getStatusCode() === 204){
-                window.location.href = "/admin/movie.html"
-            }
+        // if response = 204: redirect to movie overview page
+        if (response.getStatusCode() === 204) {
+            window.location.href = "/admin/movie.html"
+        }
     }
 
     document.querySelector("body > div > div > div > form > div > button").addEventListener('click', addMovie);
+    
+    
+    //fill kijkwijzers fields
+    let kijkwijzersFields = "";
+    Object.values(await getKijkwijzers()).map((item, key) => {
+        kijkwijzersFields += 
+            `<li>
+               <input type="checkbox" id="kijkwijzer${key}" value="${item.Id}"/>
+               <label for="kijkwijzer${key}"><img src="./../assets/kijkwijzers/${item.symbool}" /></label>
+            </li>`;
+    })
+    //display kijkwijzers
+    document.getElementById('kijkwijzerFields').innerHTML = kijkwijzersFields;
 }
 
 /**
@@ -117,9 +153,9 @@ async function getBase64String(file) {
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function () {
-            if(reader.result === "data:"){
+            if (reader.result === "data:") {
                 resolve("")
-            }else {
+            } else {
                 resolve(reader.result);
             }
         };
@@ -138,8 +174,16 @@ async function coverImagePreview() {
     const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
     // convert cover image to base64
     let cover_image = await getBase64String(movieForm.get('cover_image'))
-    
+
     document.querySelector("body > div > div > .cover-image-preview").innerHTML =
         `<p>Cover image preview</p>
          <img src="${cover_image}" alt="cover image" />`;
+}
+
+/**
+ * get array of kijkwijzers from the backend
+ */
+async function getKijkwijzers() {
+    const KijkwijzerResponse = await chromelyRequest('/kijkwijzer');
+    return KijkwijzerResponse.getData();
 }

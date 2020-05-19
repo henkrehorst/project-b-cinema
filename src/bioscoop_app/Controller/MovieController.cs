@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using bioscoop_app.Helper;
 using bioscoop_app.Model;
@@ -54,6 +55,8 @@ namespace bioscoop_app.Controller
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
             var movieRepository = new MovieRepository();
+            //convert kijkwijzer collection to int array
+            int[] kijkWijzers = data["kijkwijzers"].Select(x => (int) x).ToArray();
             string fileName = "";
             
             //get base64 image string
@@ -75,7 +78,8 @@ namespace bioscoop_app.Controller
                 data["rating"].Value<double>(),
                 data["samenvatting"].Value<string>(),
                 data["duration"].Value<int>(),
-                fileName
+                fileName,
+                kijkWijzers
             ));
             
             movieRepository.SaveChangesThenDiscard();
@@ -100,6 +104,10 @@ namespace bioscoop_app.Controller
             string filestring = data["cover_image"].Value<string>();
             string filename = repository.Data[data.Value<int>("id")].coverImage;
             
+            //convert kijkwijzer collection to int array
+            int[] kijkWijzers = data["kijkwijzers"].Select(x => (int) x).ToArray();
+            string fileName = "";
+            
             if (filestring.Length > 0)
             {
                 var uploadService = new UploadService(filestring);
@@ -119,7 +127,8 @@ namespace bioscoop_app.Controller
                     data["rating"].Value<double>(),
                     data["samenvatting"].Value<string>(),
                     data["duration"].Value<int>(),
-                    filename
+                    filename,
+                    kijkWijzers
                 ));
             } catch(InvalidOperationException except)
             {
