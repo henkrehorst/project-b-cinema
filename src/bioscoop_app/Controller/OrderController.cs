@@ -172,6 +172,8 @@ namespace bioscoop_app.Controller
                     statusText = "Order was not cancelled because it was not found."
                 }.ChromelyWrapper(req.Id);
             }
+            repository.Data.Remove(orderId);
+            repository.SaveChangesThenDiscard();
             return new Response
             {
                 status = 200

@@ -3,17 +3,18 @@
 /**
  * Eventlistener to fetch the order by the input code.
  */
-document.getElementById("getorder").addEventListener("click", () => {
+document.getElementById("getorder").addEventListener("click", async () => {
     let code = document.getElementById("code-field").value;
     let res = await chromelyRequest("/order#fetch", "POST", { "code": code });
-    if (res.getStatusCode == 200) {
+    if (res.getStatusCode() === 200) {
+        console.log("getorder 200");
         orderId = res.getData().Id;
         displayOrderState(res.getData());
-    } else if (res.getStatusCode == 204) {
+    } else if (res.getStatusCode() === 204) {
         //Display error message
-        Console.log(res.getStatusText());
+        console.log(res.getStatusText());
     } else {
-        Console.log(res.getStatusCode(), res.getStatusText());
+        console.log(res.getStatusCode(), res.getStatusText());
     }
 });
 
@@ -30,14 +31,14 @@ function createCancelOrderButton() {
     let btn = document.createElement("button");
     btn.innerHTML = "Cancel order";
     btn.className = "cancel-button";
-    btn.addEventListener("click", () => {
-        let res = await chromelyRequest("/order#cancel", "POST", orderId);
-        if (res.getStatusCode() == 200) {
-            Console.log("succes");
-        } else if (res.getStatusCode() == 400) {
-            Console.log(res.getStatusText());
+    btn.addEventListener("click", async () => {
+        let res = await chromelyRequest("/order#cancel", "POST", { "id": orderId });
+        if (res.getStatusCode() === 200) {
+            console.log("succes");
+        } else if (res.getStatusCode() === 400) {
+            console.log(res.getStatusText());
         } else {
-            Console.log(res.getStatusCode());
+            console.log(res.getStatusCode());
         }
     });
     document.getElementById("cancel_container").appendChild(btn);
