@@ -232,8 +232,8 @@ namespace CinemaTests
         {
             //Arrange
             bool expected = false;
-            Movie a = new Movie(34, "jkl;", "asdf", 9.8, 124, "qwert");
-            Movie b = new Movie(65, "asdf", "jkl;", 9.8, 124, "qwert");
+            Movie a = new Movie(34, "jkl;", "asdf", 9.8, "Samenvatting", 124, "qwert");
+            Movie b = new Movie(65, "asdf", "jkl;", 9.8, "Samenvatting", 124, "qwert");
 
             //Act
             bool actual = a.GetHashCode() == b.GetHashCode();
@@ -247,8 +247,8 @@ namespace CinemaTests
         {
             //Arrange
             bool expected = false;
-            Movie a = new Movie(34, "jkl;", "asdf", 9.8, 124, "qwert");
-            Movie b = new Movie(65, "jkl", "asdf;", 9.8, 124, "qwert");
+            Movie a = new Movie(34, "jkl;", "asdf", 9.8, "Samenvatting", 124, "qwert");
+            Movie b = new Movie(65, "jkl", "asdf;", 9.8, "Samenvatting", 124, "qwert");
 
             //Act
             bool actual = a.GetHashCode() == b.GetHashCode();
@@ -277,8 +277,8 @@ namespace CinemaTests
             // A number field equal to zero should change the hashcode
             //Arrange
             bool expected = false;
-            DataType a = new Movie(1, "dasfda", "dlaskd;hfu", 3.7, 177, "dasdfioyywer");
-            DataType b = new Movie("dasfda", "dlaskd;hfu", 3.7, 177, "dasdfioyywer");
+            DataType a = new Movie(1, "dasfda", "dlaskd;hfu", 3.7, "Samenvatting", 177, "dasdfioyywer");
+            DataType b = new Movie("dasfda", "dlaskd;hfu", 3.7, "Samenvatting", 177, "dasdfioyywer");
 
             //Act
             //int hasha = a.GetHashCode();
