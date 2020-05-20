@@ -54,9 +54,26 @@ namespace bioscoop_app.Controller
         /// <returns>The items in the order.</returns>         
         [HttpPost (Route = "/order#collect")]         
         public ChromelyResponse CollectOrder(ChromelyRequest req)        
-        {             
-            throw new NotImplementedException();        
+        {
+            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            string code = data["code"].Value<string>();
+            if (code is null)
+            {
+                return new Response { status = 400, statusText = "Bad input de code was null" }
+                .ChromelyWrapper(req.Id);
+            }
+            try
+            {
+                var repos = new Repository<Order>();
+                var orders = repos.Data.Values.AsQueryable();
+                var result = from order in orders where order.code == code select order;
+                var returnvalue = result.First().items;
+                return new Response { status = 200, data = JsonConvert.SerializeObject(returnvalue) }
+                .ChromelyWrapper(req.Id);
+             
+            }
         }
+
 
 
 
