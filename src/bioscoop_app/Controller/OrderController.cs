@@ -48,7 +48,7 @@ namespace bioscoop_app.Controller
                     status = 200,
                     data = JsonConvert.SerializeObject(result)
                 }.ChromelyWrapper(req.Id);
-            } catch (KeyNotFoundException)
+            } catch (InvalidOperationException)
             {
                 return new Response
                 {
