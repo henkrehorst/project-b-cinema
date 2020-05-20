@@ -46,6 +46,20 @@ namespace bioscoop_app.Controller
             }.ChromelyWrapper(req.Id);
         }
 
+         ///<summary>      
+        /// Post route voor het voltooien van een order.        
+        /// Bedoeld voor de medewerker.         
+        /// </summary>         
+        /// <param name="req">Post request with the order code.</param>         
+        /// <returns>The items in the order.</returns>         
+        [HttpPost (Route = "/order#collect")]         
+        public ChromelyResponse CollectOrder(ChromelyRequest req)        
+        {             
+            throw new NotImplementedException();        
+        }
+
+
+
         private void ReserveTickets(List<Product> items)
         {
             var tickets = items.Where(p => p.GetType() == typeof(Ticket))
