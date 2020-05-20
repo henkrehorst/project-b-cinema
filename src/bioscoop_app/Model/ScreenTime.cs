@@ -44,11 +44,11 @@ namespace bioscoop_app.Model
 		/// Reserves the seat on the ticket.
 		/// </summary>
 		/// <param name="ticket"></param>
-		public void ReserveSeat(Ticket ticket)
+		public void SetSeatAvailability(Ticket ticket, bool value)
 		{
-			if (availability[ticket.row, ticket.seatnr] == false) throw new InvalidOperationException("Seat is not available");
-			availability[ticket.row, ticket.seatnr] = false;
-			--availableTickets;
+			if (value && availability[ticket.row, ticket.seatnr] == false) throw new InvalidOperationException("Seat is not available");
+			availability[ticket.row, ticket.seatnr] = value;
+			availableTickets -= (value) ? 1 : -1;
 		}
 	}
 

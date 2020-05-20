@@ -363,3 +363,4 @@ MigrationBackup/
 
 # Ignore db files
 *.db*
+!data/Kijkwijzer.json
