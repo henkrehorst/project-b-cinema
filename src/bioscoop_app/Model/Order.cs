@@ -65,7 +65,7 @@ namespace bioscoop_app.Model
 			byte charindex = 0;
 			Array.ForEach(bytes, by => {
 				//Randomizes non-displayable chars.
-				by = (by >= Convert.ToByte("30", 16) && by < Convert.ToByte("7A", 16)) ? by : Convert.ToByte(new Random().Next(32, 126));
+				by = (by >= Convert.ToByte("30", 16) && by <= Convert.ToByte("7A", 16)) ? by : Convert.ToByte(new Random().Next(48, 122));
 				chars[charindex++] = Convert.ToChar(by);
 				});
 			return new string(chars);

@@ -265,6 +265,7 @@ function generateTickets(selectedSeats) {
             let ticketCount = reservationCookie['order'][order];
             for (let i = 0; i < ticketCount; i++) {
                 ticketArray[seatPos] = {
+                    'Id': order,
                     'price': parseFloat(reservationCookie['products'][order].price),
                     'name': reservationCookie['products'][order].name,
                     'row': selectedSeats[seatPos] === undefined ? 0 : selectedSeats[seatPos].row,
