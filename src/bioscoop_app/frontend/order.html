@@ -21,9 +21,14 @@
         <div class="form-group">
             <button type="button" id="getorder" class="btn btn-success confirm_button">Ga door</button>
         </div>
+        <div id="cancel_container"></div>
     </form>
+        <form action="/reservation_step_one.html" method="get">
+            <input type="hidden" name="id" id="screentime_id" value="1">
+            <input type="hidden" name="change_data" id="change_data_field" value=""/>
+            <input style="display:none;" type="submit" value="Wijzig" id="change_data_buton"/>
+        </form>
     </div>
-    <div id="cancel_container"></div>
     <script src="./js/main.js"></script>
     <script src="js/order.js"></script>
 </body>

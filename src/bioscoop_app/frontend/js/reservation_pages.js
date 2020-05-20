@@ -8,14 +8,14 @@ async function stepOne() {
     //get upsells
     const upsellResponse = await chromelyRequest('/product#type', 'POST', {'type': 'upsell'});
     let upsells = upsellResponse.getData();
-    //prepare reservation cookie (shopping cart)
-    await prepareReservationCookie(ticketProducts, upsells);
 
     //display products
     displayProducts(ticketProducts, 'product_view', 'order')
     displayProducts(upsells, 'upsell_view', 'upsell')
-
+    
     showOrUpdateReservationCart();
+    //prepare reservation cookie (shopping cart)
+    await prepareReservationCookie(ticketProducts, upsells);
 }
 
 /**
@@ -151,6 +151,13 @@ async function prepareReservationCookie(ticketProducts, upsells) {
     };
 
     updateCreateReservationCookie(cookieValue);
+
+    if (getParameterFromUrl('change_data') !== null) {
+        let orderData = JSON.parse(getParameterFromUrl('change_data'));
+        orderData.items.map(item => {
+            return productControl(item.Id, 1, 'order')
+        })
+    }
 }
 
 /**
