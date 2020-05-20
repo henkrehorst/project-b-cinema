@@ -20,7 +20,7 @@ document.getElementById("getorder").addEventListener("click", async () => {
 
 function displayOrderState(data) {
     //display order
-    console.log(JSON.stringify(data));
+    console.log(data);
     createCancelOrderButton();
 }
 
@@ -34,7 +34,7 @@ function createCancelOrderButton() {
     btn.addEventListener("click", async () => {
         let res = await chromelyRequest("/order#cancel", "POST", { "id": orderId });
         if (res.getStatusCode() === 200) {
-            console.log("succes");
+            window.location.href = "./index.html"
         } else if (res.getStatusCode() === 400) {
             console.log(res.getStatusText());
         } else {

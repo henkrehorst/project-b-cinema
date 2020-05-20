@@ -205,7 +205,7 @@ namespace bioscoop_app.Controller
             List<Product> products = new List<Product>();
             foreach (JObject product in dataSeq)
             {
-                products.Append(ProductController.ToProduct(product));
+                products.Add(ProductController.ToProduct(product));
             }
             return products;
         }
