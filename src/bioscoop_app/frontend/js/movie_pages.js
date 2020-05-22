@@ -44,6 +44,7 @@ async function movieDetailPage() {
                 <tr><th>Genre</th><td>${movie.genre}</td></tr>
                 <tr><th>Duur</th><td>${movie.duration}</td></tr>
                 <tr><th>Rating</th><td>${movie.rating}</td></tr>
+                <tr><th>Samenvatting</th><td>${movie.samenvatting}</td></tr>
         </table>`;
 
     //display movie screentimes
@@ -67,6 +68,28 @@ async function movieDetailPage() {
         screentimeTable += "</table>"
         
         //display screentime table
-        document.querySelector("body > div > div:nth-child(2) > div").innerHTML = screentimeTable;
+        document.querySelector("body > div > div:nth-child(3) > div").innerHTML = screentimeTable;
     }
+    
+    //display kijkwijzers
+    let kijkwijzersDiv = "";
+    if(movie.kijkwijzer === null) movie.kijkwijzer = [];
+    
+    //create kijkerwijzer items
+    Object.values(await getKijkwijzers()).map(item => {
+        if(movie.kijkwijzer.includes(item.Id)) {
+            kijkwijzersDiv +=
+                `<img src='/assets/kijkwijzers/${item.symbool}' alt='kijkwijzer'/>`;
+        }
+    })
+    //show kijkwijzers on page
+    document.getElementById('kijkwijzerView').innerHTML = kijkwijzersDiv;
+}
+
+/**
+ * get array of kijkwijzers from the backend
+ */
+async function getKijkwijzers() {
+    const KijkwijzerResponse = await chromelyRequest('/kijkwijzer');
+    return KijkwijzerResponse.getData();
 }
