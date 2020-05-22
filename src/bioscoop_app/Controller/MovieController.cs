@@ -71,6 +71,18 @@ namespace bioscoop_app.Controller
                 }
             }
 
+            string[] properties = new string[] { "title", "genre", "rating", "samenvatting", "duration" };
+
+            for(int i = 0; i < properties.Length; i++)
+            {
+                if(data[properties[i]].Value<string>() == "")
+                {
+                    return new Response
+                    {
+                        status = 400
+                    }.ChromelyWrapper(request.Id);
+                }
+            }
 
             movieRepository.Add(new Movie(
                 data["title"].Value<string>(),
