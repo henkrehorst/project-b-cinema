@@ -65,10 +65,12 @@ async function stepThree() {
         //read form information
         let confirmForm = new FormData(document.getElementById('checkout-form'));
         console.log(confirmForm.get('name'), confirmForm.get('email'))
-
+        
         let cookieval = getReservationCookieValue();
+        //add extra products in order
+        let items = cookieval['tickets'].concat(generateProductOrder());
         let order = {
-            'items': cookieval['tickets'],
+            'items': items,
             'cust_name': confirmForm.get('name'),
             'cust_email': confirmForm.get('email')
         };
@@ -281,9 +283,25 @@ function generateTickets(selectedSeats) {
                     'visitorAge': 12
                 };
                 seatPos++;
+                reservationCookie['tickets'] = ticketArray;
+                updateCreateReservationCookie(reservationCookie);
             }
-            reservationCookie['tickets'] = ticketArray;
-            updateCreateReservationCookie(reservationCookie);
         }
     }
+}
+
+/**
+ * Convert product order to products
+ * @return []
+ */
+function generateProductOrder() {
+    const reservationCookie = getReservationCookieValue();
+    let productArray = [];
+    for (product in reservationCookie.upsell){
+        let upsellCount = reservationCookie.upsell[product];
+        for (let i = 0; i < upsellCount; i++){
+            productArray.push(reservationCookie.upsellProducts[product])
+        }
+    }
+    return productArray;
 }
