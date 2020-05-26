@@ -58,6 +58,7 @@ async function productAddPage() {
         if(response.getStatusCode() === 204){
             window.location.href = '/admin/product.html';
         }
+        console.log(response.getData());
     }
 
     document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', addProduct);

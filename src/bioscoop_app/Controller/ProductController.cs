@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using bioscoop_app.Helper;
+using bioscoop_app.Validator;
 
 namespace bioscoop_app.Controller
 {
@@ -64,11 +65,23 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             //Console.WriteLine(data);
-            new ProductRepository().AddThenWrite(ToProduct(data));
-            return new Response
+            var results = new ProductValidator().Validate(ToProduct(data));
+            if (results.IsValid)
             {
-                status = 204
-            }.ChromelyWrapper(req.Id);
+                new ProductRepository().AddThenWrite(ToProduct(data));
+                return new Response
+                {
+                    status = 204
+                }.ChromelyWrapper(req.Id);
+            }
+            else
+            {
+                return new Response
+                {
+                    data = JsonConvert.SerializeObject(results.Errors),
+                    status = 400
+                }.ChromelyWrapper(req.Id);
+            }
         }
 
         /// <summary>
