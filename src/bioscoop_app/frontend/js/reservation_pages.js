@@ -67,10 +67,9 @@ async function stepThree() {
         console.log(confirmForm.get('name'), confirmForm.get('email'))
         
         let cookieval = getReservationCookieValue();
-        //add extra products in order
-        let items = cookieval['tickets'].concat(generateProductOrder());
         let order = {
-            'items': items,
+            'items': generateProductOrder(),
+            'tickets': cookieval['tickets'],
             'cust_name': confirmForm.get('name'),
             'cust_email': confirmForm.get('email')
         };
