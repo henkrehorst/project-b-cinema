@@ -2,6 +2,7 @@
 using bioscoop_app.Model;
 using bioscoop_app.Repository;
 using Chromely.Core.Network;
+using Chromely.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -46,7 +47,7 @@ namespace bioscoop_app.Controller
                 return new Response
                 {
                     status = 200,
-                    data = JsonConvert.SerializeObject(result)
+                    data = SingleOrderToJson(result)
                 }.ChromelyWrapper(req.Id);
             } catch (InvalidOperationException)
             {
@@ -157,7 +158,6 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/order#cancel")]
         public ChromelyResponse CancelOrder(ChromelyRequest req)
         {
-            //throw new NotImplementedException();
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             Repository<Order> repository = new Repository<Order>();
             int orderId = data["id"].Value<int>();
@@ -208,6 +208,32 @@ namespace bioscoop_app.Controller
                 products.Add(ProductController.ToProduct(product));
             }
             return products;
+        }
+
+        /// <summary>
+        /// Converts a single order to json in a way that preserves all information.
+        /// </summary>
+        /// <param name="order">The order to convert.</param>
+        /// <returns></returns>
+        private string SingleOrderToJson(Order order)
+        {
+            List<JObject> jItems = new List<JObject>();
+            foreach (Product item in order.items) {
+                if (item.GetType() == typeof(Ticket))
+                {
+                    jItems.Add((JObject) JsonConvert.DeserializeObject(JsonConvert.SerializeObject((Ticket) item)));
+                } else
+                {
+                    jItems.Add((JObject) JsonConvert.DeserializeObject(JsonConvert.SerializeObject(item)));
+                }
+            }
+            return JsonConvert.SerializeObject(new
+            {
+                code = order.code,
+                cust_name = order.cust_name,
+                cust_email = order.cust_email,
+                items = jItems
+            });
         }
     }
 }
