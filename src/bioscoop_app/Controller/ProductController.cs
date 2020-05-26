@@ -140,6 +140,7 @@ namespace bioscoop_app.Controller
             }
             else
             {
+
                 return new Product(
                     data["price"].Value<double>(),
                     data["name"].Value<string>()
