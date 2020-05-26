@@ -6,6 +6,7 @@ using bioscoop_app.Repository;
 using Chromely.Core.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using bioscoop_app.Validator;
 
 namespace bioscoop_app.Controller
 {
@@ -37,6 +38,23 @@ namespace bioscoop_app.Controller
         public ChromelyResponse AddScreenTime(ChromelyRequest request)
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
+            /*var results = new ProductValidator().Validate(ToProduct(data));
+            if (results.IsValid)
+            {
+                new ProductRepository().AddThenWrite(ToProduct(data));
+                return new Response
+                {
+                    status = 204
+                }.ChromelyWrapper(req.Id);
+            }
+            else
+            {
+                return new Response
+                {
+                    data = JsonConvert.SerializeObject(results.Errors),
+                    status = 400
+                }.ChromelyWrapper(req.Id);
+            }*/
 
             var screenTimeRepository = new ScreenTimeRepository();
             screenTimeRepository.AddThenWrite(new ScreenTime(

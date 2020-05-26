@@ -140,10 +140,17 @@ namespace bioscoop_app.Controller
             }
             else
             {
-                return new Product(
-                    data["price"].Value<double>(),
-                    data["name"].Value<string>()
-                    );
+                try
+                {
+                    return new Product(
+                        data["price"].Value<double>(),
+                        data["name"].Value<string>()
+                        );
+                }
+                catch
+                {
+                    return new Product(0.0, "");
+                }
             }
         }
         
