@@ -219,7 +219,7 @@ namespace bioscoop_app.Controller
         {
             List<JObject> jItems = new List<JObject>();
             foreach (Product item in order.items) {
-                if (item.GetType() == typeof(Ticket))
+                if (item.type == "ticket")
                 {
                     jItems.Add((JObject) JsonConvert.DeserializeObject(JsonConvert.SerializeObject((Ticket) item)));
                 } else
