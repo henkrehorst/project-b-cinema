@@ -20,6 +20,7 @@ namespace bioscoop_app.Controller
     /// </summary>
     class OrderController : ChromelyController
     {
+        [Obsolete("Order.items no longer contains tickets, to retrieve the Tickets address Order.tickets.")]
         private Func<List<Product>, List<Ticket>> filterTickets = sequence =>
         {
             return (from product in sequence
@@ -39,7 +40,7 @@ namespace bioscoop_app.Controller
             try
             {
                 string code = data["code"].Value<string>();
-                var orders = new Repository<Order>().Data.Values.AsQueryable<Order>();
+                var orders = new Repository<Order>().Data.Values.AsQueryable();
                 IEnumerable<Order> queryResult = from order in orders
                               where order.code == code
                               select order;
@@ -76,7 +77,17 @@ namespace bioscoop_app.Controller
                     data["cust_name"].Value<string>(),
                     data["cust_email"].Value<string>()
                 );
-            SetSeatsAvailability(filterTickets(order.items), true);
+            try
+            {
+                SetSeatsAvailability(order.tickets, false);
+            } catch (InvalidOperationException err)
+            {
+                return new Response
+                {
+                    status = 409,
+                    statusText = err.Message
+                }.ChromelyWrapper(req.Id);
+            }
             new Repository<Order>().AddThenWrite(order);
             return new Response
             {
@@ -138,8 +149,8 @@ namespace bioscoop_app.Controller
                     //fix ticket difference in data
                     List<Ticket> reserve = input.tickets.Except(repository.Data[orderId].tickets).ToList(); //A - B
                     List<Ticket> cancel = repository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
-                    SetSeatsAvailability(reserve, true);
-                    SetSeatsAvailability(cancel, false);
+                    SetSeatsAvailability(reserve, false);
+                    SetSeatsAvailability(cancel, true);
                 }
                 repository.Update(
                         orderId,
@@ -174,7 +185,7 @@ namespace bioscoop_app.Controller
             int orderId = data["id"].Value<int>();
             try
             {
-                SetSeatsAvailability(filterTickets(repository.Data[orderId].items), true);
+                SetSeatsAvailability(repository.Data[orderId].tickets, true);
             } catch (KeyNotFoundException)
             {
                 return new Response
