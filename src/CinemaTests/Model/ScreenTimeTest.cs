@@ -8,7 +8,7 @@ using System.Text;
 namespace CinemaTests.Model
 {
     [TestClass]
-    class ScreenTimeTest
+    public class ScreenTimeTest
     {
         [TestMethod]
         public void ReserveSeatTest()
