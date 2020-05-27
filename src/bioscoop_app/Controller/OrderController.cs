@@ -47,7 +47,7 @@ namespace bioscoop_app.Controller
                 return new Response
                 {
                     status = 200,
-                    data = SingleOrderToJson(result)
+                    data = JsonConvert.SerializeObject(result)
                 }.ChromelyWrapper(req.Id);
             } catch (InvalidOperationException)
             {
@@ -69,9 +69,10 @@ namespace bioscoop_app.Controller
         public ChromelyResponse CreateOrder(ChromelyRequest req)
         {
             var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            List<Product> products = ParseItems(data["items"].Value<JArray>());
+            //List<Product> products = ParseItems(data["items"].Value<JArray>());
             Order order = new Order(
-                    products,
+                    ParseItems(data["items"].Value<JArray>()),
+                    ParseTickets(data["tickets"].Value<JArray>()),
                     data["cust_name"].Value<string>(),
                     data["cust_email"].Value<string>()
                 );
@@ -101,11 +102,12 @@ namespace bioscoop_app.Controller
                 Order input = new Order(
                         orderId,
                         ParseItems(data["items"].Value<JArray>()),
+                        ParseTickets(data["tickets"].Value<JArray>()),
                         data["code"].Value<string>(),
                         data["cust_name"].Value<string>(),
                         data["cust_email"].Value<string>()
                     );
-                if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
+                /*if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
                 {
                     //Backend magic to change availability of items
                     List<Ticket> inputTickets = filterTickets(input.items);
@@ -129,6 +131,15 @@ namespace bioscoop_app.Controller
                         SetSeatsAvailability(reserve, true);
                         SetSeatsAvailability(cancel, false);
                     }
+                }*/
+                if (input.tickets.Any() && repository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
+                        !input.tickets.OrderBy(t => t.Id).SequenceEqual(repository.Data[orderId].tickets.OrderBy(p => p.Id)))
+                {
+                    //fix ticket difference in data
+                    List<Ticket> reserve = input.tickets.Except(repository.Data[orderId].tickets).ToList(); //A - B
+                    List<Ticket> cancel = repository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
+                    SetSeatsAvailability(reserve, true);
+                    SetSeatsAvailability(cancel, false);
                 }
                 repository.Update(
                         orderId,
@@ -211,10 +222,34 @@ namespace bioscoop_app.Controller
         }
 
         /// <summary>
+        /// Parses the tickets in the order to a list of tickets.
+        /// </summary>
+        /// <param name="dataSeq">Data as a JArray.</param>
+        /// <returns>Data as a List of Product Objects.</returns>
+        private List<Ticket> ParseTickets(JArray dataSeq)
+        {
+            List<Ticket> tickets = new List<Ticket>();
+            foreach (JObject ticket in dataSeq)
+            {
+                tickets.Add(new Ticket(
+                    ticket["Id"].Value<int>(),
+                    ticket["price"].Value<double>(),
+                    ticket["name"].Value<string>(),
+                    ticket["row"].Value<int>(),
+                    ticket["seatnr"].Value<int>(),
+                    ticket["screenTime"].Value<int>(),
+                    ticket["visitorAge"].Value<int>()
+                    ));
+            }
+            return tickets;
+        }
+
+        /// <summary>
         /// Converts a single order to json in a way that preserves all information.
         /// </summary>
         /// <param name="order">The order to convert.</param>
         /// <returns></returns>
+        [Obsolete("Ticket < Product is deprecated, please use JsonConvert instead.", true)]
         private string SingleOrderToJson(Order order)
         {
             List<JObject> jItems = new List<JObject>();
