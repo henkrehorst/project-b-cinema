@@ -8,14 +8,14 @@ async function stepOne() {
     //get upsells
     const upsellResponse = await chromelyRequest('/product#type', 'POST', {'type': 'upsell'});
     let upsells = upsellResponse.getData();
-    //prepare reservation cookie (shopping cart)
-    await prepareReservationCookie(ticketProducts, upsells);
 
     //display products
     displayProducts(ticketProducts, 'product_view', 'order')
     displayProducts(upsells, 'upsell_view', 'upsell')
-
+    
     showOrUpdateReservationCart();
+    //prepare reservation cookie (shopping cart)
+    await prepareReservationCookie(ticketProducts, upsells);
 }
 
 /**
@@ -65,10 +65,11 @@ async function stepThree() {
         //read form information
         let confirmForm = new FormData(document.getElementById('checkout-form'));
         console.log(confirmForm.get('name'), confirmForm.get('email'))
-
+        
         let cookieval = getReservationCookieValue();
         let order = {
-            'items': cookieval['tickets'],
+            'items': generateProductOrder(),
+            'tickets': cookieval['tickets'],
             'cust_name': confirmForm.get('name'),
             'cust_email': confirmForm.get('email')
         };
@@ -151,6 +152,13 @@ async function prepareReservationCookie(ticketProducts, upsells) {
     };
 
     updateCreateReservationCookie(cookieValue);
+
+    if (getParameterFromUrl('change_data') !== null) {
+        let orderData = JSON.parse(getParameterFromUrl('change_data'));
+        orderData.items.map(item => {
+            return productControl(item.Id, 1, 'order')
+        })
+    }
 }
 
 /**
@@ -274,9 +282,25 @@ function generateTickets(selectedSeats) {
                     'visitorAge': 12
                 };
                 seatPos++;
+                reservationCookie['tickets'] = ticketArray;
+                updateCreateReservationCookie(reservationCookie);
             }
-            reservationCookie['tickets'] = ticketArray;
-            updateCreateReservationCookie(reservationCookie);
         }
     }
+}
+
+/**
+ * Convert product order to products
+ * @return []
+ */
+function generateProductOrder() {
+    const reservationCookie = getReservationCookieValue();
+    let productArray = [];
+    for (product in reservationCookie.upsell){
+        let upsellCount = reservationCookie.upsell[product];
+        for (let i = 0; i < upsellCount; i++){
+            productArray.push(reservationCookie.upsellProducts[product])
+        }
+    }
+    return productArray;
 }

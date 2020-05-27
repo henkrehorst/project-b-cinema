@@ -127,8 +127,16 @@ async function chromelyRequest(route, method = 'GET', postData = {}) {
  * @returns {string}
  */
 function getIdFromUrl() {
+    return getParameterFromUrl('id');
+}
+
+/**
+ * function for reading get parameter from url
+ * @returns {string}
+ */
+function getParameterFromUrl(key) {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id');
+    return urlParams.get(key);
 }
 
 /**

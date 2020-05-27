@@ -8,7 +8,7 @@ using System.Text;
 namespace CinemaTests.Model
 {
     [TestClass]
-    class ScreenTimeTest
+    public class ScreenTimeTest
     {
         [TestMethod]
         public void ReserveSeatTest()
@@ -17,7 +17,7 @@ namespace CinemaTests.Model
             var testroom = new bool[2, 2]{ { true, true }, { true, true } };
             var testobj = new ScreenTime(25, 64, new DateTime(), new DateTime(), "testroom", testroom, 4);
             //Act
-            testobj.SetSeatAvailability(new Mock<Ticket>(10, "", 0, 0, 25, 25).Object, false);
+            testobj.SetSeatAvailability(new Ticket(10, "", 0, 0, 25, 25), false);
             //Assert
             Assert.IsFalse(testobj.availability[0, 0]);
             Assert.AreEqual(testobj.availableTickets, 3);
@@ -29,12 +29,12 @@ namespace CinemaTests.Model
             //throw new NotImplementedException();
             //Arrange
             var testroom = new bool[2, 2] { { false, true }, { true, true } };
-            var testobj = new ScreenTime(25, 64, new DateTime(), new DateTime(), "testroom", testroom, 4);
+            var testobj = new ScreenTime(25, 64, new DateTime(), new DateTime(), "testroom", testroom, 3);
             //Act
-            testobj.SetSeatAvailability(new Mock<Ticket>(10, "", 0, 0, 25, 25).Object, true);
+            testobj.SetSeatAvailability(new Ticket(10, "", 0, 0, 25, 25), true);
             //Assert
             Assert.IsTrue(testobj.availability[0, 0]);
-            Assert.AreEqual(testobj.availableTickets, 4);
+            Assert.AreEqual(4, testobj.availableTickets);
         }
 
         [TestMethod]
@@ -44,9 +44,9 @@ namespace CinemaTests.Model
         {
             //Arrange
             var testroom = new bool[2, 2] { { false, true }, { true, true } };
-            var testobj = new ScreenTime(25, 64, new DateTime(), new DateTime(), "testroom", testroom, 4);
+            var testobj = new ScreenTime(25, 64, new DateTime(), new DateTime(), "testroom", testroom, 3);
             //Act
-            testobj.SetSeatAvailability(new Mock<Ticket>(10, "", 0, 0, 25, 25).Object, true);
+            testobj.SetSeatAvailability(new Ticket(10, "", 0, 0, 25, 25), false);
         }
     }
 }
