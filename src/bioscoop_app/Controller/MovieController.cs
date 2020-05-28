@@ -8,6 +8,7 @@ using bioscoop_app.Service;
 using Chromely.Core.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using bioscoop_app.Validator;
 
 namespace bioscoop_app.Controller
 {
@@ -58,7 +59,29 @@ namespace bioscoop_app.Controller
             //convert kijkwijzer collection to int array
             int[] kijkWijzers = data["kijkwijzers"].Select(x => (int) x).ToArray();
             string fileName = "";
-            
+
+
+            var results = new MovieValidator().Validate(ToMovie(data));
+
+            if (results.IsValid)
+            {
+                new MovieRepository().AddThenWrite(ToMovie(data));
+                // return new Response
+                // {
+                //    status = 204
+                // }.ChromelyWrapper(request.Id);
+            }
+            else
+            {
+                return new Response
+                {
+                    data = JsonConvert.SerializeObject(results.Errors),
+                    status = 400
+                }.ChromelyWrapper(request.Id);
+            }
+
+
+
             //get base64 image string
             string coverImage = data["cover_image"].Value<string>();
             if (coverImage.Length != 0)
@@ -101,6 +124,25 @@ namespace bioscoop_app.Controller
                 status = 204
             }.ChromelyWrapper(request.Id);
         }
+        //Movie word toegevoegd
+        public static Movie ToMovie(JObject data)
+        {
+            int[] kijkWijzers = data["kijkwijzers"].Select(x => (int)x).ToArray();
+            string filestring = data["cover_image"].Value<string>();
+
+            return new Movie(
+                data["title"].Value<string>(),
+                data["genre"].Value<string>(),
+                data["rating"].Value<double>(),
+                data["samenvatting"].Value<string>(),
+                data["duration"].Value<int>(),
+                filestring,
+                kijkWijzers
+                );
+
+
+        }
+
 
         /// <summary>
         /// Updates the movie associated with the specified id, with the specified data.
