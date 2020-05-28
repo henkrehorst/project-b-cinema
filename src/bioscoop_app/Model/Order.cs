@@ -9,13 +9,15 @@ namespace bioscoop_app.Model
 	public sealed class Order : DataType
 	{
 		public List<Product> items;
+		public List<Ticket> tickets;
 		public string code;
 		public string cust_name;
 		public string cust_email;
 
-		public Order(List<Product> items, string cust_name, string cust_email)
+		public Order(List<Product> items, List<Ticket> tickets, string cust_name, string cust_email)
 		{
 			this.items = items;
+			this.tickets = tickets;
 			code = null;
 			this.cust_email = cust_email;
 			this.cust_name = cust_name;
@@ -23,10 +25,11 @@ namespace bioscoop_app.Model
 		}
 
 		[JsonConstructor]
-		public Order(int id, List<Product> items, string code, string cust_name, string cust_email)
+		public Order(int id, List<Product> items, List<Ticket> tickets, string code, string cust_name, string cust_email)
 		{
 			Id = id;
 			this.items = items;
+			this.tickets = tickets;
 			this.code = code;
 			this.cust_email = cust_email;
 			this.cust_name = cust_name;

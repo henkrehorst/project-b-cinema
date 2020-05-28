@@ -22,6 +22,10 @@ function displayOrderState(data) {
     //display order
     console.log(data);
     createCancelOrderButton();
+    //display order change form
+   // document.getElementById("screentime_id").value = data.items[0].screenTime;
+    document.getElementById("change_data_field").value = JSON.stringify(data);
+    document.getElementById("change_data_buton").style.display = "block";
 }
 
 /*
