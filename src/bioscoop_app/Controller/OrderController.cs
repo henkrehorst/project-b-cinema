@@ -139,6 +139,8 @@ namespace bioscoop_app.Controller
             {
                 matchedOrder.redeemable = false;
             }
+            repos.Update(matchedOrder.Id, matchedOrder);
+            repos.SaveChangesThenDiscard();
             return new Response { 
                 status = 200, 
                 data = JsonConvert.SerializeObject(new { matchedOrder.tickets, matchedOrder.items})
