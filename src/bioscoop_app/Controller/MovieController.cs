@@ -142,6 +142,7 @@ namespace bioscoop_app.Controller
                 var uploadService = new UploadService(thumbnail);
                 if (uploadService.CheckIsImage())
                 {
+                    uploadService.DeleteFile(thumbnailName);
                     uploadService.CreateFileInUploadFolder();
                     thumbnailName = uploadService.GetFileName();
                 }

@@ -35,11 +35,11 @@ async function movieDetailPage() {
     let movie = movieResponse.getData();
 
     //display cover image of movie
-    document.querySelector("body > div > div > div.col-md-3").innerHTML =
-        `<img class='cover_image' src='local://frontend/uploads/${movie.coverImage}' alt='${movie.title}'/>`;
+    // document.querySelector("body > div > div > div.col-md-3").innerHTML =
+    //     `<img class='cover_image' src='local://frontend/uploads/${movie.coverImage}' alt='${movie.title}'/>`;
 
     //display movie information
-    document.querySelector("body > div > div > div.col-md-9").innerHTML = `<h1>${movie.title}</h1>
+    document.querySelector("body > div > div > div.col-md-9").innerHTML += `
         <table class='table'>
                 <tr><th>Genre</th><td>${movie.genre}</td></tr>
                 <tr><th>Duur</th><td>${movie.duration}</td></tr>

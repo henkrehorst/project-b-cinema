@@ -41,8 +41,11 @@ async function movieEditPage() {
     document.getElementById('rating').value = movie.rating;
     document.getElementById('samenvatting').value = movie.samenvatting;
     //show preview cover image
-    document.querySelector("body > div > div > .cover-image-preview").innerHTML +=
+    document.getElementById('cover_preview').innerHTML +=
         `<img src="local://frontend/uploads/${movie.coverImage}" alt="cover image" />`
+    //show preview thumbnail image
+    document.getElementById('thumbnail_preview').innerHTML +=
+        `<img src="local://frontend/uploads/${movie.thumbnailImage}" alt="thumbnail image" />`
 
     /**
      * function for posting movie to backend
@@ -181,9 +184,25 @@ async function coverImagePreview() {
     // convert cover image to base64
     let cover_image = await getBase64String(movieForm.get('cover_image'))
 
-    document.querySelector("body > div > div > .cover-image-preview").innerHTML =
+    document.getElementById('cover_preview').innerHTML =
         `<p>Cover image preview</p>
          <img src="${cover_image}" alt="cover image" />`;
+}
+
+
+/**
+ * show a preview of the uploaded thumbnail image
+ * @returns {Promise<void>}
+ */
+async function thumbnailImagePreview() {
+    // get movie form data
+    const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
+    //convert thumbnail image to string
+    let thumbnail = await getBase64String(movieForm.get('thumbnail_image'));
+
+    document.getElementById('thumbnail_preview').innerHTML =
+        `<p>Cover image preview</p>
+         <img src="${thumbnail}" alt="cover image" />`;
 }
 
 /**

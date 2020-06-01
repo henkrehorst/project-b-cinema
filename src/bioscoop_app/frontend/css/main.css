@@ -438,5 +438,50 @@ p.screen-title {
 }
 
 #kijkwijzerView{
-    padding-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.movie_thumbnail img{
+    width: 100%;
+    object-fit: cover;
+    height: 420px;
+    filter: brightness(0.45);
+}
+
+.movie_description{
+    background-color: #ffffff;
+    min-height: 200px;
+    margin-top: -50px;
+    z-index: 999;
+    position: relative;
+}
+
+.movie_description h1{
+    margin-top: -80px;
+    color: #ffffff;
+    margin-bottom: 60px;
+}
+
+.movie_description .cover_image{
+    margin-top: -220px;
+    margin-left: -15px;
+}
+
+.movie_description p{
+    font-size: 20px;
+    letter-spacing: 1.2px;
+    padding-bottom: 50px;
+}
+
+#movieDuration{
+    margin-top: 10px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    color: #212121;
+    margin-bottom: 10px;
+}
+
+#movieDuration svg{
+    height: 25px;
 }

@@ -47,7 +47,7 @@
                 </div>
                 <div class="form-group">
                     <label for="thumbnail_image">Thumbnail image</label>
-                    <input name="thumbnail_image" type="file" class="form-control-file" id="thumbnail_image" onchange="coverImagePreview()">
+                    <input name="thumbnail_image" type="file" class="form-control-file" id="thumbnail_image" onchange="thumbnailImagePreview()">
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary">Pas film aan</button>
@@ -55,8 +55,12 @@
             </form>
         </div>
         <div class="col-md-6 cover-image-preview">
-            <p>Cover image preview</p>
-            
+            <div id="cover_preview">
+                <p>Cover image preview</p>
+            </div>
+            <div id="thumbnail_preview">
+                <p>Thumbnail image preview</p>
+            </div>
         </div>
     </div>
 </div>
