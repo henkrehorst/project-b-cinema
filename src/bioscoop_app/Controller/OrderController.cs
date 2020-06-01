@@ -112,16 +112,25 @@ namespace bioscoop_app.Controller
                 return new Response { status = 400, statusText = "Bad input de code was null" }
                 .ChromelyWrapper(req.Id);
             }
+            var repos = new Repository<Order>();
+            var orders = repos.Data.Values.AsQueryable();
+            var result = from order in orders where order.code == code select order;
+            Order matchedOrder = null;
             try
             {
-                var repos = new Repository<Order>();
-                var orders = repos.Data.Values.AsQueryable();
-                var result = from order in orders where order.code == code select order;
-                var returnvalue = result.First().items;
-                return new Response { status = 200, data = JsonConvert.SerializeObject(returnvalue) }
-                .ChromelyWrapper(req.Id);
-             
+                matchedOrder = result.First();
+            } catch (InvalidOperationException)
+            {
+                return new Response
+                {
+                    status = 204,
+                    statusText = "No order matching the input code was found."
+                }.ChromelyWrapper(req.Id);
             }
+            return new Response { 
+                status = 200, 
+                data = JsonConvert.SerializeObject(new { matchedOrder.tickets, matchedOrder.items})
+            }.ChromelyWrapper(req.Id);
         }
 
 
