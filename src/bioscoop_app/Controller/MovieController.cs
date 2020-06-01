@@ -58,9 +58,11 @@ namespace bioscoop_app.Controller
             //convert kijkwijzer collection to int array
             int[] kijkWijzers = data["kijkwijzers"].Select(x => (int) x).ToArray();
             string fileName = "";
+            string thumbnailName = "";
             
             //get base64 image string
             string coverImage = data["cover_image"].Value<string>();
+            
             if (coverImage.Length != 0)
             {
                 var uploadService = new UploadService(coverImage);
@@ -71,6 +73,18 @@ namespace bioscoop_app.Controller
                 }
             }
 
+            //get base64 string of thumbnail image
+            string thumbnail = data["thumbnail_image"].Value<string>();
+            
+            if (thumbnail.Length != 0)
+            {
+                var uploadService = new UploadService(thumbnail);
+                if (uploadService.CheckIsImage())
+                {
+                    uploadService.CreateFileInUploadFolder();
+                    thumbnailName = uploadService.GetFileName();
+                }
+            }
 
             movieRepository.Add(new Movie(
                 data["title"].Value<string>(),
@@ -79,7 +93,8 @@ namespace bioscoop_app.Controller
                 data["samenvatting"].Value<string>(),
                 data["duration"].Value<int>(),
                 fileName,
-                kijkWijzers
+                kijkWijzers,
+                thumbnailName
             ));
             
             movieRepository.SaveChangesThenDiscard();
@@ -103,11 +118,11 @@ namespace bioscoop_app.Controller
             
             string filestring = data["cover_image"].Value<string>();
             string filename = repository.Data[data.Value<int>("id")].coverImage;
+            string thumbnailName = repository.Data[data.Value<int>("id")].thumbnailImage;
             
             //convert kijkwijzer collection to int array
             int[] kijkWijzers = data["kijkwijzers"].Select(x => (int) x).ToArray();
-            string fileName = "";
-            
+
             if (filestring.Length > 0)
             {
                 var uploadService = new UploadService(filestring);
@@ -116,6 +131,19 @@ namespace bioscoop_app.Controller
                     uploadService.DeleteFile(filename);
                     uploadService.CreateFileInUploadFolder();
                     filename = uploadService.GetFileName();
+                }
+            }
+            
+            //get base64 string of thumbnail image
+            string thumbnail = data["thumbnail_image"].Value<string>();
+            
+            if (thumbnail.Length != 0)
+            {
+                var uploadService = new UploadService(thumbnail);
+                if (uploadService.CheckIsImage())
+                {
+                    uploadService.CreateFileInUploadFolder();
+                    thumbnailName = uploadService.GetFileName();
                 }
             }
             
@@ -128,7 +156,8 @@ namespace bioscoop_app.Controller
                     data["samenvatting"].Value<string>(),
                     data["duration"].Value<int>(),
                     filename,
-                    kijkWijzers
+                    kijkWijzers,
+                    thumbnailName
                 ));
             } catch(InvalidOperationException except)
             {

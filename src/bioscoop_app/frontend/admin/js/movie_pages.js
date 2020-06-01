@@ -50,8 +50,10 @@ async function movieEditPage() {
     async function updateMovie() {
         // get movie form data
         const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
-        //covert cover image to string
+        //convert cover image to string
         let cover_image = await getBase64String(movieForm.get('cover_image'))
+        //convert thumbnail image to string
+        let thumbnail = await getBase64String(movieForm.get('thumbnail_image'));
         //get values of checked kijkwijzers
         let kijkwijzers = Object.values(document.querySelectorAll("#kijkwijzerFields > li > input:checked"))
             .map(item => {return parseInt(item.value)})
@@ -65,7 +67,8 @@ async function movieEditPage() {
             'rating': movieForm.get('rating'),
             'samenvatting': movieForm.get('samenvatting'),
             'cover_image': cover_image,
-            'kijkwijzers': kijkwijzers
+            'kijkwijzers': kijkwijzers,
+            'thumbnail_image': thumbnail
         })
 
         // if response = 200: redirect to movie overview page
@@ -104,8 +107,10 @@ async function movieAddPage() {
     async function addMovie() {
         // get movie form data
         const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
-        //covert cover image to string
-        let cover_image = await getBase64String(movieForm.get('cover_image'))
+        //convert cover image to string
+        let cover_image = await getBase64String(movieForm.get('cover_image'));
+        //convert thumbnail image to string
+        let thumbnail = await getBase64String(movieForm.get('thumbnail_image'));
         //get values of checked kijkwijzers
         let kijkwijzers = Object.values(document.querySelectorAll("#kijkwijzerFields > li > input:checked"))
             .map(item => {return parseInt(item.value)})
@@ -118,7 +123,8 @@ async function movieAddPage() {
             'rating': movieForm.get('rating'),
             'samenvatting': movieForm.get('samenvatting'),
             'cover_image': cover_image,
-            'kijkwijzers': kijkwijzers
+            'kijkwijzers': kijkwijzers,
+            'thumbnail_image': thumbnail
         })
 
         // if response = 204: redirect to movie overview page
