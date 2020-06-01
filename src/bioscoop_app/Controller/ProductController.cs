@@ -113,9 +113,10 @@ namespace bioscoop_app.Controller
         /// <returns>Product as a Product or Ticket</returns>
         public static Product ToProduct(JObject data)
         {
-            if (data.ContainsKey("seat") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
+            if (data.ContainsKey("seatnr") && data.ContainsKey("row") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
             {
                 return new Ticket(
+                    data["Id"].Value<int>(),
                     data["price"].Value<double>(),
                     data["name"].Value<string>(),
                     data["row"].Value<int>(),
@@ -127,6 +128,7 @@ namespace bioscoop_app.Controller
             else
             {
                 return new Product(
+                    data["Id"].Value<int>(),
                     data["price"].Value<double>(),
                     data["name"].Value<string>()
                     );

@@ -74,7 +74,7 @@ function fillNavbar() {
         </ul>
         <ul>
           <li class=\"menu-item\"><a href="./index.html">Films</a></li>
-          <li class=\"menu-item\"><a href="#">Reserveringen</a></li>
+          <li class=\"menu-item\"><a href="./order.html">Reserveringen</a></li>
           <li class=\"menu-item\"><a href="./medewerkers/medewerker.html">Medewerkers</a></li>
           <li class=\"menu-item\"><a href="./admin/admin.html">Beheerder</a></li>
         </ul>`;
@@ -127,8 +127,16 @@ async function chromelyRequest(route, method = 'GET', postData = {}) {
  * @returns {string}
  */
 function getIdFromUrl() {
+    return getParameterFromUrl('id');
+}
+
+/**
+ * function for reading get parameter from url
+ * @returns {string}
+ */
+function getParameterFromUrl(key) {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id');
+    return urlParams.get(key);
 }
 
 /**
