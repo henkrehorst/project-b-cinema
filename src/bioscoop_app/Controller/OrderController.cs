@@ -127,6 +127,18 @@ namespace bioscoop_app.Controller
                     statusText = "No order matching the input code was found."
                 }.ChromelyWrapper(req.Id);
             }
+            if (!matchedOrder.redeemable)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "Order has been redeemed before."
+                }.ChromelyWrapper(req.Id);
+            }
+            else
+            {
+                matchedOrder.redeemable = false;
+            }
             return new Response { 
                 status = 200, 
                 data = JsonConvert.SerializeObject(new { matchedOrder.tickets, matchedOrder.items})
@@ -150,13 +162,22 @@ namespace bioscoop_app.Controller
             try
             {
                 int orderId = data["id"].Value<int>();
+                if (!repository.Data[orderId].redeemable)
+                {
+                    return new Response
+                    {
+                        status = 400,
+                        statusText = "Can't modify an order that has already been collected."
+                    }.ChromelyWrapper(req.Id);
+                }
                 Order input = new Order(
                         orderId,
                         ParseItems(data["items"].Value<JArray>()),
                         ParseTickets(data["tickets"].Value<JArray>()),
                         data["code"].Value<string>(),
                         data["cust_name"].Value<string>(),
-                        data["cust_email"].Value<string>()
+                        data["cust_email"].Value<string>(),
+                        true
                     );
                 /*if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
                 {
@@ -225,6 +246,14 @@ namespace bioscoop_app.Controller
             int orderId = data["id"].Value<int>();
             try
             {
+                if (!repository.Data[orderId].redeemable)
+                {
+                    return new Response
+                    {
+                        status = 400,
+                        statusText = "Order can't be cancelled because it has already been collected."
+                    }.ChromelyWrapper(req.Id);
+                }
                 SetSeatsAvailability(repository.Data[orderId].tickets, true);
             } catch (KeyNotFoundException)
             {
