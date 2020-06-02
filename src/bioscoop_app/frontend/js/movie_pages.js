@@ -57,10 +57,11 @@ async function movieDetailPage() {
         //create screentime table
         let screentimeTable = "<table class='table'><tr><th>Start tijd</th><th>Eind tijd</th><th></th></tr>";
         
-        for(time in screenTimes){
+        for (time in screenTimes) {
+            //let date = new Date(screentimes[time].startTime);
             screentimeTable += `<tr>
-                <td>${new Date(screenTimes[time].startTime).toLocaleString()}</td>
-                <td>${new Date(screenTimes[time].startTime).toLocaleString()}</td>
+                <td>${new Date(screenTimes[time].startTime).toLocaleString('nl-NL')}</td>
+                <td>${new Date(screenTimes[time].endTime).toLocaleString('nl-NL')}</td>
                 <td><a href="/reservation_step_one.html?id=${screenTimes[time].Id}">Reserveren</a></td>
             </tr>`;
         }
