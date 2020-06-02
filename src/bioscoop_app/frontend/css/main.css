@@ -438,7 +438,7 @@ p.screen-title {
 }
 
 #kijkwijzerView{
-    padding-bottom: 10px;
+    padding-bottom: 20px;
 }
 
 .movie_thumbnail img{
@@ -469,7 +469,6 @@ p.screen-title {
 
 .movie_description p{
     font-size: 20px;
-    letter-spacing: 1.2px;
     padding-bottom: 50px;
 }
 
@@ -484,4 +483,35 @@ p.screen-title {
 
 #movieDuration svg{
     height: 25px;
+    margin-right: 6px;
+}
+
+#genreView span{
+    padding: 8px;
+    margin-right: 5px;
+    color: #ffffff;
+    background-color: black;
+    border-radius: 4px;
+}
+
+#genreView{
+    margin-bottom: 20px
+}
+
+.screentimes_row{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    background-color: #ffffff;
+    padding-left: 0!important;
+    padding-right: 0!important;
+}
+
+.screentimes_row .reservation_box_header{
+    justify-content: end;
+    padding-left: 20px;
+}
+
+.screentime_view{
+    padding: 20px 40px 40px 40px;
 }
