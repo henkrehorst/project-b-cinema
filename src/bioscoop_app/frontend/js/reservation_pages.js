@@ -1,4 +1,25 @@
 ﻿/**
+ * Function for showing the details of the movie
+ */
+async function showMovieDetail() {
+    //get movie by id
+    const movieResponse = await chromelyRequest('/movies#id', 'POST', {'id': getReservationCookieValue().screentime.movie});
+    let movie = movieResponse.getData();
+    
+    //display thumbnail
+    document.getElementById("movieThumbnail").src = `local://frontend/uploads/${movie.thumbnailImage}`;
+    //display title and time
+    document.getElementById("movieTitle").innerText = movie.title;
+    //change time format to nl
+    moment.locale('nl-nl');
+    document.getElementById("movieTime").innerText = 
+        moment(new Date(getReservationCookieValue().screentime.startTime)).format('dddd d MMMM yyyy') +
+        " | " + moment(new Date(getReservationCookieValue().screentime.startTime)).format('LT') +
+        " - " + moment(new Date(getReservationCookieValue().screentime.endTime)).format('LT');
+}
+
+
+/**
  * function with all javascript running on step one of the reservation flow (ticket selection step)
  */
 async function stepOne() {
@@ -12,10 +33,11 @@ async function stepOne() {
     //display products
     displayProducts(ticketProducts, 'product_view', 'order')
     displayProducts(upsells, 'upsell_view', 'upsell')
-    
-    showOrUpdateReservationCart();
+
     //prepare reservation cookie (shopping cart)
     await prepareReservationCookie(ticketProducts, upsells);
+    showOrUpdateReservationCart();
+    showMovieDetail()
 }
 
 /**
@@ -49,6 +71,8 @@ function displayProducts(products, location, productType) {
 async function stepTwo() {
     //show reservation
     showOrUpdateReservationCart();
+    //display movie thumbnail
+    showMovieDetail();
 }
 
 /**
@@ -57,6 +81,8 @@ async function stepTwo() {
 async function stepThree() {
     //show shopping cart
     showOrUpdateReservationCart();
+    //display movie thumbnail
+    showMovieDetail();
 
     /**
      * function for finish reservation
@@ -65,7 +91,7 @@ async function stepThree() {
         //read form information
         let confirmForm = new FormData(document.getElementById('checkout-form'));
         console.log(confirmForm.get('name'), confirmForm.get('email'))
-        
+
         let cookieval = getReservationCookieValue();
         let order = {
             'items': generateProductOrder(),
@@ -86,6 +112,8 @@ async function stepThree() {
         //change title
         document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_box_header > h3").innerHTML =
             "We hebben je reservering succesvol ontvangen";
+        //make last step completed
+        document.getElementById("lastStep").classList.replace("current", "completed")
     }
 
     //add finish function on confirm button
@@ -152,13 +180,6 @@ async function prepareReservationCookie(ticketProducts, upsells) {
     };
 
     updateCreateReservationCookie(cookieValue);
-
-    if (getParameterFromUrl('change_data') !== null) {
-        let orderData = JSON.parse(getParameterFromUrl('change_data'));
-        orderData.items.map(item => {
-            return productControl(item.Id, 1, 'order')
-        })
-    }
 }
 
 /**
@@ -296,11 +317,12 @@ function generateTickets(selectedSeats) {
 function generateProductOrder() {
     const reservationCookie = getReservationCookieValue();
     let productArray = [];
-    for (product in reservationCookie.upsell){
+    for (product in reservationCookie.upsell) {
         let upsellCount = reservationCookie.upsell[product];
-        for (let i = 0; i < upsellCount; i++){
+        for (let i = 0; i < upsellCount; i++) {
             productArray.push(reservationCookie.upsellProducts[product])
         }
     }
     return productArray;
 }
+

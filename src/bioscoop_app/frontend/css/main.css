@@ -448,6 +448,11 @@ p.screen-title {
     filter: brightness(0.45);
 }
 
+.movie_thumbnail{
+    position: relative;
+    height: 420px;
+}
+
 .movie_description{
     background-color: #ffffff;
     min-height: 200px;
@@ -514,4 +519,37 @@ p.screen-title {
 
 .screentime_view{
     padding: 20px 40px 40px 40px;
+}
+
+.reservation_view{
+    margin-top: -100px;
+}
+
+.thumbnailOverlay{
+    position: absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+}
+
+.thumbnailOverlay h1{
+    padding-top: 85px;
+    font-size: 60px;
+    color: #ffff;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.thumbnailOverlay p{
+    font-size: 22px!important; 
+    color: #ffff;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.step_wrapper{
+    padding-top: 15px;
+    margin: 0 auto;
+    width: 800px;
 }
