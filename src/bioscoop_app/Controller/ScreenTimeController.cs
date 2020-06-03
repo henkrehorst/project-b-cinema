@@ -38,14 +38,16 @@ namespace bioscoop_app.Controller
         public ChromelyResponse AddScreenTime(ChromelyRequest request)
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
-            /*var results = new ProductValidator().Validate(ToProduct(data));
+            var toScreenTime = ToScreenTime(data);
+            var results = new ScreenTimeValidator().Validate(toScreenTime);
+
             if (results.IsValid)
             {
-                new ProductRepository().AddThenWrite(ToProduct(data));
+                new ScreenTimeRepository().AddThenWrite(toScreenTime);
                 return new Response
                 {
                     status = 204
-                }.ChromelyWrapper(req.Id);
+                }.ChromelyWrapper(request.Id);
             }
             else
             {
@@ -53,8 +55,8 @@ namespace bioscoop_app.Controller
                 {
                     data = JsonConvert.SerializeObject(results.Errors),
                     status = 400
-                }.ChromelyWrapper(req.Id);
-            }*/
+                }.ChromelyWrapper(request.Id);
+            }
 
             var screenTimeRepository = new ScreenTimeRepository();
             screenTimeRepository.AddThenWrite(new ScreenTime(
@@ -68,6 +70,12 @@ namespace bioscoop_app.Controller
             {
                 status = 204
             }.ChromelyWrapper(request.Id);
+        }
+
+        public static ScreenTime ToScreenTime(JObject data)
+        {
+            //return new ScreenTime(data["movie_id"].Value<int>(), data["start_time"].Value<DateTime>(), data["end_time"].Value<DateTime>(), data["room_name"].Value<string>());
+            return new ScreenTime(0, DateTime.Now, DateTime.Now, "");
         }
 
         /// <param name="req">http POST re</param>
