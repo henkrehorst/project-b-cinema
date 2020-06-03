@@ -565,3 +565,10 @@ p.screen-title {
 .reservation_information strong{
     color: #ff0000;
 }
+
+.star-rating{
+    width: 50px;
+    height: 50px;
+    left: 1px;
+    position: relative;
+}
