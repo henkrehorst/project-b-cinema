@@ -382,7 +382,8 @@ async function setReservation(order) {
         'screentime': screentimeResponse.getData(),
         'newOrder': false,
         'name': order.cust_name,
-        'email': order.cust_email
+        'email': order.cust_email,
+        'order_tickets': order.tickets
     };
 
     updateCreateReservationCookie(cookieValue);
