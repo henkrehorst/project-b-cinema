@@ -302,6 +302,27 @@ function loadSeatOverview() {
             }
         }
     }
+    //select reserved seats in change order flow
+    let cookie = getReservationCookieValue();
+    if (!cookie.newOrder) {
+        //console.log("change flow seat selection");
+        console.log(cookie.products);
+        //console.log(cookie["products"]);
+        for (ticket in cookie.products) {
+            console.log(ticket);
+            let row = cookie.order_tickets.row;
+            let seat = cookie.order_tickets.seatnr;
+
+            let elSeat = document.querySelector('.row-' + row + '.seat-' + seat);
+            let classes = elSeat.classList;
+            let type = (classes.contains('vip') ? 3 : classes.contains('luxery') ? 2 : 1);
+
+            elseat.classList.remove('not-available');
+            elSeat.classList.add('selected');
+            selectedSeats.push({ 'row': row, 'seat': seat, 'type': (type == 1 ? 'normaal' : (type == 2 ? 'luxe' : 'VIP')), 'price': seatPrices[type - 1] });
+            generateTickets(selectedSeats);
+        }
+    }
 }
 
 // Controls: zoom-in, zoom-out & load new room

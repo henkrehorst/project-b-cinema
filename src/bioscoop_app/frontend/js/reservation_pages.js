@@ -106,14 +106,25 @@ async function stepThree() {
         console.log(confirmForm.get('name'), confirmForm.get('email'))
 
         let cookieval = getReservationCookieValue();
-        let order = {
-            'items': generateProductOrder(),
-            'tickets': cookieval['tickets'],
-            'cust_name': confirmForm.get('name'),
-            'cust_email': confirmForm.get('email')
-        };
-
-        let res = await chromelyRequest('/order#create', 'POST', order);
+        let res;
+        if (cookieval.newOrder) {
+            let order = {
+                'items': generateProductOrder(),
+                'tickets': cookieval['tickets'],
+                'cust_name': confirmForm.get('name'),
+                'cust_email': confirmForm.get('email')
+            };
+            res = await chromelyRequest('/order#create', 'POST', order);
+        } else {
+            let order = {
+                'Id': localStorage.getItem("ordercode"),
+                'items': generateProductOrder(),
+                'tickets': cookieval['tickets'],
+                'cust_name': confirmForm.get('name'),
+                'cust_email': confirmForm.get('email')
+            };
+            res = await chromelyRequest('/order#update', 'POST', order);
+        }
         let reservationCode = (res.getStatusCode() === 200) ? res.getData() : -1;
         //display reservation code after success
         document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_confirm_form").innerHTML =
