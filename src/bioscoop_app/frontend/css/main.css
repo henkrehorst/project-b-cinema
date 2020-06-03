@@ -160,7 +160,7 @@ nav .container ul li a:hover {
 }
 
 .product_container{
-    padding: 25px 0px 25px 25px;
+    padding: 25px 0 25px 25px;
     display: grid;
     grid-template-columns: auto auto;
     justify-content: space-around;
@@ -552,4 +552,16 @@ p.screen-title {
     padding-top: 15px;
     margin: 0 auto;
     width: 800px;
+}
+
+#codeError{
+    display: none;
+}
+
+.reservation_information, .reservation_actions{
+    padding: 20px;
+}
+
+.reservation_information strong{
+    color: #ff0000;
 }
