@@ -129,18 +129,23 @@ namespace bioscoop_app.Controller
         {
             int[] kijkWijzers = data["kijkwijzers"].Select(x => (int)x).ToArray();
             string filestring = data["cover_image"].Value<string>();
-
-            return new Movie(
-                data["title"].Value<string>(),
-                data["genre"].Value<string>(),
-                data["rating"].Value<double>(),
-                data["samenvatting"].Value<string>(),
-                data["duration"].Value<int>(),
-                filestring,
-                kijkWijzers
-                );
-
-
+            try
+            {
+                return new Movie(
+                    data["title"].Value<string>(),
+                    data["genre"].Value<string>(),
+                    data["rating"].Value<double>(),
+                    data["samenvatting"].Value<string>(),
+                    data["duration"].Value<int>(),
+                    filestring,
+                    kijkWijzers
+                    );
+            }
+            catch
+            {
+                return new Movie("", "", 0.0, "", 0, "", new int[] {});
+            }
+           
         }
 
 
