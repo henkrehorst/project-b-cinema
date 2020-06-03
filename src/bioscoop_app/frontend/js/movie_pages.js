@@ -48,6 +48,24 @@ async function movieDetailPage() {
     });
     document.getElementById("genreView").innerHTML = labels;
 
+    //display star rating
+    let rating = movie.rating;
+    let ratingContainer = document.getElementById("ratingView");
+    for (let i = 5; i > 0; i--) {
+        let img = document.createElement("img");
+        let selector = 10;
+        if (rating < 1 && rating > 0) {
+            selector = (10 * rating).toFixed();
+        }
+        else if (rating <= 0) {
+            selector = 0;
+        }
+        img.src = `/assets/img/rating/${selector}.png`;
+        img.className = "star-rating";
+        ratingContainer.appendChild(img);
+        --rating;
+    }
+
     //display movie screentimes
     const screenTimesResponse = await chromelyRequest('/screentime#movie', 'POST', {id: getIdFromUrl()});
     let screenTimes = screenTimesResponse.getData();
