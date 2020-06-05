@@ -127,6 +127,7 @@ async function stepThree() {
                 'cust_email': confirmForm.get('email')
             };
             res = await chromelyRequest('/order#create', 'POST', order);
+            console.log(res.getData(),res.getStatusCode())
         } else {
             console.log("update route for order " + localStorage.getItem("ordercode"));
             let order = {
