@@ -54,7 +54,16 @@ async function stepOne() {
 
 
     showOrUpdateReservationCart();
-    showMovieDetail()
+    showMovieDetail();
+    
+    //For the next step, check tickets have been selected
+    document.getElementById("nextStep").addEventListener("click", () => {
+       if(Object.size(getReservationCookieValue().order) <= 0){
+           document.getElementById("ticketError").style.display = "block";
+       }else{
+           window.location.href = "/reservation_step_two.html";
+       }
+    });
 }
 
 /**
