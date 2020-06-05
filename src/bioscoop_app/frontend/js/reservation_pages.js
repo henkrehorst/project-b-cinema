@@ -376,7 +376,7 @@ async function reservationOverview() {
 
         //activate cancel button
         document.getElementById("cancelButton").addEventListener("click", async () => {
-            let res = await chromelyRequest("/order#cancel", "POST", {"id": orderId});
+            let res = await chromelyRequest("/order#cancel", "POST", { "code": getParameterFromUrl("orderCode")});
             if (res.getStatusCode() === 200) {
                 window.location.href = "./index.html"
             } else if (res.getStatusCode() === 400) {

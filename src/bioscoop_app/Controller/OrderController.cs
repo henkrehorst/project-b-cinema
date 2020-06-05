@@ -27,6 +27,23 @@ namespace bioscoop_app.Controller
                     where product.GetType() == typeof(Ticket)
                     select (Ticket)product).ToList();
         };
+
+        /// <summary>
+        /// Performs a linq query on the order data, searching for the order with the code in the request postdata.
+        /// </summary>
+        /// <param name="req">Request containing the code as postdata.</param>
+        /// <returns>The order matching the code.</returns>
+        /// <exception cref="InvalidOperationException">If no order matched the code.</exception>
+        private Order queryByCode(ChromelyRequest req)
+        {
+            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            string code = data["code"].Value<string>();
+            var orders = new Repository<Order>().Data.Values.AsQueryable();
+            IEnumerable<Order> queryResult = from order in orders
+                                             where order.code == code
+                                             select order;
+            return queryResult.First();
+        }
         /// <summary>
         /// Searches the order with the specified code in the data, and returns it.
         /// </summary>
@@ -35,21 +52,10 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/order#fetch")]
         public ChromelyResponse FetchOrder(ChromelyRequest req)
         {
-            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-
+            Order order = null;
             try
             {
-                string code = data["code"].Value<string>();
-                var orders = new Repository<Order>().Data.Values.AsQueryable();
-                IEnumerable<Order> queryResult = from order in orders
-                              where order.code == code
-                              select order;
-                Order result = queryResult.First();
-                return new Response
-                {
-                    status = 200,
-                    data = JsonConvert.SerializeObject(result)
-                }.ChromelyWrapper(req.Id);
+                order = queryByCode(req);
             } catch (InvalidOperationException)
             {
                 return new Response
@@ -58,6 +64,11 @@ namespace bioscoop_app.Controller
                     statusText = "No order was found for the given code."
                 }.ChromelyWrapper(req.Id);
             }
+            return new Response
+            {
+                status = 200,
+                data = JsonConvert.SerializeObject(order)
+            }.ChromelyWrapper(req.Id);
         }
 
         /// <summary>
@@ -266,29 +277,29 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/order#cancel")]
         public ChromelyResponse CancelOrder(ChromelyRequest req)
         {
-            JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             Repository<Order> repository = new Repository<Order>();
-            int orderId = data["id"].Value<int>();
+            Order order = null;
             try
             {
-                if (!repository.Data[orderId].redeemable)
+                order = queryByCode(req);
+            } catch (InvalidOperationException)
+            {
+                return new Response
                 {
-                    return new Response
-                    {
-                        status = 400,
-                        statusText = "Order can't be cancelled because it has already been collected."
-                    }.ChromelyWrapper(req.Id);
-                }
-                SetSeatsAvailability(repository.Data[orderId].tickets, true);
-            } catch (KeyNotFoundException)
+                    status = 204,
+                    statusText = "Order was not cancelled because it was not found."
+                }.ChromelyWrapper(req.Id);
+            }
+            if (!repository.Data[order.Id].redeemable)
             {
                 return new Response
                 {
                     status = 400,
-                    statusText = "Order was not cancelled because it was not found."
+                    statusText = "Order can't be cancelled because it has already been collected."
                 }.ChromelyWrapper(req.Id);
             }
-            repository.Data.Remove(orderId);
+            SetSeatsAvailability(repository.Data[order.Id].tickets, true);
+            repository.Data.Remove(order.Id);
             repository.SaveChangesThenDiscard();
             return new Response
             {
