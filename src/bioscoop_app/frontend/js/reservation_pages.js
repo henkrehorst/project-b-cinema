@@ -1,4 +1,12 @@
-﻿/**
+﻿/*
+ * Update the active item in the navbar.
+ */
+async function setActiveNav(value = null) {
+    document.querySelector("nav").setAttribute("data-active-item", (value === null) ? ((getReservationCookieValue().newOrder) ? "Films" : "Reserveringen") : value);
+    markActive();
+}
+
+/**
  * Function for showing the details of the movie
  */
 async function showMovieDetail() {
@@ -23,6 +31,7 @@ async function showMovieDetail() {
  * function with all javascript running on step one of the reservation flow (ticket selection step)
  */
 async function stepOne() {
+    setActiveNav();
     // get all products with type ticket
     const ticketProductResponse = await chromelyRequest('/product#type', 'POST', {'type': 'ticket'});
     let ticketProducts = ticketProductResponse.getData();
@@ -77,6 +86,7 @@ function displayProducts(products, location, productType) {
  * function with all javascript running on step two of the reservation flow (seat selection step)
  */
 async function stepTwo() {
+    setActiveNav();
     //show reservation
     showOrUpdateReservationCart();
     //display movie thumbnail
@@ -87,6 +97,7 @@ async function stepTwo() {
  * function with all javascript running on step three of the reservation flow (confirm)
  */
 async function stepThree() {
+    setActiveNav();
     //show shopping cart
     showOrUpdateReservationCart();
     //display movie thumbnail
@@ -353,6 +364,7 @@ function generateProductOrder() {
  * Function with all javascript of the reservation overview page
  */
 async function reservationOverview() {
+    setActiveNav("Reserveringen");
     let orderResponse = await chromelyRequest("/order#fetch", "POST", {"code": getParameterFromUrl("orderCode")});
 
     if (orderResponse.getStatusCode() === 200) {

@@ -79,6 +79,13 @@ function fillNavbar() {
           <li class=\"menu-item\"><a href="./admin/admin.html">Beheerder</a></li>
         </ul>`;
 
+    markActive();
+}
+
+/*
+ * Marks the active item in the navbar.
+ */
+function markActive() {
     //set active item
     let nav = document.querySelector("body > nav");
     if (nav.dataset.activeItem !== undefined) {
