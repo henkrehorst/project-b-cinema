@@ -158,16 +158,6 @@ async function stepThree() {
     document.getElementById('confirm_button').addEventListener('click', finishReservation);
 }
 
-async function stepVoltooien() {
-
-
-
-
-
-}
-
-
-
 /**
  * function for controlling the amount of price control
  * @param id
