@@ -316,6 +316,7 @@ function loadSeatOverview() {
             let seat = tickdata.seatnr;
             console.log('.row-' + row + '.seat-' + seat);
             let elSeat = document.querySelector('.seat.row-' + row + '.seat-' + seat);
+            if (elSeat === null) break;
             let classes = elSeat.classList;
             let type = (classes.contains('vip') ? 3 : classes.contains('luxery') ? 2 : 1);
 
@@ -452,5 +453,10 @@ let availability = getReservationCookieValue().screentime.availability;
 //}
 
 loadSeatOverview();
+
+document.querySelector("body > div.container.reservation_view > div > div.col-md-3.reservation_boxes > a").addEventListener('click', () => {
+    if (selectedSeats.length === getReservationCookieValue().order_tickets.length) window.location.href = "/reservation_step_three.html";
+    else sendError("You have not selected as many seats as you ordered.");
+})
 
 console.log(getReservationCookieValue());

@@ -131,14 +131,15 @@ async function stepThree() {
         } else {
             console.log("update route for order " + localStorage.getItem("ordercode"));
             let order = {
-                'Id': localStorage.getItem("ordercode"),
+                'id': localStorage.getItem("ordercode"),
                 'items': generateProductOrder(),
                 'tickets': cookieval['tickets'],
                 'cust_name': confirmForm.get('name'),
                 'cust_email': confirmForm.get('email')
             };
             res = await chromelyRequest('/order#update', 'POST', order);
-            console.log("done waiting");
+            console.log("done waiting, " + res.getStatusCode());
+            console.log(res.getData());
         }
         let reservationCode = (res.getStatusCode() === 200) ? res.getData() : -1;
         //display reservation code after success

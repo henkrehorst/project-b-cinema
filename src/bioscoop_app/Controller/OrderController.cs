@@ -155,66 +155,88 @@ namespace bioscoop_app.Controller
         /// </summary>
         /// <param name="req">http POST request containing the id and data</param>
         /// <returns>Status code indicating success or failure.</returns>
-        [HttpPost(Route = "/reserveringen#update")]
+        [HttpPost(Route = "/order#update")]
         public ChromelyResponse UpdateOrder(ChromelyRequest req)
         {
             //throw new NotImplementedException();
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             Repository<Order> repository = new Repository<Order>();
+            int orderId = -1;
             try
             {
-                int orderId = data["id"].Value<int>();
-                if (!repository.Data[orderId].redeemable)
+                orderId = data["id"].Value<int>();
+            } catch (ArgumentNullException)
+            {
+                return new Response
                 {
-                    return new Response
-                    {
-                        status = 400,
-                        statusText = "Can't modify an order that has already been collected."
-                    }.ChromelyWrapper(req.Id);
+                    status = 400,
+                    statusText = "id was null"
+                }.ChromelyWrapper(req.Id);
+            }
+            string orderCode = null;
+            try
+            {
+                orderCode = repository.Data[orderId].code;
+            } catch (KeyNotFoundException)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "No order found for the id provided."
+                }.ChromelyWrapper(req.Id);
+            }
+            if (!repository.Data[orderId].redeemable)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "Can't modify an order that has already been collected."
+                }.ChromelyWrapper(req.Id);
+            }
+            Order input = new Order(
+                    orderId,
+                    ParseItems(data["items"].Value<JArray>()),
+                    ParseTickets(data["tickets"].Value<JArray>()),
+                    orderCode,
+                    data["cust_name"].Value<string>(),
+                    data["cust_email"].Value<string>(),
+                    true
+                );
+            /*if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
+            {
+                //Backend magic to change availability of items
+                List<Ticket> inputTickets = filterTickets(input.items);
+                List<Ticket> existingTickets = filterTickets(repository.Data[orderId].items);
+                if (inputTickets.Any() && !existingTickets.Any())
+                {
+                    //Reserve tickets
+                    SetSeatsAvailability(inputTickets, false);
                 }
-                Order input = new Order(
-                        orderId,
-                        ParseItems(data["items"].Value<JArray>()),
-                        ParseTickets(data["tickets"].Value<JArray>()),
-                        data["code"].Value<string>(),
-                        data["cust_name"].Value<string>(),
-                        data["cust_email"].Value<string>(),
-                        true
-                    );
-                /*if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
+                if (!inputTickets.Any() && existingTickets.Any())
                 {
-                    //Backend magic to change availability of items
-                    List<Ticket> inputTickets = filterTickets(input.items);
-                    List<Ticket> existingTickets = filterTickets(repository.Data[orderId].items);
-                    if (inputTickets.Any() && !existingTickets.Any())
-                    {
-                        //Reserve tickets
-                        SetSeatsAvailability(inputTickets, false);
-                    }
-                    if (!inputTickets.Any() && existingTickets.Any())
-                    {
-                        // Cancel ticket reservation
-                        SetSeatsAvailability(existingTickets, true);
-                    }
-                    if (inputTickets.Any() && existingTickets.Any() &&
-                        !inputTickets.OrderBy(t => t.Id).SequenceEqual(existingTickets.OrderBy(t => t.Id)))
-                    {
-                        //fix ticket difference in data
-                        List<Ticket> reserve = inputTickets.Except(existingTickets).ToList(); //A - B
-                        List<Ticket> cancel = existingTickets.Except(inputTickets).ToList(); // B - A
-                        SetSeatsAvailability(reserve, true);
-                        SetSeatsAvailability(cancel, false);
-                    }
-                }*/
-                if (input.tickets.Any() && repository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
-                        !input.tickets.OrderBy(t => t.Id).SequenceEqual(repository.Data[orderId].tickets.OrderBy(p => p.Id)))
+                    // Cancel ticket reservation
+                    SetSeatsAvailability(existingTickets, true);
+                }
+                if (inputTickets.Any() && existingTickets.Any() &&
+                    !inputTickets.OrderBy(t => t.Id).SequenceEqual(existingTickets.OrderBy(t => t.Id)))
                 {
                     //fix ticket difference in data
-                    List<Ticket> reserve = input.tickets.Except(repository.Data[orderId].tickets).ToList(); //A - B
-                    List<Ticket> cancel = repository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
-                    SetSeatsAvailability(reserve, false);
-                    SetSeatsAvailability(cancel, true);
+                    List<Ticket> reserve = inputTickets.Except(existingTickets).ToList(); //A - B
+                    List<Ticket> cancel = existingTickets.Except(inputTickets).ToList(); // B - A
+                    SetSeatsAvailability(reserve, true);
+                    SetSeatsAvailability(cancel, false);
                 }
+            }*/
+            if (input.tickets.Any() && repository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
+                    !input.tickets.OrderBy(t => t.Id).SequenceEqual(repository.Data[orderId].tickets.OrderBy(p => p.Id)))
+            {
+                //fix ticket difference in data
+                List<Ticket> reserve = input.tickets.Except(repository.Data[orderId].tickets).ToList(); //A - B
+                List<Ticket> cancel = repository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
+                SetSeatsAvailability(reserve, false);
+                SetSeatsAvailability(cancel, true);
+            }
+            try {
                 repository.Update(
                         orderId,
                         input
@@ -232,6 +254,7 @@ namespace bioscoop_app.Controller
             return new Response
             {
                 status = 200,
+                data = JsonConvert.SerializeObject(orderCode)
             }.ChromelyWrapper(req.Id);
         }
 
