@@ -27,11 +27,11 @@ namespace bioscoop_app.Helper
         /// </summary>
         /// <param name="reqId">The request Id</param>
         /// <returns>This as a ChromelyResponse</returns>
-        /// <exception cref="InvalidDataException">If the status code is invalid.</exception>
+        /// <exception cref="InvalidDataException">If the status code is invalid, or if data is send with status code 204.</exception>
         public ChromelyResponse ChromelyWrapper(string reqId)
         {
             if (status < 100 || status >= 600) throw new InvalidDataException("Invalid status code");
-            if (status == 204) data = null;
+            if (status == 204 && data is object) throw new InvalidDataException("Response with code 204 can't have data");
             return new ChromelyResponse(reqId)
             {
                 Data = JsonConvert.SerializeObject(this)
