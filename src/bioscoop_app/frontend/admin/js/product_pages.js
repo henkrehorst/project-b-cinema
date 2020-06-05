@@ -32,23 +32,6 @@ async function productOverviewPage() {
             </tr>`;
     }
     document.querySelector("body > div > div > div:nth-child(2) > table > tbody").innerHTML = productTable;
-
-    //get all seat costs from backend
-    const seatCostResponse = await chromelyRequest('/product#type','POST',{'type':'seatcost'});
-    const seatCosts = seatCostResponse.getData();
-
-    //display tickets in table
-    let seatCostTable = "";
-    for(let seatCost in seatCosts){
-        seatCostTable += `<tr>
-                <td>${seatCosts[seatCost].name}</td>
-                <td>&euro; ${seatCosts[seatCost].price.toFixed(2).replace('.',',')}</td>
-                <td><a href="/admin/product_edit.html?id=${seatCosts[seatCost].Id}">Edit</a></td>
-            </tr>`;
-    }
-    document.getElementById("seatCoastView").innerHTML = seatCostTable;
-    
-    
 }
 
 /**
