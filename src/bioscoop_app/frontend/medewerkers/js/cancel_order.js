@@ -6,6 +6,7 @@ document.getElementById("cancel").addEventListener("click", async () => {
     let res = await chromelyRequest("/order#cancel", "POST", { "code": code });
     if (res.getStatusCode() === 200) {
         console.log("cancel order 200");
+        window.location.href = "./medewerker.html";
     } else if (res.getStatusCode() === 204) {
         //Display error message
         console.log(res.getStatusText());
