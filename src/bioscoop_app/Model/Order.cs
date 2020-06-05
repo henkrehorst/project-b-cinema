@@ -13,6 +13,7 @@ namespace bioscoop_app.Model
 		public string code;
 		public string cust_name;
 		public string cust_email;
+		public bool redeemable;
 
 		public Order(List<Product> items, List<Ticket> tickets, string cust_name, string cust_email)
 		{
@@ -21,11 +22,12 @@ namespace bioscoop_app.Model
 			code = null;
 			this.cust_email = cust_email;
 			this.cust_name = cust_name;
+			redeemable = true;
 			code = GenerateCode();
 		}
 
 		[JsonConstructor]
-		public Order(int id, List<Product> items, List<Ticket> tickets, string code, string cust_name, string cust_email)
+		public Order(int id, List<Product> items, List<Ticket> tickets, string code, string cust_name, string cust_email, bool redeemable)
 		{
 			Id = id;
 			this.items = items;
@@ -33,6 +35,7 @@ namespace bioscoop_app.Model
 			this.code = code;
 			this.cust_email = cust_email;
 			this.cust_name = cust_name;
+			this.redeemable = redeemable;
 		}
 
 		/// <summary>

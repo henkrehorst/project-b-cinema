@@ -96,6 +96,60 @@ namespace bioscoop_app.Controller
             }.ChromelyWrapper(req.Id);
         }
 
+         ///<summary>      
+        /// Post route voor het voltooien van een order.        
+        /// Bedoeld voor de medewerker.         
+        /// </summary>         
+        /// <param name="req">Post request with the order code.</param>         
+        /// <returns>The items in the order.</returns>         
+        [HttpPost (Route = "/order#collect")]         
+        public ChromelyResponse CollectOrder(ChromelyRequest req)        
+        {
+            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            string code = data["code"].Value<string>();
+            if (code is null)
+            {
+                return new Response { status = 400, statusText = "Bad input de code was null" }
+                .ChromelyWrapper(req.Id);
+            }
+            var repos = new Repository<Order>();
+            var orders = repos.Data.Values.AsQueryable();
+            var result = from order in orders where order.code == code select order;
+            Order matchedOrder = null;
+            try
+            {
+                matchedOrder = result.First();
+            } catch (InvalidOperationException)
+            {
+                return new Response
+                {
+                    status = 204,
+                    statusText = "No order matching the input code was found."
+                }.ChromelyWrapper(req.Id);
+            }
+            if (!matchedOrder.redeemable)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "Order has been redeemed before."
+                }.ChromelyWrapper(req.Id);
+            }
+            else
+            {
+                matchedOrder.redeemable = false;
+            }
+            repos.Update(matchedOrder.Id, matchedOrder);
+            repos.SaveChangesThenDiscard();
+            return new Response { 
+                status = 200, 
+                data = JsonConvert.SerializeObject(new { matchedOrder.tickets, matchedOrder.items})
+            }.ChromelyWrapper(req.Id);
+        }
+
+
+
+
         /// <summary>
         /// Updates the order associated with the specified id, with the specified data.
         /// </summary>
@@ -110,13 +164,22 @@ namespace bioscoop_app.Controller
             try
             {
                 int orderId = data["id"].Value<int>();
+                if (!repository.Data[orderId].redeemable)
+                {
+                    return new Response
+                    {
+                        status = 400,
+                        statusText = "Can't modify an order that has already been collected."
+                    }.ChromelyWrapper(req.Id);
+                }
                 Order input = new Order(
                         orderId,
                         ParseItems(data["items"].Value<JArray>()),
                         ParseTickets(data["tickets"].Value<JArray>()),
                         data["code"].Value<string>(),
                         data["cust_name"].Value<string>(),
-                        data["cust_email"].Value<string>()
+                        data["cust_email"].Value<string>(),
+                        true
                     );
                 /*if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
                 {
@@ -185,6 +248,14 @@ namespace bioscoop_app.Controller
             int orderId = data["id"].Value<int>();
             try
             {
+                if (!repository.Data[orderId].redeemable)
+                {
+                    return new Response
+                    {
+                        status = 400,
+                        statusText = "Order can't be cancelled because it has already been collected."
+                    }.ChromelyWrapper(req.Id);
+                }
                 SetSeatsAvailability(repository.Data[orderId].tickets, true);
             } catch (KeyNotFoundException)
             {
