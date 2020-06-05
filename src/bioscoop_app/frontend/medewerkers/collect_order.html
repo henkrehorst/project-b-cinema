@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Order</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css" />
+</head>
+<body>
+    <nav data-active-item="Uitgifte reserveringen">
+        <div class="container">
+        </div>
+    </nav>
+    <div class="container">
+        <form id="code_input">
+            <div class="form-group mt-5">
+                <label for="code-field">Voer hier de code van de order in:</label>
+                <input name="code" type="text" placeholder="00000000" class="form-control" id="code-field" required>
+            </div>
+            <div class="form-group">
+                <button type="button" id="getorder" class="btn btn-success confirm_button">Uitgifte reservering</button>
+            </div>
+        </form>
+        <div id="order_details" hidden>
+            <div id="ticket_container">
+                <table>
+                    <caption>Tickets</caption>
+                    <thead>
+                        <tr>
+                            <th>Soort ticket</th>
+                            <th>Rij</th>
+                            <th>Stoel</th>
+                            <th>Leeftijd</th>
+                            <th>Prijs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th colspan="4">Subtotaal:</th>
+                            <td name="subtotaal">€0,00</td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+            </div>
+            <div id="item_container">
+                <table>
+                    <caption>Producten</caption>
+                    <tr>
+                        <th>Product</th>
+                        <th>Prijs</th>
+                    </tr>
+                    <tr>
+                        <th>Subtotaal:</th>
+                        <td name="subtotaal">€0,00</td>
+                    </tr>
+                </table>
+            </div>
+            <h2>Totaal: </h2>
+        </div>
+    </div>
+    <script src="./js/main.js"></script>
+    <script src="./js/collect_order.js"></script>
+</body>
+</html>

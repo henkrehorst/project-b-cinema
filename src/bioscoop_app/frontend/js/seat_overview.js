@@ -197,7 +197,7 @@ function loadSeatOverview() {
                             let canPlace = true;
 
                             for (let i = 0; i < ticketAmount; i++) {
-                                if (!availability[row][seat + i]) {
+                                if (document.querySelector(".seat.row-" + row + ".seat-" + seat).classList.contains("not-available")) {
                                     sendError('U kunt hier niet ' + ticketAmount + ' stoelen naast elkaar plaatsen vanwege al gereserveerde stoelen.');
                                     canPlace = false;
                                     break
@@ -300,6 +300,29 @@ function loadSeatOverview() {
                     }
                 });
             }
+        }
+    }
+    //select reserved seats in change order flow
+    let cookie = getReservationCookieValue();
+    if (!cookie.newOrder) {
+        //console.log("change flow seat selection");
+        //console.log(cookie.products);
+        //console.log(cookie["products"]);
+        for (ticket in cookie.order_tickets) {
+            console.log(ticket);
+            console.log(cookie.order_tickets);
+            let tickdata = cookie.order_tickets[ticket];
+            let row = tickdata.row;
+            let seat = tickdata.seatnr;
+            console.log('.row-' + row + '.seat-' + seat);
+            let elSeat = document.querySelector('.seat.row-' + row + '.seat-' + seat);
+            let classes = elSeat.classList;
+            let type = (classes.contains('vip') ? 3 : classes.contains('luxery') ? 2 : 1);
+
+            elSeat.classList.remove('not-available');
+            elSeat.classList.add('selected');
+            selectedSeats.push({ 'row': row, 'seat': seat, 'type': (type == 1 ? 'normaal' : (type == 2 ? 'luxe' : 'VIP')), 'price': seatPrices[type - 1] });
+            generateTickets(selectedSeats);
         }
     }
 }

@@ -45,13 +45,19 @@
                     <label for="cover_image">Cover image</label>
                     <input name="cover_image" type="file" class="form-control-file" id="cover_image" onchange="coverImagePreview()">
                 </div>
-                
+                <div class="form-group">
+                    <label for="thumbnail_image">Thumbnail image</label>
+                    <input name="thumbnail_image" type="file" class="form-control-file" id="thumbnail_image" onchange="thumbnailImagePreview()">
+                </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary">Voeg film toe</button>
                 </div>
             </form>
         </div>
-        <div class="col-md-6 cover-image-preview"></div>
+        <div class="col-md-6 cover-image-preview">
+            <div id="cover_preview"></div>
+            <div id="thumbnail_preview"></div>
+        </div>
     </div>
 </div>
 

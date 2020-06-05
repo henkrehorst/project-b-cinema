@@ -41,8 +41,11 @@ async function movieEditPage() {
     document.getElementById('rating').value = movie.rating;
     document.getElementById('samenvatting').value = movie.samenvatting;
     //show preview cover image
-    document.querySelector("body > div > div > .cover-image-preview").innerHTML +=
+    document.getElementById('cover_preview').innerHTML +=
         `<img src="local://frontend/uploads/${movie.coverImage}" alt="cover image" />`
+    //show preview thumbnail image
+    document.getElementById('thumbnail_preview').innerHTML +=
+        `<img src="local://frontend/uploads/${movie.thumbnailImage}" alt="thumbnail image" />`
 
     /**
      * function for posting movie to backend
@@ -50,8 +53,10 @@ async function movieEditPage() {
     async function updateMovie() {
         // get movie form data
         const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
-        //covert cover image to string
+        //convert cover image to string
         let cover_image = await getBase64String(movieForm.get('cover_image'))
+        //convert thumbnail image to string
+        let thumbnail = await getBase64String(movieForm.get('thumbnail_image'));
         //get values of checked kijkwijzers
         let kijkwijzers = Object.values(document.querySelectorAll("#kijkwijzerFields > li > input:checked"))
             .map(item => {return parseInt(item.value)})
@@ -65,7 +70,8 @@ async function movieEditPage() {
             'rating': movieForm.get('rating'),
             'samenvatting': movieForm.get('samenvatting'),
             'cover_image': cover_image,
-            'kijkwijzers': kijkwijzers
+            'kijkwijzers': kijkwijzers,
+            'thumbnail_image': thumbnail
         })
 
         // if response = 200: redirect to movie overview page
@@ -104,8 +110,10 @@ async function movieAddPage() {
     async function addMovie() {
         // get movie form data
         const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
-        //covert cover image to string
-        let cover_image = await getBase64String(movieForm.get('cover_image'))
+        //convert cover image to string
+        let cover_image = await getBase64String(movieForm.get('cover_image'));
+        //convert thumbnail image to string
+        let thumbnail = await getBase64String(movieForm.get('thumbnail_image'));
         //get values of checked kijkwijzers
         let kijkwijzers = Object.values(document.querySelectorAll("#kijkwijzerFields > li > input:checked"))
             .map(item => {return parseInt(item.value)})
@@ -118,7 +126,8 @@ async function movieAddPage() {
             'rating': movieForm.get('rating'),
             'samenvatting': movieForm.get('samenvatting'),
             'cover_image': cover_image,
-            'kijkwijzers': kijkwijzers
+            'kijkwijzers': kijkwijzers,
+            'thumbnail_image': thumbnail
         })
 
         // if response = 204: redirect to movie overview page
@@ -175,9 +184,25 @@ async function coverImagePreview() {
     // convert cover image to base64
     let cover_image = await getBase64String(movieForm.get('cover_image'))
 
-    document.querySelector("body > div > div > .cover-image-preview").innerHTML =
+    document.getElementById('cover_preview').innerHTML =
         `<p>Cover image preview</p>
          <img src="${cover_image}" alt="cover image" />`;
+}
+
+
+/**
+ * show a preview of the uploaded thumbnail image
+ * @returns {Promise<void>}
+ */
+async function thumbnailImagePreview() {
+    // get movie form data
+    const movieForm = new FormData(document.querySelector("body > div > div > div > form"));
+    //convert thumbnail image to string
+    let thumbnail = await getBase64String(movieForm.get('thumbnail_image'));
+
+    document.getElementById('thumbnail_preview').innerHTML =
+        `<p>Cover image preview</p>
+         <img src="${thumbnail}" alt="cover image" />`;
 }
 
 /**
