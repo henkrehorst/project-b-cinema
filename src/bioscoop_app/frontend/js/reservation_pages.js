@@ -217,7 +217,8 @@ async function prepareReservationCookie(ticketProducts, upsells) {
         'upsellProducts': upsells,
         'upsell': {},
         'screentime': screentimeResponse.getData(),
-        'newOrder': true
+        'newOrder': true,
+        'tickets':[]
     };
 
     updateCreateReservationCookie(cookieValue);
@@ -408,6 +409,7 @@ async function setReservation(order) {
         'upsellProducts': upsellResponse.getData(),
         'upsell': convertTicketsProducts(order.items.map(item => item.Id)),
         'screentime': screentimeResponse.getData(),
+        'tickets': [],
         'newOrder': false,
         'name': order.cust_name,
         'email': order.cust_email,

@@ -455,7 +455,7 @@ let availability = getReservationCookieValue().screentime.availability;
 loadSeatOverview();
 
 document.querySelector("body > div.container.reservation_view > div > div.col-md-3.reservation_boxes > a").addEventListener('click', () => {
-    if (selectedSeats.length === getReservationCookieValue().order_tickets.length) window.location.href = "/reservation_step_three.html";
+    if (selectedSeats.length === getReservationCookieValue().tickets.length && getReservationCookieValue().tickets.length !== 0) window.location.href = "/reservation_step_three.html";
     else sendError("You have not selected as many seats as you ordered.");
 })
 
