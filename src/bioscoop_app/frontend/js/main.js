@@ -14,7 +14,6 @@ function addSecurityModel() {
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-md-6">
-                        <form id="securityForm">
                             <div class="form-group mt-2">
                                 <label for="password-field text-left">Wachtwoord:</label>
                                 <input name="password" type="password" placeholder="Wachtwoord" class="form-control" id="password-field">
@@ -23,7 +22,6 @@ function addSecurityModel() {
                             <div class="form-group">
                                 <button type="button" onclick="userLogin()" id="signInButton" class="btn btn-primary btn-block">INLOGGEN</button>
                             </div>
-                        </form>
                         </div>
                     </div>
                 </div>
@@ -60,6 +58,14 @@ function addSecurityModel() {
             showSecurityModel();
         }
     }
+
+    //submit password on enter
+    document.getElementById("password-field").addEventListener("keyup", event => {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("signInButton").click();
+        }
+    });
 }
 
 addSecurityModel()
@@ -75,8 +81,6 @@ function fillNavbar() {
         <ul>
           <li class=\"menu-item\"><a href="./index.html">Films</a></li>
           <li class=\"menu-item\"><a href="./order.html">Reserveringen</a></li>
-          <li class=\"menu-item\"><a href="./medewerkers/medewerker.html">Medewerkers</a></li>
-          <li class=\"menu-item\"><a href="./admin/admin.html">Beheerder</a></li>
         </ul>`;
 
     markActive();
@@ -193,11 +197,11 @@ class chromelyResponse {
  */
 async function userLogin() {
     //get password from security form
-    let password = new FormData(document.getElementById('securityForm')).get('password');
+    let password = document.getElementById("password-field").value;
 
     //check password in backend
     const response = await chromelyRequest('/security/login', 'POST', {password: password})
-    
+
     //if status code  === 200, password is correct redirect user to correct screen
     if (response.getStatusCode() === 200) {
         if (response.getData().role === "cashier") {
@@ -209,7 +213,7 @@ async function userLogin() {
         } else {
             //show error message
             document.getElementById('error-message').innerHTML =
-            `<div class="alert alert-primary" role="alert">
+                `<div class="alert alert-primary" role="alert">
                   Er is iets fout gegaan probeer het nog een keer!
             </div>`;
         }
