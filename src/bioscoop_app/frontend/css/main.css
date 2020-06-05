@@ -572,3 +572,9 @@ p.screen-title {
     left: 1px;
     position: relative;
 }
+
+#ticketError{
+    display: none;
+    margin: -20px 40px 10px 40px;
+    text-align: center;
+}
