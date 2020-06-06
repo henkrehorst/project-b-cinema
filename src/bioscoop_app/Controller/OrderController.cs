@@ -96,6 +96,26 @@ namespace bioscoop_app.Controller
             }.ChromelyWrapper(req.Id);
         }
 
+        //Order word toegevoegd
+        public static Order orders(JObject data)
+        {
+            try
+            {
+                return new Order(
+                    data["cust_name"].Value<string>(),
+                    data["cust_email"].Value<string>()
+                    );
+            }
+            catch
+            {
+                return new Order("", "");
+            }
+
+        }
+
+
+
+
          ///<summary>      
         /// Post route voor het voltooien van een order.        
         /// Bedoeld voor de medewerker.         
