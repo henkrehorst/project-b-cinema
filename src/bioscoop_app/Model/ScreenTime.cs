@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using bioscoop_app.Service;
 using Newtonsoft.Json;
 using System.Linq;
+using bioscoop_app.Repository;
 
 namespace bioscoop_app.Model
 {
 	public class ScreenTime : DataType
 	{
 		public int movie;
-		public float duration;
+		public int duration;
 		public DateTime startTime {
 			get => startTime;
 			set
 			{
 				startTime = value;
-				endTime = startTime.AddSeconds(duration);
+				endTime = startTime.AddMinutes(duration);
 			}
 		}
 		public DateTime endTime {
@@ -32,9 +33,10 @@ namespace bioscoop_app.Model
 		public ScreenTime(int movie, DateTime startTime, DateTime endTime, string roomName)
 		{
 			this.movie = movie;
-			this.startTime = startTime;
-			this.endTime = endTime;
 			this.roomName = roomName;
+			duration = new Repository<Movie>().Data[movie].duration;
+			this.startTime = startTime;
+
 			availability = RoomLayoutService.GetInitialAvailability(roomName);
 			foreach (bool val in availability)
 			{
@@ -47,8 +49,8 @@ namespace bioscoop_app.Model
 		{
 			Id = id;
 			this.movie = movie;
+			duration = new Repository<Movie>().Data[movie].duration;
 			this.startTime = startTime;
-			this.endTime = endTime;
 			this.roomName = roomName;
 			this.availability = availability;
 			this.availableTickets = availableTickets;
