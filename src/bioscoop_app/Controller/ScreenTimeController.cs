@@ -74,8 +74,14 @@ namespace bioscoop_app.Controller
 
         public static ScreenTime ToScreenTime(JObject data)
         {
-            //return new ScreenTime(data["movie_id"].Value<int>(), data["start_time"].Value<DateTime>(), data["end_time"].Value<DateTime>(), data["room_name"].Value<string>());
-            return new ScreenTime(0, DateTime.Now, DateTime.Now, "");
+            try
+            {
+                return new ScreenTime(data["movie_id"].Value<int>(), data["start_time"].Value<DateTime>(), data["end_time"].Value<DateTime>(), data["room_name"].Value<string>());
+            }
+            catch
+            {
+                return new ScreenTime(0, DateTime.Now, DateTime.Now, "auditorium1");
+            }
         }
 
         /// <param name="req">http POST re</param>
