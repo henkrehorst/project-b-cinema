@@ -11,16 +11,18 @@ namespace bioscoop_app.Model
 	{
 		public int movie;
 		public int duration;
-		public DateTime startTime {
-			get => startTime;
+		private DateTime _startTime;
+		private DateTime _endTime;
+		public DateTime StartTime {
+			get => _startTime;
 			set
 			{
-				startTime = value;
-				endTime = startTime.AddMinutes(duration);
+				_startTime = value;
+				_endTime = _startTime.AddMinutes(duration);
 			}
 		}
-		public DateTime endTime {
-			get => endTime;
+		public DateTime EndTime {
+			get => _endTime;
 			set
 			{
 				throw new InvalidOperationException();
@@ -35,7 +37,7 @@ namespace bioscoop_app.Model
 			this.movie = movie;
 			this.roomName = roomName;
 			duration = new Repository<Movie>().Data[movie].duration;
-			this.startTime = startTime;
+			StartTime = startTime;
 
 			availability = RoomLayoutService.GetInitialAvailability(roomName);
 			foreach (bool val in availability)
