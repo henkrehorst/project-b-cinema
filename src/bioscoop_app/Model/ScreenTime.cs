@@ -9,8 +9,22 @@ namespace bioscoop_app.Model
 	public class ScreenTime : DataType
 	{
 		public int movie;
-		public DateTime startTime;
-		public DateTime endTime;
+		public float duration;
+		public DateTime startTime {
+			get => startTime;
+			set
+			{
+				startTime = value;
+				endTime = startTime.AddSeconds(duration);
+			}
+		}
+		public DateTime endTime {
+			get => endTime;
+			set
+			{
+				throw new InvalidOperationException();
+			}
+		}
 		public string roomName;
 		public bool[,] availability;
 		public int availableTickets;
