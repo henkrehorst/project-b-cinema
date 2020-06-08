@@ -21,7 +21,7 @@ namespace bioscoop_app.Controller
         [HttpGet(Route = "/movies")]
         public ChromelyResponse GetMovies(ChromelyRequest request)
         {
-            var movieRepository = new MovieRepository();
+            var movieRepository = new Repository<Movie>();
 
             var movies = movieRepository.Data;
 
@@ -41,7 +41,7 @@ namespace bioscoop_app.Controller
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(new MovieRepository().Data[id])
+                data = JsonConvert.SerializeObject(new Repository<Movie>().Data[id])
             }.ChromelyWrapper(req.Id);
         }
 
@@ -54,7 +54,7 @@ namespace bioscoop_app.Controller
         public ChromelyResponse AddMovie(ChromelyRequest request)
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
-            var movieRepository = new MovieRepository();
+            var movieRepository = new Repository<Movie>();
             //convert kijkwijzer collection to int array
             int[] kijkWijzers = data["kijkwijzers"].Select(x => (int) x).ToArray();
             string fileName = "";
@@ -114,7 +114,7 @@ namespace bioscoop_app.Controller
         public ChromelyResponse UpdateMovie(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            Repository<Movie> repository = new MovieRepository();
+            Repository<Movie> repository = new Repository<Movie>();
             
             string filestring = data["cover_image"].Value<string>();
             string filename = repository.Data[data.Value<int>("id")].coverImage;

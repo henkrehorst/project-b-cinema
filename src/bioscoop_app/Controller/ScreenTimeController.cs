@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using bioscoop_app.Helper;
 using bioscoop_app.Model;
@@ -19,7 +20,7 @@ namespace bioscoop_app.Controller
         [HttpGet(Route = "/screentime")]
         public ChromelyResponse GetScreenTimes(ChromelyRequest request)
         {
-            var screenTimeRepository = new ScreenTimeRepository();
+            var screenTimeRepository = new Repository<ScreenTime>();
 
             return new Response
             {
@@ -38,7 +39,7 @@ namespace bioscoop_app.Controller
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
 
-            var screenTimeRepository = new ScreenTimeRepository();
+            var screenTimeRepository = new Repository<ScreenTime>();
             screenTimeRepository.AddThenWrite(new ScreenTime(
                 data["movie_id"].Value<int>(),
                 data["start_time"].Value<DateTime>(),
@@ -61,7 +62,7 @@ namespace bioscoop_app.Controller
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(new ScreenTimeRepository().Data[id])
+                data = JsonConvert.SerializeObject(new Repository<ScreenTime>().Data[id])
             }.ChromelyWrapper(req.Id);
         }
 
@@ -83,7 +84,7 @@ namespace bioscoop_app.Controller
 
             try
             {
-                var screenTimeRepository = new ScreenTimeRepository();
+                var screenTimeRepository = new Repository<ScreenTime>();
                 screenTimeRepository.Update(data["id"].Value<int>(), new ScreenTime(
                     data["movie_id"].Value<int>(),
                     data["start_time"].Value<DateTime>(),
@@ -116,9 +117,16 @@ namespace bioscoop_app.Controller
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(new ScreenTimeRepository()
-                    .GetScreenTimeByMovieId(data["id"].Value<int>()))
+                data = JsonConvert.SerializeObject(GetScreenTimeByMovieId(data["id"].Value<int>()))
             }.ChromelyWrapper(req.Id);
+        }
+        /// <param name="movieId">The id of the movie.</param>
+        /// <returns>A dictionary of ScreenTimes associated with the movie.</returns>
+        private Dictionary<int, ScreenTime> GetScreenTimeByMovieId(int movieId)
+        {
+            return new Repository<ScreenTime>().Data.Where(item =>
+                    item.Value.movie.Equals(movieId))
+                .ToDictionary(item => item.Key, item => item.Value);
         }
     }
 }

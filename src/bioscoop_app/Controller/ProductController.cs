@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using bioscoop_app.Helper;
+using System.Linq;
 
 namespace bioscoop_app.Controller
 {
@@ -22,7 +23,7 @@ namespace bioscoop_app.Controller
         [HttpGet(Route = "/products")]
         public ChromelyResponse GetProducts(ChromelyRequest req)
         {
-            Dictionary<int, Product> rawData = new ProductRepository().Data;
+            Dictionary<int, Product> rawData = new Repository<Product>().Data;
             List<Product> data = new List<Product>();
             foreach (Product prod in rawData.Values)
             {
@@ -45,11 +46,9 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             
-            var productRepository = new ProductRepository();
-
             return new Response
             {
-                data = JsonConvert.SerializeObject(productRepository.GetProductsByType(data.Value<string>("type"))),
+                data = JsonConvert.SerializeObject(GetProductsByType(data.Value<string>("type"))),
                 status = 200
             }.ChromelyWrapper(req.Id);
         }
@@ -64,7 +63,7 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             //Console.WriteLine(data);
-            new ProductRepository().AddThenWrite(new Product(
+            new Repository<Product>().AddThenWrite(new Product(
                 data["price"].Value<double>(),
                 data["name"].Value<string>(),
                 data["type"].Value<string>()
@@ -94,7 +93,7 @@ namespace bioscoop_app.Controller
                 }.ChromelyWrapper(req.Id);
             }
             int checkedId = (int) id;
-            Repository<Product> repository = new ProductRepository();
+            Repository<Product> repository = new Repository<Product>();
             try
             {
                 repository.Update(checkedId, ToProduct(data));
@@ -149,8 +148,17 @@ namespace bioscoop_app.Controller
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(new ProductRepository().Data[id])
+                data = JsonConvert.SerializeObject(new Repository<Product>().Data[id])
             }.ChromelyWrapper(req.Id);
         }
+        /// <param name="productType">The type of the product</param>
+        /// <returns>A dictionary of Products associated with the product type</returns>
+        private Dictionary<int, Product> GetProductsByType(string productType)
+        {
+            return new Repository<Product>().Data.Where(item =>
+                    item.Value.type.Equals(productType))
+                .ToDictionary(item => item.Key, item => item.Value);
+        }
+
     }
 }
