@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using bioscoop_app.Model;
 using bioscoop_app.Service;
+using System.Reflection;
+using FluentValidation;
 
 namespace bioscoop_app.Repository
 {
@@ -13,11 +15,11 @@ namespace bioscoop_app.Repository
     /// Abstract class that contains base functionality for Repositories.
     /// </summary>
     /// <typeparam name="T">The Type this repository acts on. Must satisfy (T is DataType).</typeparam>
-    public class Repository<T> where T : DataType
+    public sealed class Repository<T> where T : DataType
     {
-        protected const string FileExtension = ".json";
-        protected Dictionary<int, T> data;
-        protected bool isOpen = false;
+        private const string FileExtension = ".json";
+        private readonly Dictionary<int, T> _data;
+        private bool _isOpen = false;
 
         /// <summary>
         /// The data this repository operates on.
@@ -26,7 +28,7 @@ namespace bioscoop_app.Repository
         {
             get
             {
-                return IsOpen ? this.data : throw new InvalidOperationException();
+                return IsOpen ? _data : throw new InvalidOperationException();
             }
             set
             {
@@ -37,17 +39,17 @@ namespace bioscoop_app.Repository
         /// States whether the data is up to date and this repository can be acted on.
         /// Can't be modified from public context.
         /// </summary>
-        public bool IsOpen { get { return this.isOpen; } set { throw new InvalidOperationException(); } }
+        public bool IsOpen { get { return _isOpen; } set { throw new InvalidOperationException(); } }
 
         /// <summary>
         /// Initializes a repository with the data read from the corresponding data file.
         /// </summary>
         public Repository()
         {
-            data = JsonConvert.DeserializeObject<Dictionary<int, T>>(
+            _data = JsonConvert.DeserializeObject<Dictionary<int, T>>(
                 File.ReadAllText(StorageService.GetDataSourcePath() + typeof(T).Name + FileExtension)
             );
-            isOpen = true;
+            _isOpen = true;
         }
 
         /// <summary>
@@ -69,21 +71,23 @@ namespace bioscoop_app.Repository
         /// </summary>
         /// <param name="entry">Instance to add to the data sequence</param>
         /// <exception cref="InvalidOperationException">Thrown when the repository is not open.</exception>
+        /// <exception cref="ValidationException">Thrown when the new data does not match validator rules.</exception>
         public void Add(T entry)
         {
-            if (!isOpen)
+            if (!_isOpen)
             {
                 throw new InvalidOperationException();
             }
-            if (!data.Any())
+            ValidateT(entry);
+            if (!_data.Any())
             {
                 entry.Id = 1;
             }
             else
             {
-                entry.Id = data.Keys.Max() + 1;
+                entry.Id = _data.Keys.Max() + 1;
             }
-            data.Add(entry.Id, entry);
+            _data.Add(entry.Id, entry);
         }
 
         /// <summary>
@@ -92,14 +96,16 @@ namespace bioscoop_app.Repository
         /// <param name="id">The key to the value</param>
         /// <param name="value">The data to replace the value with.</param>
         /// <exception cref="InvalidOperationException">Thrown when the id does not exist in the data sequence.</exception>
+        /// <exception cref="ValidationException">Thrown when the new data does not match validator rules.</exception>
         public void Update(int id, T value)
         {
-            if(!data.Keys.Contains(id)) {
+            if(!_data.Keys.Contains(id)) {
                 string msg = "Update should not be used on entries that are not yet stored in the data sequence";
                 throw new InvalidOperationException(msg);
             }
+            ValidateT(value);
             value.Id = id;
-            data[id] = value;
+            _data[id] = value;
         }
 
         /// <summary>
@@ -110,9 +116,9 @@ namespace bioscoop_app.Repository
         /// False if the id did not exist or was not removed.</returns>
         public bool Remove(int id)
         {
-            if (!data.ContainsKey(id)) return false;
-            data.Remove(id);
-            return data.ContainsKey(id);
+            if (!_data.ContainsKey(id)) return false;
+            _data.Remove(id);
+            return _data.ContainsKey(id);
         }
         
         /// <summary>
@@ -131,7 +137,7 @@ namespace bioscoop_app.Repository
         /// </summary>
         public void Discard()
         {
-            isOpen = false;
+            _isOpen = false;
         }
 
         /// <summary>
@@ -150,6 +156,17 @@ namespace bioscoop_app.Repository
         {
             Add(entry);
             SaveChanges();
+        }
+
+        /// <summary>
+        /// Dynamically initializes the type specific Validator for T, and validates obj.
+        /// </summary>
+        /// <param name="obj">The object to validate.</param>
+        /// <exception cref="ValidationException">Thrown when the new data does not match validator rules.</exception>
+        private void ValidateT(T obj)
+        {
+            ((AbstractValidator<T>)Type.GetType(obj.GetType().Name + "Validator")
+                .GetConstructors()[0].Invoke(null)).ValidateAndThrow(obj);
         }
     }
 }
