@@ -24,8 +24,8 @@ namespace bioscoop_app.Controller
         private Func<List<Product>, List<Ticket>> filterTickets = sequence =>
         {
             return (from product in sequence
-                    where product.GetType() == typeof(Ticket)
-                    select (Ticket)product).ToList();
+                where product.GetType() == typeof(Ticket)
+                select (Ticket) product).ToList();
         };
 
         /// <summary>
@@ -36,14 +36,15 @@ namespace bioscoop_app.Controller
         /// <exception cref="InvalidOperationException">If no order matched the code.</exception>
         private Order queryByCode(ChromelyRequest req)
         {
-            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            var data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
             string code = data["code"].Value<string>();
             var orders = new Repository<Order>().Data.Values.AsQueryable();
             IEnumerable<Order> queryResult = from order in orders
-                                             where order.code == code
-                                             select order;
+                where order.code == code
+                select order;
             return queryResult.First();
         }
+
         /// <summary>
         /// Searches the order with the specified code in the data, and returns it.
         /// </summary>
@@ -56,7 +57,8 @@ namespace bioscoop_app.Controller
             try
             {
                 order = queryByCode(req);
-            } catch (InvalidOperationException)
+            }
+            catch (InvalidOperationException)
             {
                 return new Response
                 {
@@ -64,6 +66,7 @@ namespace bioscoop_app.Controller
                     statusText = "No order was found for the given code."
                 }.ChromelyWrapper(req.Id);
             }
+
             return new Response
             {
                 status = 200,
@@ -80,49 +83,74 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/order#create")]
         public ChromelyResponse CreateOrder(ChromelyRequest req)
         {
-            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            var data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
             //List<Product> products = ParseItems(data["items"].Value<JArray>());
-            Order order = new Order(
+            if (Validator.IsEmail(data["cust_email"].Value<string>()) &&
+                Validator.IsName(data["cust_name"].Value<string>()))
+            {
+                Order order = new Order(
                     ParseItems(data["items"].Value<JArray>()),
                     ParseTickets(data["tickets"].Value<JArray>()),
                     data["cust_name"].Value<string>(),
                     data["cust_email"].Value<string>()
                 );
-            try
-            {
-                SetSeatsAvailability(order.tickets, false);
-            } catch (InvalidOperationException err)
-            {
+                try
+                {
+                    SetSeatsAvailability(order.tickets, false);
+                }
+                catch (InvalidOperationException err)
+                {
+                    return new Response
+                    {
+                        status = 409,
+                        statusText = err.Message
+                    }.ChromelyWrapper(req.Id);
+                }
+
+                new Repository<Order>().AddThenWrite(order);
                 return new Response
                 {
-                    status = 409,
-                    statusText = err.Message
+                    status = 200,
+                    data = JsonConvert.SerializeObject(order.code)
                 }.ChromelyWrapper(req.Id);
             }
-            new Repository<Order>().AddThenWrite(order);
-            return new Response
+            else
             {
-                status = 200,
-                data = JsonConvert.SerializeObject(order.code)
-            }.ChromelyWrapper(req.Id);
+                //create error object
+                Dictionary<string, string> errorMessage = new Dictionary<string, string>();
+                //set error message
+                if (!Validator.IsName(data["cust_name"].Value<string>()))
+                    errorMessage.Add("name-field"
+                        , "De opgegeven naam is leeg of bevat verkeerde tekens, voer een geldige naam van minimaal 2 tekens in!");
+                if (!Validator.IsEmail(data["cust_email"].Value<string>()))
+                    errorMessage.Add("email-field"
+                        , "Voer een geldig email adres in!");
+
+                return new Response
+                {
+                    status = 422,
+                    data = JsonConvert.SerializeObject(errorMessage)
+                }.ChromelyWrapper(req.Id);
+            }
         }
 
-         ///<summary>      
+        ///<summary>      
         /// Post route voor het voltooien van een order.        
         /// Bedoeld voor de medewerker.         
         /// </summary>         
         /// <param name="req">Post request with the order code.</param>         
         /// <returns>The items in the order.</returns>         
-        [HttpPost (Route = "/order#collect")]         
-        public ChromelyResponse CollectOrder(ChromelyRequest req)        
+        [HttpPost(Route = "/order#collect")]
+        public ChromelyResponse CollectOrder(ChromelyRequest req)
         {
-            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            var data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
             string code = data["code"].Value<string>();
             if (code is null)
             {
-                return new Response { status = 400, statusText = "Bad input de code was null" }
-                .ChromelyWrapper(req.Id);
+                return new Response {status = 400, statusText = "Bad input de code was null"}
+                    .ChromelyWrapper(req.Id);
             }
+
             var repos = new Repository<Order>();
             var orders = repos.Data.Values.AsQueryable();
             var result = from order in orders where order.code == code select order;
@@ -130,7 +158,8 @@ namespace bioscoop_app.Controller
             try
             {
                 matchedOrder = result.First();
-            } catch (InvalidOperationException)
+            }
+            catch (InvalidOperationException)
             {
                 return new Response
                 {
@@ -138,6 +167,7 @@ namespace bioscoop_app.Controller
                     statusText = "No order matching the input code was found."
                 }.ChromelyWrapper(req.Id);
             }
+
             if (!matchedOrder.redeemable)
             {
                 return new Response
@@ -150,15 +180,15 @@ namespace bioscoop_app.Controller
             {
                 matchedOrder.redeemable = false;
             }
+
             repos.Update(matchedOrder.Id, matchedOrder);
             repos.SaveChangesThenDiscard();
-            return new Response { 
-                status = 200, 
-                data = JsonConvert.SerializeObject(new { matchedOrder.tickets, matchedOrder.items})
+            return new Response
+            {
+                status = 200,
+                data = JsonConvert.SerializeObject(new {matchedOrder.tickets, matchedOrder.items})
             }.ChromelyWrapper(req.Id);
         }
-
-
 
 
         /// <summary>
@@ -170,41 +200,49 @@ namespace bioscoop_app.Controller
         public ChromelyResponse UpdateOrder(ChromelyRequest req)
         {
             //throw new NotImplementedException();
-            JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            Repository<Order> repository = new Repository<Order>();
-            int orderId = -1;
-            try
+            JObject data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
+            if (Validator.IsEmail(data["cust_email"].Value<string>()) &&
+                Validator.IsName(data["cust_name"].Value<string>()))
             {
-                orderId = data["id"].Value<int>();
-            } catch (ArgumentNullException)
-            {
-                return new Response
+                Repository<Order> repository = new Repository<Order>();
+                int orderId = -1;
+                try
                 {
-                    status = 400,
-                    statusText = "id was null"
-                }.ChromelyWrapper(req.Id);
-            }
-            string orderCode = null;
-            try
-            {
-                orderCode = repository.Data[orderId].code;
-            } catch (KeyNotFoundException)
-            {
-                return new Response
+                    orderId = data["id"].Value<int>();
+                }
+                catch (ArgumentNullException)
                 {
-                    status = 400,
-                    statusText = "No order found for the id provided."
-                }.ChromelyWrapper(req.Id);
-            }
-            if (!repository.Data[orderId].redeemable)
-            {
-                return new Response
+                    return new Response
+                    {
+                        status = 400,
+                        statusText = "id was null"
+                    }.ChromelyWrapper(req.Id);
+                }
+
+                string orderCode = null;
+                try
                 {
-                    status = 400,
-                    statusText = "Can't modify an order that has already been collected."
-                }.ChromelyWrapper(req.Id);
-            }
-            Order input = new Order(
+                    orderCode = repository.Data[orderId].code;
+                }
+                catch (KeyNotFoundException)
+                {
+                    return new Response
+                    {
+                        status = 400,
+                        statusText = "No order found for the id provided."
+                    }.ChromelyWrapper(req.Id);
+                }
+
+                if (!repository.Data[orderId].redeemable)
+                {
+                    return new Response
+                    {
+                        status = 400,
+                        statusText = "Can't modify an order that has already been collected."
+                    }.ChromelyWrapper(req.Id);
+                }
+
+                Order input = new Order(
                     orderId,
                     ParseItems(data["items"].Value<JArray>()),
                     ParseTickets(data["tickets"].Value<JArray>()),
@@ -213,60 +251,83 @@ namespace bioscoop_app.Controller
                     data["cust_email"].Value<string>(),
                     true
                 );
-            /*if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
-            {
-                //Backend magic to change availability of items
-                List<Ticket> inputTickets = filterTickets(input.items);
-                List<Ticket> existingTickets = filterTickets(repository.Data[orderId].items);
-                if (inputTickets.Any() && !existingTickets.Any())
+                /*if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
                 {
-                    //Reserve tickets
-                    SetSeatsAvailability(inputTickets, false);
-                }
-                if (!inputTickets.Any() && existingTickets.Any())
-                {
-                    // Cancel ticket reservation
-                    SetSeatsAvailability(existingTickets, true);
-                }
-                if (inputTickets.Any() && existingTickets.Any() &&
-                    !inputTickets.OrderBy(t => t.Id).SequenceEqual(existingTickets.OrderBy(t => t.Id)))
+                    //Backend magic to change availability of items
+                    List<Ticket> inputTickets = filterTickets(input.items);
+                    List<Ticket> existingTickets = filterTickets(repository.Data[orderId].items);
+                    if (inputTickets.Any() && !existingTickets.Any())
+                    {
+                        //Reserve tickets
+                        SetSeatsAvailability(inputTickets, false);
+                    }
+                    if (!inputTickets.Any() && existingTickets.Any())
+                    {
+                        // Cancel ticket reservation
+                        SetSeatsAvailability(existingTickets, true);
+                    }
+                    if (inputTickets.Any() && existingTickets.Any() &&
+                        !inputTickets.OrderBy(t => t.Id).SequenceEqual(existingTickets.OrderBy(t => t.Id)))
+                    {
+                        //fix ticket difference in data
+                        List<Ticket> reserve = inputTickets.Except(existingTickets).ToList(); //A - B
+                        List<Ticket> cancel = existingTickets.Except(inputTickets).ToList(); // B - A
+                        SetSeatsAvailability(reserve, true);
+                        SetSeatsAvailability(cancel, false);
+                    }
+                }*/
+                if (input.tickets.Any() && repository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
+                    !input.tickets.OrderBy(t => t.Id)
+                        .SequenceEqual(repository.Data[orderId].tickets.OrderBy(p => p.Id)))
                 {
                     //fix ticket difference in data
-                    List<Ticket> reserve = inputTickets.Except(existingTickets).ToList(); //A - B
-                    List<Ticket> cancel = existingTickets.Except(inputTickets).ToList(); // B - A
-                    SetSeatsAvailability(reserve, true);
-                    SetSeatsAvailability(cancel, false);
+                    List<Ticket> reserve = input.tickets.Except(repository.Data[orderId].tickets).ToList(); //A - B
+                    List<Ticket> cancel = repository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
+                    SetSeatsAvailability(reserve, false);
+                    SetSeatsAvailability(cancel, true);
                 }
-            }*/
-            if (input.tickets.Any() && repository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
-                    !input.tickets.OrderBy(t => t.Id).SequenceEqual(repository.Data[orderId].tickets.OrderBy(p => p.Id)))
-            {
-                //fix ticket difference in data
-                List<Ticket> reserve = input.tickets.Except(repository.Data[orderId].tickets).ToList(); //A - B
-                List<Ticket> cancel = repository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
-                SetSeatsAvailability(reserve, false);
-                SetSeatsAvailability(cancel, true);
-            }
-            try {
-                repository.Update(
+
+                try
+                {
+                    repository.Update(
                         orderId,
                         input
                     );
-            }
-            catch (InvalidOperationException except)
-            {
+                }
+                catch (InvalidOperationException except)
+                {
+                    return new Response
+                    {
+                        status = 400,
+                        statusText = except.Message
+                    }.ChromelyWrapper(req.Id);
+                }
+
+                repository.SaveChangesThenDiscard();
                 return new Response
                 {
-                    status = 400,
-                    statusText = except.Message
+                    status = 200,
+                    data = JsonConvert.SerializeObject(orderCode)
                 }.ChromelyWrapper(req.Id);
             }
-            repository.SaveChangesThenDiscard();
-            return new Response
+            else
             {
-                status = 200,
-                data = JsonConvert.SerializeObject(orderCode)
-            }.ChromelyWrapper(req.Id);
+                //create error object
+                Dictionary<string, string> errorMessage = new Dictionary<string, string>();
+                //set error message
+                if (!Validator.IsName(data["cust_name"].Value<string>()))
+                    errorMessage.Add("name-field"
+                        , "De opgegeven naam is leeg of bevat verkeerde tekens, voer een geldige naam van minimaal 2 tekens in!");
+                if (!Validator.IsEmail(data["cust_email"].Value<string>()))
+                    errorMessage.Add("email-field"
+                        , "Voer een geldig email adres in!");
+
+                return new Response
+                {
+                    status = 422,
+                    data = JsonConvert.SerializeObject(errorMessage)
+                }.ChromelyWrapper(req.Id);
+            }
         }
 
         /// <summary>
@@ -282,7 +343,8 @@ namespace bioscoop_app.Controller
             try
             {
                 order = queryByCode(req);
-            } catch (InvalidOperationException)
+            }
+            catch (InvalidOperationException)
             {
                 return new Response
                 {
@@ -290,6 +352,7 @@ namespace bioscoop_app.Controller
                     statusText = "Order was not cancelled because it was not found."
                 }.ChromelyWrapper(req.Id);
             }
+
             if (!repository.Data[order.Id].redeemable)
             {
                 return new Response
@@ -298,6 +361,7 @@ namespace bioscoop_app.Controller
                     statusText = "Order can't be cancelled because it has already been collected."
                 }.ChromelyWrapper(req.Id);
             }
+
             SetSeatsAvailability(repository.Data[order.Id].tickets, true);
             repository.Data.Remove(order.Id);
             repository.SaveChangesThenDiscard();
@@ -319,6 +383,7 @@ namespace bioscoop_app.Controller
             {
                 repo.Data[ticket.screenTime].SetSeatAvailability(ticket, value);
             }
+
             repo.SaveChangesThenDiscard();
         }
 
@@ -334,6 +399,7 @@ namespace bioscoop_app.Controller
             {
                 products.Add(ProductController.ToProduct(product));
             }
+
             return products;
         }
 
@@ -355,8 +421,9 @@ namespace bioscoop_app.Controller
                     ticket["seatnr"].Value<int>(),
                     ticket["screenTime"].Value<int>(),
                     ticket["visitorAge"].Value<int>()
-                    ));
+                ));
             }
+
             return tickets;
         }
 
@@ -369,15 +436,18 @@ namespace bioscoop_app.Controller
         private string SingleOrderToJson(Order order)
         {
             List<JObject> jItems = new List<JObject>();
-            foreach (Product item in order.items) {
+            foreach (Product item in order.items)
+            {
                 if (item.type == "ticket")
                 {
                     jItems.Add((JObject) JsonConvert.DeserializeObject(JsonConvert.SerializeObject((Ticket) item)));
-                } else
+                }
+                else
                 {
                     jItems.Add((JObject) JsonConvert.DeserializeObject(JsonConvert.SerializeObject(item)));
                 }
             }
+
             return JsonConvert.SerializeObject(new
             {
                 code = order.code,

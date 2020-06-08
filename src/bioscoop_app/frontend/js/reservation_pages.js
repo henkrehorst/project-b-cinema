@@ -131,6 +131,9 @@ async function stepThree() {
         //read form information
         let confirmForm = new FormData(document.getElementById('checkout-form'));
         console.log(confirmForm.get('name'), confirmForm.get('email'))
+        //clear error messages
+        clearFieldErrorMessage("name-field");
+        clearFieldErrorMessage("email-field");
 
         let cookieval = getReservationCookieValue();
         let res;
@@ -157,19 +160,26 @@ async function stepThree() {
             console.log("done waiting, " + res.getStatusCode());
             console.log(res.getData());
         }
-        let reservationCode = (res.getStatusCode() === 200) ? res.getData() : -1;
-        //display reservation code after success
-        document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_confirm_form").innerHTML =
-            `<p>Hieronder staat je reserveringscode om je tickets mee op te halen,
+        if(res.getStatusCode() === 200) {
+            let reservationCode = (res.getStatusCode() === 200) ? res.getData() : -1;
+            //display reservation code after success
+            document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_confirm_form").innerHTML =
+                `<p>Hieronder staat je reserveringscode om je tickets mee op te halen,
             deze is ook terug te vinden in je email.</p>
         <div class="mt-5 reservation_code_box"><p>${reservationCode}</p></div>
          <a href="/index.html" class="btn btn-success confirm_button">GA TERUG NAAR HET OVERZICHT</a>`;
 
-        //change title
-        document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_box_header > h3").innerHTML =
-            "We hebben je reservering succesvol ontvangen";
-        //make last step completed
-        document.getElementById("lastStep").classList.replace("current", "completed")
+            //change title
+            document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_box_header > h3").innerHTML =
+                "We hebben je reservering succesvol ontvangen";
+            //make last step completed
+            document.getElementById("lastStep").classList.replace("current", "completed")
+        }else if(res.getStatusCode() === 422){
+            //display error messages
+            for(let item in res.getData()){
+                displayFieldErrorMessage(item, res.getData()[item])
+            }
+        }
     }
 
     //add finish function on confirm button

@@ -238,3 +238,31 @@ Object.size = function(obj) {
     }
     return size;
 };
+
+
+function displayFieldErrorMessage(id, message) {
+    //added red error border on field
+    if(!document.getElementById(id).classList.contains("is-invalid")){
+        document.getElementById(id).classList.add("is-invalid")
+    }
+    
+    //display error message
+    if(!document.getElementById(id + '-error').classList.contains("invalid-feedback")){
+        document.getElementById(id + '-error').classList.add("invalid-feedback")
+    }
+    document.getElementById(id + '-error').innerText = message;
+}
+
+function clearFieldErrorMessage(id) {
+    //remove error styling from field
+    if(document.getElementById(id).classList.contains("is-invalid")){
+        document.getElementById(id).classList.remove("is-invalid")
+    }
+
+    //remove error message
+    if(document.getElementById(id + '-error').classList.contains("invalid-feedback")){
+        document.getElementById(id + '-error').classList.remove("invalid-feedback")
+    }
+    document.getElementById(id + '-error').innerText = "";
+
+}
