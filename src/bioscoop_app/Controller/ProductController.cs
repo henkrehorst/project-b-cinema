@@ -64,7 +64,11 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             //Console.WriteLine(data);
-            new ProductRepository().AddThenWrite(ToProduct(data));
+            new ProductRepository().AddThenWrite(new Product(
+                data["price"].Value<double>(),
+                data["name"].Value<string>(),
+                data["type"].Value<string>()
+            ));
             return new Response
             {
                 status = 204
@@ -80,7 +84,7 @@ namespace bioscoop_app.Controller
         public ChromelyResponse UpdateProduct(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            int? id = data.Value<int>("id");
+            int? id = data.Value<int>("Id");
             if (id is null)
             {
                 return new Response
@@ -111,11 +115,12 @@ namespace bioscoop_app.Controller
 
         /// <param name="data">Product as a JObject</param>
         /// <returns>Product as a Product or Ticket</returns>
-        private Product ToProduct(JObject data)
+        public static Product ToProduct(JObject data)
         {
-            if (data.ContainsKey("seat") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
+            if (data.ContainsKey("seatnr") && data.ContainsKey("row") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
             {
                 return new Ticket(
+                    data["Id"].Value<int>(),
                     data["price"].Value<double>(),
                     data["name"].Value<string>(),
                     data["row"].Value<int>(),
@@ -127,6 +132,7 @@ namespace bioscoop_app.Controller
             else
             {
                 return new Product(
+                    data["Id"].Value<int>(),
                     data["price"].Value<double>(),
                     data["name"].Value<string>(),
                     data["type"].Value<string>()

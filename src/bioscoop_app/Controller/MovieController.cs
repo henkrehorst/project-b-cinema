@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using bioscoop_app.Helper;
 using bioscoop_app.Model;
@@ -54,10 +55,14 @@ namespace bioscoop_app.Controller
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
             var movieRepository = new MovieRepository();
+            //convert kijkwijzer collection to int array
+            int[] kijkWijzers = data["kijkwijzers"].Select(x => (int) x).ToArray();
             string fileName = "";
+            string thumbnailName = "";
             
             //get base64 image string
             string coverImage = data["cover_image"].Value<string>();
+            
             if (coverImage.Length != 0)
             {
                 var uploadService = new UploadService(coverImage);
@@ -68,13 +73,28 @@ namespace bioscoop_app.Controller
                 }
             }
 
+            //get base64 string of thumbnail image
+            string thumbnail = data["thumbnail_image"].Value<string>();
+            
+            if (thumbnail.Length != 0)
+            {
+                var uploadService = new UploadService(thumbnail);
+                if (uploadService.CheckIsImage())
+                {
+                    uploadService.CreateFileInUploadFolder();
+                    thumbnailName = uploadService.GetFileName();
+                }
+            }
 
             movieRepository.Add(new Movie(
                 data["title"].Value<string>(),
                 data["genre"].Value<string>(),
                 data["rating"].Value<double>(),
+                data["samenvatting"].Value<string>(),
                 data["duration"].Value<int>(),
-                fileName
+                fileName,
+                kijkWijzers,
+                thumbnailName
             ));
             
             movieRepository.SaveChangesThenDiscard();
@@ -98,7 +118,11 @@ namespace bioscoop_app.Controller
             
             string filestring = data["cover_image"].Value<string>();
             string filename = repository.Data[data.Value<int>("id")].coverImage;
+            string thumbnailName = repository.Data[data.Value<int>("id")].thumbnailImage;
             
+            //convert kijkwijzer collection to int array
+            int[] kijkWijzers = data["kijkwijzers"].Select(x => (int) x).ToArray();
+
             if (filestring.Length > 0)
             {
                 var uploadService = new UploadService(filestring);
@@ -110,14 +134,31 @@ namespace bioscoop_app.Controller
                 }
             }
             
+            //get base64 string of thumbnail image
+            string thumbnail = data["thumbnail_image"].Value<string>();
+            
+            if (thumbnail.Length != 0)
+            {
+                var uploadService = new UploadService(thumbnail);
+                if (uploadService.CheckIsImage())
+                {
+                    uploadService.DeleteFile(thumbnailName);
+                    uploadService.CreateFileInUploadFolder();
+                    thumbnailName = uploadService.GetFileName();
+                }
+            }
+            
             try
             {
                 repository.Update(data.Value<int>("id"), new Movie(
                     data["title"].Value<string>(),
                     data["genre"].Value<string>(),
                     data["rating"].Value<double>(),
+                    data["samenvatting"].Value<string>(),
                     data["duration"].Value<int>(),
-                    filename
+                    filename,
+                    kijkWijzers,
+                    thumbnailName
                 ));
             } catch(InvalidOperationException except)
             {

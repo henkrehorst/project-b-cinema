@@ -4,20 +4,58 @@
     <meta charset="UTF-8">
     <title>Film</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/step.min.css">
     <link rel="stylesheet" href="./css/main.css"/>
+    <script src="https://kit.fontawesome.com/f7b2f35ba9.js" crossorigin="anonymous"></script>
 </head>
 <body onload="stepOne()">
-<nav data-active-item="Films">
+<nav>
     <div class="container">
     </div>
 </nav>
-<div class="container">
+<div class="movie_thumbnail">
+    <img src="" id="movieThumbnail" alt="thumbnail"/>
+    <div class="thumbnailOverlay">
+        <h1 id="movieTitle"></h1>
+        <p id="movieTime"></p>
+        <div class="step_wrapper">
+            <!--steps created by semantic-ui (component library)-->
+            <div class="ui three steps">
+                <div class="current step">
+                    <i class="fas fa-ticket-alt icon"></i>
+                    <div class="content">
+                        <div class="title">Tickets</div>
+                        <div class="description">Kies je tickets</div>
+                    </div>
+                </div>
+                <div class="disabled step">
+                    <i class="fas fa-couch icon"></i>
+                    <div class="content">
+                        <div class="title">Kies plaatsen</div>
+                        <div class="description">Kies je plaatsen</div>
+                    </div>
+                </div>
+                <div class="disabled step">
+                    <i class="fas fa-info icon"></i>
+                    <div class="content">
+                        <div class="title">Bevestig</div>
+                        <div class="description">Bevestig je reservering</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container reservation_view">
     <div class="row reservation_container">
         <div class="col-md-8 reservation_boxes">
             <div class="reservation_box_header">
                 <h3>Kies hieronder je tickets</h3>
             </div>
             <div class="product_container" id="product_view">
+            </div>
+            <div id="ticketError" class="alert alert-danger" role="alert">
+                Voor dat u verder kunt, moet u eerst een ticket kiezen!
             </div>
             <h3 style="text-align: center">Extra producten</h3>
             <div class="product_container" id="upsell_view">
@@ -58,10 +96,11 @@
                 </tr>
                 </thead>
             </table>
-            <a href="/reservation_step_two.html" class="btn btn-success">KIES PLAATSEN</a>
+            <a id="nextStep" class="btn btn-success">KIES PLAATSEN</a>
         </div>
     </div>
 </div>
+<script src="./js/moment.min.js"></script>
 <script src="./js/main.js"></script>
 <script src="./js/reservation_pages.js"></script>
 </body>

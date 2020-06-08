@@ -34,17 +34,37 @@ async function movieDetailPage() {
     const movieResponse = await chromelyRequest('/movies#id', 'POST', {'id': getIdFromUrl()});
     let movie = movieResponse.getData();
 
-    //display cover image of movie
-    document.querySelector("body > div > div > div.col-md-3").innerHTML =
-        `<img class='cover_image' src='local://frontend/uploads/${movie.coverImage}' alt='${movie.title}'/>`;
-
     //display movie information
-    document.querySelector("body > div > div > div.col-md-9").innerHTML = `<h1>${movie.title}</h1>
-        <table class='table'>
-                <tr><th>Genre</th><td>${movie.genre}</td></tr>
-                <tr><th>Duur</th><td>${movie.duration}</td></tr>
-                <tr><th>Rating</th><td>${movie.rating}</td></tr>
-        </table>`;
+    document.getElementById("movieTitle").innerHTML += `${movie.title}`;
+    document.getElementById("movieDescription").innerHTML += `${movie.samenvatting}`;
+    document.getElementById("coverImage").src = `local://frontend/uploads/${movie.coverImage}`;
+    document.getElementById("movieThumbnail").src = `local://frontend/uploads/${movie.thumbnailImage}`;
+    document.getElementById("movieDuration").innerHTML += `${movie.duration} minuten`;
+
+    //display genre labels
+    let labels = ""
+    movie.genre.split(" ").map(item => {
+        labels += `<span class="genre-label">${item}</span>`;
+    });
+    document.getElementById("genreView").innerHTML = labels;
+
+    //display star rating
+    let rating = movie.rating;
+    let ratingContainer = document.getElementById("ratingView");
+    for (let i = 5; i > 0; i--) {
+        let img = document.createElement("img");
+        let selector = 10;
+        if (rating < 1 && rating > 0) {
+            selector = (10 * rating).toFixed();
+        }
+        else if (rating <= 0) {
+            selector = 0;
+        }
+        img.src = `/assets/img/rating/${selector}.png`;
+        img.className = "star-rating";
+        ratingContainer.appendChild(img);
+        --rating;
+    }
 
     //display movie screentimes
     const screenTimesResponse = await chromelyRequest('/screentime#movie', 'POST', {id: getIdFromUrl()});
@@ -54,19 +74,42 @@ async function movieDetailPage() {
         document.querySelector("body > div > div:nth-child(2) > div").innerHTML += "<p>Geen tijden gevonden</p>";
     } else {
         //create screentime table
-        let screentimeTable = "<table class='table'><tr><th>Start tijd</th><th>Eind tijd</th><th></th></tr>";
-        
-        for(time in screenTimes){
+        let screentimeTable = "";
+
+        //change time format to nl
+        moment.locale('nl-nl');
+
+        for (time in screenTimes) {
             screentimeTable += `<tr>
-                <td>${new Date(screenTimes[time].startTime).toLocaleString()}</td>
-                <td>${new Date(screenTimes[time].startTime).toLocaleString()}</td>
-                <td><a href="/reservation_step_one.html?id=${screenTimes[time].Id}">Reserveren</a></td>
+                <td>${moment(new Date(screenTimes[time].startTime)).format('dddd d MMMM yyyy')}</td>
+                <td>${moment(new Date(screenTimes[time].startTime)).format('LT')} - ${moment(new Date(screenTimes[time].endTime)).format('LT')}</td>
+                <td><a class="btn-block btn-success btn" href="/reservation_step_one.html?id=${screenTimes[time].Id}">Reserveren</a></td>
             </tr>`;
         }
-        //close table
-        screentimeTable += "</table>"
-        
+
         //display screentime table
-        document.querySelector("body > div > div:nth-child(2) > div").innerHTML = screentimeTable;
+        document.getElementById("screentimePlace").innerHTML = screentimeTable;
     }
+
+    //display kijkwijzers
+    let kijkwijzersDiv = "";
+    if (movie.kijkwijzer === null) movie.kijkwijzer = [];
+
+    //create kijkerwijzer items
+    Object.values(await getKijkwijzers()).map(item => {
+        if (movie.kijkwijzer.includes(item.Id)) {
+            kijkwijzersDiv +=
+                `<img src='/assets/kijkwijzers/${item.symbool}' alt='kijkwijzer'/>`;
+        }
+    })
+    //show kijkwijzers on page
+    document.getElementById('kijkwijzerView').innerHTML = kijkwijzersDiv;
+}
+
+/**
+ * get array of kijkwijzers from the backend
+ */
+async function getKijkwijzers() {
+    const KijkwijzerResponse = await chromelyRequest('/kijkwijzer');
+    return KijkwijzerResponse.getData();
 }

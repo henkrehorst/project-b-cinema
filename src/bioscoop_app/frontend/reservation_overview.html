@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Film</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
+</head>
+<body onload="reservationOverview()">
+<nav data-active-item="Reserveringen">
+    <div class="container">
+    </div>
+</nav>
+<div class="movie_thumbnail">
+    <img src="" id="movieThumbnail" alt="thumbnail"/>
+    <div class="thumbnailOverlay">
+        <h1 id="movieTitle"></h1>
+        <p id="movieTime"></p>
+    </div>
+</div>
+<div class="container reservation_view">
+    <div class="row reservation_container">
+        <div class="col-md-8 reservation_boxes">
+            <div class="reservation_box_header">
+                <h3>Jouw gegevens</h3>
+            </div>
+            <div class="reservation_information">
+                <p>De reservering met de code <strong id="order-code"></strong> is gereserveerd met de volgende gegevens:</p>
+                <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Naam:</th>
+                        <td id="name-field"></td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td id="email-field"></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <div class="reservation_actions">
+                <a href="./reservation_step_one.html?change=change" class="btn btn-warning btn-block">Wijzig reservering</a>
+                <button type="button" id="cancelButton" class="btn btn-danger btn-block">Annuleer reservering</button>
+                <a href="./index.html" class="btn btn-success btn-block">Ga terug naar het overzicht</a>
+            </div>
+        </div>
+        <div class="col-md-3 reservation_boxes">
+            <div class="reservation_box_header">
+                <h3>Jouw reservering</h3>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ticket</th>
+                    <th scope="col">Prijs</th>
+                </tr>
+                </thead>
+                <tbody id="reservation_view">
+                </tbody>
+            </table>
+
+            <table class="table mt-4 table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Extra product</th>
+                    <th scope="col">Prijs</th>
+                </tr>
+                </thead>
+                <tbody id="upsell_cart">
+                </tbody>
+            </table>
+            <table class="table mt-4 table-striped">
+                <thead>
+                <tr>
+                    <th colspan="" scope="col">TOTAAL:</th>
+                    <th id="total_cost"></th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="./js/moment.min.js"></script>
+<script src="./js/main.js"></script>
+<script src="./js/reservation_pages.js"></script>
+</body>
+</html>

@@ -4,14 +4,49 @@
     <meta charset="UTF-8">
     <title>Film</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/step.min.css">
     <link rel="stylesheet" href="./css/main.css"/>
+    <script src="https://kit.fontawesome.com/f7b2f35ba9.js" crossorigin="anonymous"></script>
 </head>
 <body onload="stepTwo()">
-<nav data-active-item="Films">
+<nav>
     <div class="container">
     </div>
 </nav>
-<div class="container">
+<div class="movie_thumbnail">
+    <img src="" id="movieThumbnail" alt="thumbnail"/>
+    <div class="thumbnailOverlay">
+        <h1 id="movieTitle"></h1>
+        <p id="movieTime"></p>
+        <div class="step_wrapper">
+            <!--steps created by semantic-ui (component library)-->
+            <div class="ui three steps">
+                <div class="completed step">
+                    <i class="fas fa-ticket-alt icon"></i>
+                    <div class="content">
+                        <div class="title">Tickets</div>
+                        <div class="description">Kies je tickets</div>
+                    </div>
+                </div>
+                <div class="current step">
+                    <i class="fas fa-couch icon"></i>
+                    <div class="content">
+                        <div class="title">Kies plaatsen</div>
+                        <div class="description">Kies je plaatsen</div>
+                    </div>
+                </div>
+                <div class="disabled step">
+                    <i class="fas fa-info icon"></i>
+                    <div class="content">
+                        <div class="title">Bevestig</div>
+                        <div class="description">Bevestig je reservering</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container reservation_view">
     <div class="row reservation_container">
         <div class="col-md-8 reservation_boxes">
             <div class="reservation_box_header">
@@ -24,11 +59,37 @@
                 <p class="screen-title">SCHERM 3</p>
                 <button class="zoom-out">Verkleinen</button>
                 <button class="zoom-in">Vergroten</button>
-                <button class="next-screen">Volgend Scherm</button>
+                <button style="display: none" class="next-screen">Volgend Scherm</button>
             </div>
 
             <p class="seat-description">0 stoelen geselecteerd.</p>
-            <p class="error-msg">Hier komen de error messages</p>
+            <p class="error-msg"></p>
+            <div id="legend" style="padding-left: 30px; padding-bottom: 20px">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td class="seat normal" style="width: 20px; position: relative !important"></td>
+                        <td style="left: 10px; position:relative">Geen meerprijs</td>
+                    </tr>
+                    <tr>
+                        <td class="seat luxery" style="width: 20px; position: relative !important"></td>
+                        <td style="left: 10px; position:relative">Stoel premium €1,00</td>
+                    </tr>
+                    <tr>
+                        <td class="seat vip" style="width: 20px; position: relative !important"></td>
+                        <td style="left: 10px; position:relative">Stoel deluxe €2,00</td>
+                    </tr>
+                    <tr>
+                        <td class="seat not-available" style="width: 20px; position: relative !important"></td>
+                        <td style="left: 10px; position:relative">Niet beschikbaar</td>
+                    </tr>
+                    <tr>
+                        <td class="seat selected" style="width: 20px; position: relative !important"></td>
+                        <td style="left: 10px; position:relative">Selectie</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="col-md-3 reservation_boxes">
             <div class="reservation_box_header">
@@ -65,10 +126,11 @@
                 </tr>
                 </thead>
             </table>
-            <a href="/reservation_step_three.html" class="btn btn-success">BEVESTIG RESERVERING</a>
+            <a class="btn btn-success">BEVESTIG RESERVERING</a>
         </div>
     </div>
 </div>
+<script src="./js/moment.min.js"></script>
 <script src="./js/main.js"></script>
 <script src="./js/reservation_pages.js"></script>
 <script src="js/seat_overview.js"></script>

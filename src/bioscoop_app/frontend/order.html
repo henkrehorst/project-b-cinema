@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <title>Order</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css"/>
+</head>
+<body>
+<nav data-active-item="Reserveringen">
+    <div class="container">
+    </div>
+</nav>
+<div class="container">
+    <form id="code_input">
+        <div class="form-group mt-5">
+            <label for="code-field">Voer hier de code van uw order in:</label>
+            <input name="code" type="text" placeholder="00000000" class="form-control" id="code-field" required>
+        </div>
+        <div class="alert alert-danger" id="codeError" role="alert" style="margin-top: 15px;">
+            Geen reservering gevonden bij deze code, probeer het nog eens!
+        </div>
+        <div class="form-group">
+            <button type="button" id="getorder" class="btn btn-success confirm_button">Ga door</button>
+        </div>
+        <div id="cancel_container"></div>
+    </form>
+    <form action="/reservation_step_one.html" method="get">
+        <input type="hidden" name="id" id="screentime_id" value="1">
+        <input type="hidden" name="change_data" id="change_data_field" value=""/>
+        <input style="display:none;" type="submit" value="Wijzig" id="change_data_buton"/>
+    </form>
+</div>
+<script src="./js/main.js"></script>
+<script src="js/order.js"></script>
+</body>
+</html>
