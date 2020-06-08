@@ -16,6 +16,14 @@ namespace bioscoop_app.Controller
     /// </summary>
     public class MovieController : ChromelyController
     {
+        private Func<string, ChromelyResponse> ParseError = id =>
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "Failed to parse request"
+                }.ChromelyWrapper(id);
+            };
         /// <param name="request">http GET request</param>
         /// <returns>All Movies in the data file.</returns>
         [HttpGet(Route = "/movies")]
@@ -37,11 +45,32 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/movies#id")]
         public ChromelyResponse GetMovieById(ChromelyRequest req)
         {
-            int id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
+            JObject jParse = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson()));
+            int id;
+            try
+            {
+                id = jParse.Value<int>("id");
+            }
+            catch(FormatException) {
+                return ParseError(req.Id);
+            }
+            Movie data;  
+            try
+            {
+                data = new Repository<Movie>().Data[id];
+            }
+            catch(KeyNotFoundException)
+            {
+                return new Response
+                {
+                    status = 204,
+                    statusText = $"No movie found for {id}"
+                }.ChromelyWrapper(req.Id);
+            }
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(new Repository<Movie>().Data[id])
+                data = JsonConvert.SerializeObject(data)
             }.ChromelyWrapper(req.Id);
         }
 
