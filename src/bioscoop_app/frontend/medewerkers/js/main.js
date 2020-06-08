@@ -7,8 +7,8 @@ function fillNavbar() {
           <li><a href="/">Klant applicatie</a></li>
         </ul>
         <ul>
-          <li class="menu-item"><a href="/medewerkers/reservering.html">Reserveringen</a></li>
           <li class="menu-item"><a href="/medewerkers/collect_order.html">Uitgifte reserveringen</a></li>
+          <li class="menu-item"><a href="/medewerkers/cancel_order.html">Reservering annuleren</a></li>
         </ul>`;
 
     //set active item

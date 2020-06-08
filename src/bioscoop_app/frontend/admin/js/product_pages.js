@@ -90,7 +90,7 @@ async function productEditPage() {
 
         // update product in backend
         const response = await chromelyRequest('/products#update', 'POST', {
-            'id': getIdFromUrl(),
+            'Id': getIdFromUrl(),
             'name': productForm.get('name'),
             'price': productForm.get('price'),
             'type': productForm.get('product-type')

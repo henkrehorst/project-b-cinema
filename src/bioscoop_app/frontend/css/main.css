@@ -395,7 +395,7 @@ p.screen-title {
 .modal {
     display: none;
     position: fixed; 
-    z-index: 1;
+    z-index: 99;
     padding-top: 100px;
     left: 0;
     top: 0;
@@ -571,4 +571,10 @@ p.screen-title {
     height: 50px;
     left: 1px;
     position: relative;
+}
+
+#ticketError{
+    display: none;
+    margin: -20px 40px 10px 40px;
+    text-align: center;
 }
