@@ -240,6 +240,11 @@ Object.size = function(obj) {
 };
 
 
+/**
+ * display error by field
+ * @param id
+ * @param message
+ */
 function displayFieldErrorMessage(id, message) {
     //added red error border on field
     if(!document.getElementById(id).classList.contains("is-invalid")){
@@ -253,6 +258,10 @@ function displayFieldErrorMessage(id, message) {
     document.getElementById(id + '-error').innerText = message;
 }
 
+/**
+ * clear error message of field
+ * @param id
+ */
 function clearFieldErrorMessage(id) {
     //remove error styling from field
     if(document.getElementById(id).classList.contains("is-invalid")){
