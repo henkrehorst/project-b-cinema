@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
 {
+	[Obsolete]
 	public class Room : DataType
 	{
 		public List<List<Seat>> layout;
