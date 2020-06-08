@@ -31,13 +31,17 @@ async function showMovieDetail() {
  * function with all javascript running on step one of the reservation flow (ticket selection step)
  */
 async function stepOne() {
-    setActiveNav();
     // get all products with type ticket
     const ticketProductResponse = await chromelyRequest('/product#type', 'POST', {'type': 'ticket'});
     let ticketProducts = ticketProductResponse.getData();
     //get upsells
     const upsellResponse = await chromelyRequest('/product#type', 'POST', {'type': 'upsell'});
     let upsells = upsellResponse.getData();
+    //get seat costs
+    const seatCostResponse = await chromelyRequest('/product#type', 'POST', {'type': 'seatcost'});
+    let seatCosts = seatCostResponse.getData();
+    //merge seatCosts in upsells
+    Object.assign(upsells, seatCosts);
 
     //display products
     displayProducts(ticketProducts, 'product_view', 'order')
@@ -54,7 +58,17 @@ async function stepOne() {
 
 
     showOrUpdateReservationCart();
-    showMovieDetail()
+    showMovieDetail();
+    setActiveNav();
+
+    //For the next step, check tickets have been selected
+    document.getElementById("nextStep").addEventListener("click", () => {
+        if (Object.size(getReservationCookieValue().order) <= 0) {
+            document.getElementById("ticketError").style.display = "block";
+        } else {
+            window.location.href = "/reservation_step_two.html";
+        }
+    });
 }
 
 /**
@@ -65,8 +79,9 @@ function displayProducts(products, location, productType) {
     //show ticket products on page
     let productView = "";
     for (product in products) {
-        productView +=
-            `<div class="product_item">
+        if (products[product].type !== "seatcost") {
+            productView +=
+                `<div class="product_item">
                 <div class="product_details">
                     <p>${products[product].name}</p>
                     <p>&euro; ${products[product].price.toFixed(2).replace('.', ',')}</p>
@@ -78,6 +93,7 @@ function displayProducts(products, location, productType) {
                     <button onclick="productControl(${products[product].Id}, 1, '${productType}')" type="button">+</button>
                 </div>
             </div>`;
+        }
     }
     document.getElementById(location).innerHTML = productView;
 }
@@ -103,7 +119,7 @@ async function stepThree() {
     //display movie thumbnail
     showMovieDetail();
     //fill customer information in change order flow
-    if(getReservationCookieValue().newOrder === false){
+    if (getReservationCookieValue().newOrder === false) {
         document.getElementById("name-field").value = getReservationCookieValue().name;
         document.getElementById("email-field").value = getReservationCookieValue().email;
     }
@@ -115,6 +131,9 @@ async function stepThree() {
         //read form information
         let confirmForm = new FormData(document.getElementById('checkout-form'));
         console.log(confirmForm.get('name'), confirmForm.get('email'))
+        //clear error messages
+        clearFieldErrorMessage("name-field");
+        clearFieldErrorMessage("email-field");
 
         let cookieval = getReservationCookieValue();
         let res;
@@ -127,32 +146,40 @@ async function stepThree() {
                 'cust_email': confirmForm.get('email')
             };
             res = await chromelyRequest('/order#create', 'POST', order);
-            console.log(res.getData(),res.getStatusCode())
+            console.log(res.getData(), res.getStatusCode())
         } else {
             console.log("update route for order " + localStorage.getItem("ordercode"));
             let order = {
-                'Id': localStorage.getItem("ordercode"),
+                'id': localStorage.getItem("ordercode"),
                 'items': generateProductOrder(),
                 'tickets': cookieval['tickets'],
                 'cust_name': confirmForm.get('name'),
                 'cust_email': confirmForm.get('email')
             };
             res = await chromelyRequest('/order#update', 'POST', order);
-            console.log("done waiting");
+            console.log("done waiting, " + res.getStatusCode());
+            console.log(res.getData());
         }
-        let reservationCode = (res.getStatusCode() === 200) ? res.getData() : -1;
-        //display reservation code after success
-        document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_confirm_form").innerHTML =
-            `<p>Hieronder staat je reserveringscode om je tickets mee op te halen,
+        if(res.getStatusCode() === 200) {
+            let reservationCode = (res.getStatusCode() === 200) ? res.getData() : -1;
+            //display reservation code after success
+            document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_confirm_form").innerHTML =
+                `<p>Hieronder staat je reserveringscode om je tickets mee op te halen,
             deze is ook terug te vinden in je email.</p>
         <div class="mt-5 reservation_code_box"><p>${reservationCode}</p></div>
          <a href="/index.html" class="btn btn-success confirm_button">GA TERUG NAAR HET OVERZICHT</a>`;
 
-        //change title
-        document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_box_header > h3").innerHTML =
-            "We hebben je reservering succesvol ontvangen";
-        //make last step completed
-        document.getElementById("lastStep").classList.replace("current", "completed")
+            //change title
+            document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_box_header > h3").innerHTML =
+                "We hebben je reservering succesvol ontvangen";
+            //make last step completed
+            document.getElementById("lastStep").classList.replace("current", "completed")
+        }else if(res.getStatusCode() === 422){
+            //display error messages
+            for(let item in res.getData()){
+                displayFieldErrorMessage(item, res.getData()[item])
+            }
+        }
     }
 
     //add finish function on confirm button
@@ -192,7 +219,38 @@ function productControl(id, amount, type = "order") {
     if (amount === 0) {
         //remove ticket from order
         delete orderInformation[type][id];
+        //check if key is not deleted
+        if (orderInformation[type] === undefined) {
+            orderInformation[type] = {};
+        }
     } else {
+        //update order
+        orderInformation[type][id] = amount;
+    }
+    //update reservation cookie
+    updateCreateReservationCookie(orderInformation);
+    showOrUpdateReservationCart();
+}
+
+
+/**
+ * function update product in shopping cart
+ * @param id
+ * @param amount
+ * @param type
+ */
+function updateProductInShoppingCart(id, amount, type = "order") {
+    //update order information
+    let orderInformation = getReservationCookieValue();
+
+    if (amount === 0 && orderInformation[type][id] !== undefined) {
+        //remove ticket from order
+        delete orderInformation[type][id];
+        //check if key is not deleted
+        if (orderInformation[type] === undefined) {
+            orderInformation[type] = {};
+        }
+    } else if (amount !== 0) {
         //update order
         orderInformation[type][id] = amount;
     }
@@ -216,7 +274,8 @@ async function prepareReservationCookie(ticketProducts, upsells) {
         'upsellProducts': upsells,
         'upsell': {},
         'screentime': screentimeResponse.getData(),
-        'newOrder': true
+        'newOrder': true,
+        'tickets': []
     };
 
     updateCreateReservationCookie(cookieValue);
@@ -307,12 +366,18 @@ function getTotalTicketCount() {
  * @param selectedSeats
  */
 function generateTickets(selectedSeats) {
+    console.log(selectedSeats);
     //get reservation cookie value
     let reservationCookie = getReservationCookieValue();
     if (selectedSeats.length === 0) {
         reservationCookie['tickets'] = [];
+        updateProductInShoppingCart(9, 0, "upsell");
+        updateProductInShoppingCart(10, 0, "upsell");
         updateCreateReservationCookie(reservationCookie);
     } else {
+        //calculate extra seat cost
+        let deluxeCount = 0;
+        let premiumCount = 0;
         let seatPos = 0;
         let ticketArray = [];
         for (order in reservationCookie['order']) {
@@ -327,11 +392,22 @@ function generateTickets(selectedSeats) {
                     'screenTime': reservationCookie['screentime'].Id,
                     'visitorAge': 12
                 };
-                seatPos++;
+
                 reservationCookie['tickets'] = ticketArray;
+                if (selectedSeats[seatPos] !== undefined) {
+                    //check seats has extra seat costs
+                    if (selectedSeats[seatPos].type === "luxe") {
+                        premiumCount++;
+                    } else if (selectedSeats[seatPos].type === "VIP") {
+                        deluxeCount++;
+                    }
+                }
+                seatPos++;
                 updateCreateReservationCookie(reservationCookie);
             }
         }
+        updateProductInShoppingCart(9, deluxeCount, "upsell");
+        updateProductInShoppingCart(10, premiumCount, "upsell");
     }
 }
 
@@ -365,7 +441,7 @@ async function reservationOverview() {
 
         //activate cancel button
         document.getElementById("cancelButton").addEventListener("click", async () => {
-            let res = await chromelyRequest("/order#cancel", "POST", {"id": orderId});
+            let res = await chromelyRequest("/order#cancel", "POST", {"code": getParameterFromUrl("orderCode")});
             if (res.getStatusCode() === 200) {
                 window.location.href = "./index.html"
             } else if (res.getStatusCode() === 400) {
@@ -375,12 +451,12 @@ async function reservationOverview() {
             }
         });
     }
-    
+
     //display costumer and order information
     document.getElementById("name-field").innerText = getReservationCookieValue().name;
     document.getElementById("email-field").innerText = getReservationCookieValue().email;
     document.getElementById("order-code").innerText = getParameterFromUrl("orderCode")
-    
+
     //show shopping cart
     showOrUpdateReservationCart();
     //display movie thumbnail
@@ -397,6 +473,13 @@ async function setReservation(order) {
     const ticketProductResponse = await chromelyRequest('/product#type', 'POST', {'type': 'ticket'});
     //get upsells
     const upsellResponse = await chromelyRequest('/product#type', 'POST', {'type': 'upsell'});
+    let upsells = upsellResponse.getData()
+    //get seat costs
+    const seatCostResponse = await chromelyRequest('/product#type', 'POST', {'type': 'seatcost'});
+    let seatCosts = seatCostResponse.getData();
+    //merge seatCosts in upsells
+    Object.assign(upsells, seatCosts);
+
 
     //get screentime from url id
     const screentimeResponse = await chromelyRequest('/screentime#id', 'POST', {'id': order.tickets[0].screenTime})
@@ -404,9 +487,10 @@ async function setReservation(order) {
     let cookieValue = {
         'order': convertTicketsProducts(order.tickets.map(item => item.Id)),
         'products': ticketProductResponse.getData(),
-        'upsellProducts': upsellResponse.getData(),
+        'upsellProducts': upsells,
         'upsell': convertTicketsProducts(order.items.map(item => item.Id)),
         'screentime': screentimeResponse.getData(),
+        'tickets': [],
         'newOrder': false,
         'name': order.cust_name,
         'email': order.cust_email,
@@ -441,10 +525,12 @@ function fillProductControls() {
     for (let item in ticketData) {
         productControl(item, ticketData[item])
     }
-    
+
     // fill extra products
     let productData = getReservationCookieValue().upsell;
     for (let item in productData) {
-        productControl(item, productData[item], 'upsell')
+        if (9 !== parseInt(item) && parseInt(item) !== 10) {
+            productControl(item, productData[item], 'upsell')
+        }
     }
 }

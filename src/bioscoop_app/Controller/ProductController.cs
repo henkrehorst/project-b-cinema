@@ -64,7 +64,11 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             //Console.WriteLine(data);
-            new ProductRepository().AddThenWrite(ToProduct(data));
+            new ProductRepository().AddThenWrite(new Product(
+                data["price"].Value<double>(),
+                data["name"].Value<string>(),
+                data["type"].Value<string>()
+            ));
             return new Response
             {
                 status = 204
@@ -80,7 +84,7 @@ namespace bioscoop_app.Controller
         public ChromelyResponse UpdateProduct(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            int? id = data.Value<int>("id");
+            int? id = data.Value<int>("Id");
             if (id is null)
             {
                 return new Response
@@ -130,7 +134,8 @@ namespace bioscoop_app.Controller
                 return new Product(
                     data["Id"].Value<int>(),
                     data["price"].Value<double>(),
-                    data["name"].Value<string>()
+                    data["name"].Value<string>(),
+                    data["type"].Value<string>()
                     );
             }
         }

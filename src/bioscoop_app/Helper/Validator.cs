@@ -23,8 +23,8 @@ namespace bioscoop_app.Helper
         /// <returns></returns>
         public static bool IsName(string name)
         {
-            Regex nameRegex = new Regex("/^[a-z ,.'-]+$/i");
-            return nameRegex.IsMatch(name);
+            Regex nameRegex = new Regex( @"^([A-z][A-Za-z]*\s+[A-Za-z]*)|([A-z][A-Za-z]*)$");
+            return nameRegex.IsMatch(name) && !string.IsNullOrWhiteSpace(name) && name.Length > 1;
         }
     }
 }
