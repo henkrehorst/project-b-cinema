@@ -18,9 +18,12 @@ namespace bioscoop_app.Validators
             RuleFor(screenTime => screenTime.roomName)
                 .Must(roomName => Array.IndexOf(new string[] { "auditorium1", "auditorium2", "auditorium3" }, roomName) != -1);
             RuleFor(screenTime => screenTime.startTime).NotNull()
-                .Must(time => time.CompareTo(futureTime ? DateTime.Now : _minTime) >= 0);
-            RuleFor(screenTime => screenTime)
-                .Must(screenTime => screenTime.endTime.CompareTo(screenTime.startTime) > 0);
+                .Must(time => time.CompareTo(futureTime ? DateTime.Now : _minTime) >= 0)
+                .DependentRules(() =>
+                {
+                    RuleFor(screenTime => screenTime)
+                        .Must(screenTime => screenTime.endTime.CompareTo(screenTime.startTime) > 0);
+                });
         }
     }
 }

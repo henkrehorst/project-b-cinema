@@ -6,6 +6,7 @@ using bioscoop_app.Model;
 using bioscoop_app.Repository;
 using bioscoop_app.Service;
 using Chromely.Core;
+using FluentValidation;
 using Newtonsoft.Json;
 
 namespace bioscoop_app
@@ -14,6 +15,7 @@ namespace bioscoop_app
     {
         static void Main(string[] args)
         {
+            ValidatorOptions.CascadeMode = CascadeMode.StopOnFirstFailure;
             //setup storages files modules
             StorageService.SetupStorageFiles();
 
