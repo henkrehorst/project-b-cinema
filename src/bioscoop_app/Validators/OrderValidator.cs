@@ -12,6 +12,9 @@ namespace bioscoop_app.Validators
         {
             RuleFor(order => order.cust_name).NotNull().NotEmpty();
             RuleFor(order => order.cust_email).EmailAddress();
+            RuleFor(order => order.items).NotNull();
+            RuleFor(order => order.tickets).NotNull().Must(items => items.Count > 0);
+            RuleFor(order => order.code).NotNull().Length(8, 8);
         }
     }
 }
