@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using bioscoop_app.Helper;
 using System.Linq;
+using FluentValidation;
 
 namespace bioscoop_app.Controller
 {
@@ -23,7 +24,14 @@ namespace bioscoop_app.Controller
         [HttpGet(Route = "/products")]
         public ChromelyResponse GetProducts(ChromelyRequest req)
         {
-            Dictionary<int, Product> rawData = new Repository<Product>().Data;
+            Dictionary<int, Product> rawData;
+            try
+            {
+                rawData = new Repository<Product>().Data;
+            } catch (InvalidOperationException)
+            {
+                return Response.TransactionProtocolViolation(req.Id);
+            }
             List<Product> data = new List<Product>();
             foreach (Product prod in rawData.Values)
             {
@@ -45,10 +53,18 @@ namespace bioscoop_app.Controller
         public ChromelyResponse GetProductByType(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            
+
+            string type;
+            try
+            {
+                type = data.Value<string>("type");
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
             return new Response
             {
-                data = JsonConvert.SerializeObject(GetProductsByType(data.Value<string>("type"))),
+                data = JsonConvert.SerializeObject(GetProductsByType(type)),
                 status = 200
             }.ChromelyWrapper(req.Id);
         }
@@ -63,11 +79,23 @@ namespace bioscoop_app.Controller
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
             //Console.WriteLine(data);
-            new Repository<Product>().AddThenWrite(new Product(
-                data["price"].Value<double>(),
-                data["name"].Value<string>(),
-                data["type"].Value<string>()
-            ));
+            try
+            {
+                new Repository<Product>().AddThenWrite(new Product(
+                    data["price"].Value<double>(),
+                    data["name"].Value<string>(),
+                    data["type"].Value<string>()
+                ));
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            } catch (InvalidOperationException)
+            {
+                return Response.TransactionProtocolViolation(req.Id);
+            } catch (ValidationException exception)
+            {
+                return Response.ValidationError(req.Id, exception);
+            }
             return new Response
             {
                 status = 204
@@ -83,29 +111,36 @@ namespace bioscoop_app.Controller
         public ChromelyResponse UpdateProduct(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            int? id = data.Value<int>("Id");
-            if (id is null)
+            int id;
+            try
             {
-                return new Response
-                {
-                    status = 400,
-                    statusText = "id undefined"
-                }.ChromelyWrapper(req.Id);
+                id = data.Value<int>("Id");
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
             }
-            int checkedId = (int) id;
+
             Repository<Product> repository = new Repository<Product>();
             try
             {
-                repository.Update(checkedId, ToProduct(data));
+                repository.Update(id, ToProduct(data));
+                repository.SaveChanges();
             } catch (InvalidOperationException exception)
             {
-                return new Response
+                if (exception.Message is object && exception.Message != "")
                 {
-                    status = 400,
-                    statusText = exception.Message
-                }.ChromelyWrapper(req.Id);
+                    return Response.IllegalUpdate(req.Id, exception.Message);
+                } else
+                {
+                    return Response.TransactionProtocolViolation(req.Id);
+                }
+            } catch (ValidationException exception)
+            {
+                return Response.ValidationError(req.Id, exception);
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
             }
-            repository.SaveChanges();
             return new Response
             {
                 status = 204
@@ -114,6 +149,7 @@ namespace bioscoop_app.Controller
 
         /// <param name="data">Product as a JObject</param>
         /// <returns>Product as a Product or Ticket</returns>
+        /// <exception cref="FormatException">If the data is in incorrect format.</exception>
         public static Product ToProduct(JObject data)
         {
             if (data.ContainsKey("seatnr") && data.ContainsKey("row") && data.ContainsKey("screenTime") && data.ContainsKey("visitorAge"))
@@ -144,12 +180,32 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/product#id")]
         public ChromelyResponse GetMovieById(ChromelyRequest req)
         {
-            int id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
-            return new Response
+            int id;
+            try
             {
-                status = 200,
-                data = JsonConvert.SerializeObject(new Repository<Product>().Data[id])
-            }.ChromelyWrapper(req.Id);
+               id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
+            try
+            {
+                return new Response
+                {
+                    status = 200,
+                    data = JsonConvert.SerializeObject(new Repository<Product>().Data[id])
+                }.ChromelyWrapper(req.Id);
+            } catch (InvalidOperationException)
+            {
+                return Response.TransactionProtocolViolation(req.Id);
+            } catch (KeyNotFoundException)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = $"No movie found for id {id}."
+                }.ChromelyWrapper(req.Id);
+            }
         }
         /// <param name="productType">The type of the product</param>
         /// <returns>A dictionary of Products associated with the product type</returns>
