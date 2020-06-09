@@ -15,7 +15,7 @@ namespace CinemaTests.Model
         {
             //Arrange
             var testroom = new bool[2, 2]{ { true, true }, { true, true } };
-            var testobj = new ScreenTime(25, 64, new DateTime(), new DateTime(), "testroom", testroom, 4);
+            var testobj = new ScreenTime(25, 1, new DateTime(), new DateTime(), "testroom", testroom, 4);
             //Act
             testobj.SetSeatAvailability(new Ticket(10, "", 0, 0, 25, 25), false);
             //Assert
@@ -29,7 +29,7 @@ namespace CinemaTests.Model
             //throw new NotImplementedException();
             //Arrange
             var testroom = new bool[2, 2] { { false, true }, { true, true } };
-            var testobj = new ScreenTime(25, 64, new DateTime(), new DateTime(), "testroom", testroom, 3);
+            var testobj = new ScreenTime(25, 1, new DateTime(), new DateTime(), "testroom", testroom, 3);
             //Act
             testobj.SetSeatAvailability(new Ticket(10, "", 0, 0, 25, 25), true);
             //Assert
@@ -44,7 +44,7 @@ namespace CinemaTests.Model
         {
             //Arrange
             var testroom = new bool[2, 2] { { false, true }, { true, true } };
-            var testobj = new ScreenTime(25, 64, new DateTime(), new DateTime(), "testroom", testroom, 3);
+            var testobj = new ScreenTime(25, 1, new DateTime(), new DateTime(), "testroom", testroom, 3);
             //Act
             testobj.SetSeatAvailability(new Ticket(10, "", 0, 0, 25, 25), false);
         }
