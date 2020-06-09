@@ -123,6 +123,7 @@ namespace bioscoop_app.Repository
         /// <summary>
         /// Writes the current state of the data to the storage file.
         /// </summary>
+        /// <exception cref="InvalidOperationException">When the Repository is closed.</exception>
         public void SaveChanges()
         {
             if (!_isOpen) throw new InvalidOperationException();
@@ -143,6 +144,7 @@ namespace bioscoop_app.Repository
         /// <summary>
         /// Writes the current state of the data to the storage file, then disables the repository.
         /// </summary>
+        /// <exception cref="InvalidOperationException">When the Repository is closed.</exception>
         public void SaveChangesThenDiscard()
         {
             SaveChanges();
@@ -152,6 +154,7 @@ namespace bioscoop_app.Repository
         /// <summary>
         /// Adds an entry to the data sequence, then writes the current state of the data to the storage file.
         /// </summary>
+        /// <exception cref="InvalidOperationException">When the Repository is closed.</exception>
         public void AddThenWrite(T entry)
         {
             Add(entry);
