@@ -96,11 +96,8 @@ namespace bioscoop_app.Repository
         /// <exception cref="ValidationException">Thrown when the new data does not match validator rules.</exception>
         public void Update(int id, T value)
         {
-            if (!_isOpen)
-            {
-                throw new InvalidOperationException();
-            }
-            if(!_data.Keys.Contains(id)) {
+            if (!_isOpen) throw new InvalidOperationException();
+            if (!_data.Keys.Contains(id)) {
                 string msg = "Update should not be used on entries that are not yet stored in the data sequence";
                 throw new InvalidOperationException(msg);
             }
@@ -117,6 +114,7 @@ namespace bioscoop_app.Repository
         /// False if the id did not exist or was not removed.</returns>
         public bool Remove(int id)
         {
+            if (!_isOpen) throw new InvalidOperationException();
             if (!_data.ContainsKey(id)) return false;
             _data.Remove(id);
             return _data.ContainsKey(id);
@@ -127,9 +125,10 @@ namespace bioscoop_app.Repository
         /// </summary>
         public void SaveChanges()
         {
+            if (!_isOpen) throw new InvalidOperationException();
             File.WriteAllText(
                 StorageService.GetDataSourcePath() + typeof(T).Name + FileExtension,
-                JsonConvert.SerializeObject(Data)
+                JsonConvert.SerializeObject(_data)
             );
         }
 
