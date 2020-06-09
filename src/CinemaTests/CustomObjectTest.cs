@@ -203,7 +203,7 @@ namespace CinemaTests
         {
             //Arrange
             bool expected = true;
-            ScreenTime obj = new ScreenTime(5, new DateTime(), new DateTime(), "auditorium1");
+            ScreenTime obj = new ScreenTime(5, new DateTime(), "auditorium1");
 
             //Act
             bool actual = obj.GetHashCode() == obj.GetHashCode();
@@ -217,7 +217,7 @@ namespace CinemaTests
         {
             //Arrange
             bool expected = false;
-            ScreenTime a = new ScreenTime(3, new DateTime(), new DateTime(), "auditorium1");
+            ScreenTime a = new ScreenTime(3, new DateTime(), "auditorium1");
             Seat b = new Seat(6, 7, 8);
 
             //Act
