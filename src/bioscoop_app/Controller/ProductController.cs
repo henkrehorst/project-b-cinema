@@ -124,7 +124,7 @@ namespace bioscoop_app.Controller
             try
             {
                 repository.Update(id, ToProduct(data));
-                repository.SaveChanges();
+                repository.SaveChangesThenDiscard();
             } catch (InvalidOperationException exception)
             {
                 if (exception.Message is object && exception.Message != "")
