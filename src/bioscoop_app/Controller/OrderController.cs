@@ -34,11 +34,9 @@ namespace bioscoop_app.Controller
         /// <param name="req">Request containing the code as postdata.</param>
         /// <returns>The order matching the code.</returns>
         /// <exception cref="InvalidOperationException">If no order matched the code.</exception>
-        private Order queryByCode(ChromelyRequest req)
+        private Order QueryByCode(Repository<Order> repository, string code)
         {
-            var data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
-            string code = data["code"].Value<string>();
-            var orders = new Repository<Order>().Data.Values.AsQueryable();
+            var orders = repository.Data.Values.AsQueryable();
             IEnumerable<Order> queryResult = from order in orders
                 where order.code == code
                 select order;
@@ -53,10 +51,24 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/order#fetch")]
         public ChromelyResponse FetchOrder(ChromelyRequest req)
         {
-            Order order = null;
+            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            string code;
             try
             {
-                order = queryByCode(req);
+                code = data["code"].Value<string>();
+            }
+            catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
+            if (code is null || code.Length != 8)
+            {
+                return Response.ParseError(req.Id);
+            }
+            Order order;
+            try
+            {
+                order = QueryByCode(new Repository<Order>(), code);
             }
             catch (InvalidOperationException)
             {
@@ -338,11 +350,25 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/order#cancel")]
         public ChromelyResponse CancelOrder(ChromelyRequest req)
         {
-            Repository<Order> repository = new Repository<Order>();
-            Order order = null;
+            var data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
+            string code;
             try
             {
-                order = queryByCode(req);
+                code = data["code"].Value<string>();
+            }
+            catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
+            if(code is null || code.Length != 8)
+            {
+                return Response.ParseError(req.Id);
+            }
+            Order order;
+            Repository<Order> repository = new Repository<Order>();
+            try
+            {
+                order = QueryByCode(repository, code);
             }
             catch (InvalidOperationException)
             {
@@ -353,7 +379,7 @@ namespace bioscoop_app.Controller
                 }.ChromelyWrapper(req.Id);
             }
 
-            if (!repository.Data[order.Id].redeemable)
+            if (!order.redeemable)
             {
                 return new Response
                 {
