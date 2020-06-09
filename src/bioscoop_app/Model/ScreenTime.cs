@@ -13,7 +13,7 @@ namespace bioscoop_app.Model
 		public int duration;
 		private DateTime _startTime;
 		private DateTime _endTime;
-		public DateTime StartTime {
+		public DateTime startTime {
 			get => _startTime;
 			set
 			{
@@ -21,7 +21,7 @@ namespace bioscoop_app.Model
 				_endTime = _startTime.AddMinutes(duration);
 			}
 		}
-		public DateTime EndTime {
+		public DateTime endTime {
 			get => _endTime;
 			set
 			{
@@ -37,7 +37,7 @@ namespace bioscoop_app.Model
 			this.movie = movie;
 			this.roomName = roomName;
 			duration = new Repository<Movie>().Data[movie].duration;
-			StartTime = startTime;
+			this.startTime = startTime;
 
 			availability = RoomLayoutService.GetInitialAvailability(roomName);
 			foreach (bool val in availability)
