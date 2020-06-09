@@ -9,6 +9,7 @@ using Chromely.Core.Network;
 using FluentValidation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Xilium.CefGlue;
 
 namespace bioscoop_app.Controller
 {
@@ -162,14 +163,45 @@ namespace bioscoop_app.Controller
         public ChromelyResponse UpdateMovie(ChromelyRequest req)
         {
             JObject data = (JObject)JsonConvert.DeserializeObject(req.PostData.ToJson());
-            Repository<Movie> repository = new Repository<Movie>();
-            
-            string filestring = data["cover_image"].Value<string>();
-            string filename = repository.Data[data.Value<int>("id")].coverImage;
-            string thumbnailName = repository.Data[data.Value<int>("id")].thumbnailImage;
             
             //convert kijkwijzer collection to int array
-            int[] kijkWijzers = data["kijkwijzers"].Select(x => (int) x).ToArray();
+            int[] kijkWijzers;
+            //get base64 string of thumbnail image
+            string thumbnail;
+            //get base64 string of cover image
+            string filestring;
+            int id;
+            try
+            {
+                try
+                {
+                    kijkWijzers = data["kijkwijzers"].Select(x => (int)x).ToArray();
+                } catch (ArgumentNullException)
+                {
+                    return Response.ParseError(req.Id);
+                }
+                thumbnail = data["thumbnail_image"].Value<string>();
+                filestring = data["cover_image"].Value<string>();
+                id = data.Value<int>("id");
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
+
+            Repository<Movie> repository = new Repository<Movie>();
+            string filename;
+            string thumbnailName;
+            try
+            {
+                filename = repository.Data[id].coverImage;
+                thumbnailName = repository.Data[id].thumbnailImage;
+            } catch (KeyNotFoundException)
+            {
+                return Response.IllegalUpdate(req.Id, "No movie with specified Id found.");
+            } catch (InvalidOperationException)
+            {
+                return Response.TransactionProtocolViolation(req.Id);
+            }
 
             if (filestring.Length > 0)
             {
@@ -181,9 +213,6 @@ namespace bioscoop_app.Controller
                     filename = uploadService.GetFileName();
                 }
             }
-            
-            //get base64 string of thumbnail image
-            string thumbnail = data["thumbnail_image"].Value<string>();
             
             if (thumbnail.Length != 0)
             {
@@ -210,11 +239,17 @@ namespace bioscoop_app.Controller
                 ));
             } catch(InvalidOperationException except)
             {
-                return new Response
+                if(except.Message is object && except.Message != "")
                 {
-                    status = 400,
-                    statusText = except.Message
-                }.ChromelyWrapper(req.Id);
+                    return Response.IllegalUpdate(req.Id, except.Message);
+                }
+                else
+                {
+                    return Response.TransactionProtocolViolation(req.Id);
+                }
+            } catch(ValidationException except)
+            {
+                return Response.ValidationError(req.Id, except);
             }
             repository.SaveChangesThenDiscard();
             return new Response
