@@ -24,15 +24,12 @@ namespace bioscoop_app.Repository
         /// <summary>
         /// The data this repository operates on.
         /// </summary>
+        /// <exception cref="InvalidOperationException">If the repository is closed.</exception>
         public Dictionary<int, T> Data
         {
             get
             {
                 return IsOpen ? _data : throw new InvalidOperationException();
-            }
-            set
-            {
-                throw new InvalidOperationException();
             }
         }
         /// <summary>
@@ -95,10 +92,14 @@ namespace bioscoop_app.Repository
         /// </summary>
         /// <param name="id">The key to the value</param>
         /// <param name="value">The data to replace the value with.</param>
-        /// <exception cref="InvalidOperationException">Thrown when the id does not exist in the data sequence.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the id does not exist in the data sequence, or the repository is closed.</exception>
         /// <exception cref="ValidationException">Thrown when the new data does not match validator rules.</exception>
         public void Update(int id, T value)
         {
+            if (!_isOpen)
+            {
+                throw new InvalidOperationException();
+            }
             if(!_data.Keys.Contains(id)) {
                 string msg = "Update should not be used on entries that are not yet stored in the data sequence";
                 throw new InvalidOperationException(msg);
