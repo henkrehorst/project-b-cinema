@@ -20,34 +20,42 @@
                 <div class="form-group">
                     <label for="title">Titel</label>
                     <input name="title" id="title" type="text" placeholder="titel" class="form-control"/>
+                    <div id="title-error"></div>
                 </div>
                 <div class="form-group">
                     <label for="genre">Genre</label>
                     <input name="genre" type="text" placeholder="Genre" class="form-control" id="genre">
+                    <div id="genre-error"></div>
                 </div>
                 <div class="form-group">
                     <label for="duration">Duur</label>
                     <input name="duration" type="number" placeholder="Duur" class="form-control" id="duration">
+                    <div id="duration-error"></div>
                 </div>
                 <div class="form-group">
                     <label for="rating">Rating</label>
                     <input name="rating" type="number" min="0" max="5" step="0.1" placeholder="Rating" class="form-control" id="rating">
+                    <div id="rating-error"></div>
                 </div>
                 <div class="form-group">
                     <label for="samenvatting">Korte Samenvatting</label>
                     <input name="samenvatting" id="samenvatting" type="text" placeholder="Korte Samenvatting" class="form-control"/>
+                    <div id="samenvatting-error"></div>
                 </div>
                 <div class="kijkwijzerPicker">
                     <p>Kijkwijzer</p>
-                    <ul id="kijkwijzerFields"></ul>
+                    <ul id="kijkwijzerFields" class="is-invalid"></ul>
+                    <div id="kijkwijzer-error"></div>
                 </div>
                 <div class="form-group">
-                    <label for="cover_image">Cover image</label>
-                    <input name="cover_image" type="file" class="form-control-file" id="cover_image" onchange="coverImagePreview()">
+                    <label for="coverImage">Cover image</label>
+                    <input name="cover_image" type="file" class="form-control-file" id="coverImage" onchange="coverImagePreview()">
+                    <div id="coverImage-error"></div>
                 </div>
                 <div class="form-group">
-                    <label for="thumbnail_image">Thumbnail image</label>
-                    <input name="thumbnail_image" type="file" class="form-control-file" id="thumbnail_image" onchange="thumbnailImagePreview()">
+                    <label for="thumbnailImage">Thumbnail image</label>
+                    <input name="thumbnail_image" type="file" class="form-control-file" id="thumbnailImage" onchange="thumbnailImagePreview()">
+                    <div id="thumbnailImage-error"></div>
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary">Pas film aan</button>

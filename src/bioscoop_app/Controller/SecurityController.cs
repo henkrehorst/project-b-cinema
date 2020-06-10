@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using bioscoop_app.Helper;
 using bioscoop_app.Repository;
 using Chromely.Core.Network;
@@ -15,10 +16,17 @@ namespace bioscoop_app.Controller
         /// <param name="req">http POST request for authentication admin and cashier</param>
         /// <returns>The users roll if the password is correct</returns>
         [HttpPost(Route = "/security/login")]
-        public ChromelyResponse GetMovieById(ChromelyRequest req)
+        public ChromelyResponse Login(ChromelyRequest req)
         {
-            string password =
-                ((JObject) JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<string>("password");
+            string password;
+            try
+            {
+                password = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<string>("password");
+            }
+            catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
 
             if (password == _adminPassword)
             {

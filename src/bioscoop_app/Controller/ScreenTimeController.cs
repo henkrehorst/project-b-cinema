@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using bioscoop_app.Helper;
 using bioscoop_app.Model;
 using bioscoop_app.Repository;
 using Chromely.Core.Network;
+using FluentValidation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -19,12 +21,10 @@ namespace bioscoop_app.Controller
         [HttpGet(Route = "/screentime")]
         public ChromelyResponse GetScreenTimes(ChromelyRequest request)
         {
-            var screenTimeRepository = new ScreenTimeRepository();
-
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(screenTimeRepository.Data)
+                data = JsonConvert.SerializeObject(new Repository<ScreenTime>().Data)
             }.ChromelyWrapper(request.Id);
         }
 
@@ -37,15 +37,21 @@ namespace bioscoop_app.Controller
         public ChromelyResponse AddScreenTime(ChromelyRequest request)
         {
             var data = (JObject) JsonConvert.DeserializeObject(request.PostData.ToJson());
-
-            var screenTimeRepository = new ScreenTimeRepository();
-            screenTimeRepository.AddThenWrite(new ScreenTime(
-                data["movie_id"].Value<int>(),
-                data["start_time"].Value<DateTime>(),
-                data["end_time"].Value<DateTime>(),
-                data["room_name"].Value<string>()
-            ));
-
+            try
+            {
+                new Repository<ScreenTime>().AddThenWrite(new ScreenTime(
+                    data["movie_id"].Value<int>(),
+                    data["start_time"].Value<DateTime>(),
+                    data["end_time"].Value<DateTime>(),
+                    data["room_name"].Value<string>()
+                ));
+            } catch (FormatException)
+            {
+                return Response.ParseError(request.Id);
+            } catch (ValidationException exception)
+            {
+                return Response.ValidationError(request.Id, exception);
+            }
             return new Response
             {
                 status = 204
@@ -57,12 +63,29 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/screentime#id")]
         public ChromelyResponse GetScreenTimeById(ChromelyRequest req)
         {
-            int id = ((JObject) JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
-            return new Response
+            int id;
+            try
             {
-                status = 200,
-                data = JsonConvert.SerializeObject(new ScreenTimeRepository().Data[id])
-            }.ChromelyWrapper(req.Id);
+                id = ((JObject)JsonConvert.DeserializeObject(req.PostData.ToJson())).Value<int>("id");
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
+            try
+            {
+                return new Response
+                {
+                    status = 200,
+                    data = JsonConvert.SerializeObject(new Repository<ScreenTime>().Data[id])
+                }.ChromelyWrapper(req.Id);
+            } catch (KeyNotFoundException)
+            {
+                return new Response
+                {
+                    status = 400,
+                    statusText = "No ScreenTime found for the given id."
+                }.ChromelyWrapper(req.Id);
+            }
         }
 
         /// <summary>
@@ -83,27 +106,34 @@ namespace bioscoop_app.Controller
 
             try
             {
-                var screenTimeRepository = new ScreenTimeRepository();
+                var screenTimeRepository = new Repository<ScreenTime>();
                 screenTimeRepository.Update(data["id"].Value<int>(), new ScreenTime(
                     data["movie_id"].Value<int>(),
                     data["start_time"].Value<DateTime>(),
                     data["end_time"].Value<DateTime>(),
                     data["room_name"].Value<string>()
                 ));
-                screenTimeRepository.SaveChanges();
-
-                return new Response
-                {
-                    status = 204
-                }.ChromelyWrapper(req.Id);
+                screenTimeRepository.SaveChangesThenDiscard();
             } catch (InvalidOperationException exception)
             {
-                return new Response
+                if (exception.Message is object && exception.Message != "")
                 {
-                    status = 400,
-                    statusText = exception.Message
-                }.ChromelyWrapper(req.Id);
+                    return Response.IllegalUpdate(req.Id, exception.Message);
+                } else
+                {
+                    return Response.TransactionProtocolViolation(req.Id);
+                }
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            } catch (ValidationException exception)
+            {
+                return Response.ValidationError(req.Id, exception);
             }
+            return new Response
+            {
+                status = 204
+            }.ChromelyWrapper(req.Id);
         }
         
         /// <param name="req">http POST request that contains the id of the movie</param>
@@ -112,13 +142,29 @@ namespace bioscoop_app.Controller
         public ChromelyResponse GetScreenTimesByMovieId(ChromelyRequest req)
         {
             JObject data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
+            int id;
+            try
+            {
+                id = data["id"].Value<int>();
+            }
+            catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
             
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(new ScreenTimeRepository()
-                    .GetScreenTimeByMovieId(data["id"].Value<int>()))
+                data = JsonConvert.SerializeObject(GetScreenTimeByMovieId(id))
             }.ChromelyWrapper(req.Id);
+        }
+        /// <param name="movieId">The id of the movie.</param>
+        /// <returns>A dictionary of ScreenTimes associated with the movie.</returns>
+        private Dictionary<int, ScreenTime> GetScreenTimeByMovieId(int movieId)
+        {
+            return new Repository<ScreenTime>().Data.Where(item =>
+                    item.Value.movie.Equals(movieId))
+                .ToDictionary(item => item.Key, item => item.Value);
         }
     }
 }

@@ -1,7 +1,9 @@
 using Newtonsoft.Json;
+using System;
 
 namespace bioscoop_app.Model
 {
+	[Obsolete]
 	public class Seat : DataType
 	{
 		public double price_modifier;

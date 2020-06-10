@@ -44,6 +44,7 @@ namespace bioscoop_app.Model
 		/// Reserves the seat on the ticket.
 		/// </summary>
 		/// <param name="ticket"></param>
+		/// <exception cref="InvalidOperationException">If the seat is not available.</exception>
 		public void SetSeatAvailability(Ticket ticket, bool value)
 		{
 			if (!value && availability[ticket.row, ticket.seatnr] == false) throw new InvalidOperationException("Seat is not available");
