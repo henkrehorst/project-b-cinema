@@ -46,7 +46,7 @@ async function screentimeEditPage() {
         }
     }
     
-    document.querySelector("#start_time").value = screenTime.startTime;
+    document.querySelector("#startTime").value = screenTime.startTime;
     document.querySelector("#end_time").value = screenTime.endTime;
     let roomDropdown = document.querySelector("#room_name");
     for (key in roomDropdown.options) {
@@ -55,13 +55,16 @@ async function screentimeEditPage() {
             break;
         }
     }
-
+    
     /**
      * function for updating screentime in backend
      */
     async function updateScreenTime() {
         // get screentime form data
         const screenTimeForm = new FormData(document.querySelector("body > div > div > div > form"));
+
+        //clear screentime errors if exists
+        clearScreenTimeErrors()
 
         // post screentime to backend
         const response = await chromelyRequest('/screentime#update', 'POST', {
@@ -74,6 +77,13 @@ async function screentimeEditPage() {
         
         if(response.getStatusCode() === 204){
             window.location.href = "/admin/screentime.html";
+        }
+
+        // display error message by 400
+        if(response.getStatusCode() === 400){
+            response.data.map(error => {
+                displayFieldErrorMessage(error.PropertyName, error.ErrorMessage);
+            })
         }
     }
 
@@ -95,6 +105,9 @@ async function screentimeAddPage() {
         // get screentime form data
         const screenTimeForm = new FormData(document.querySelector("body > div > div > div > form"));
         
+        //clear screentime errors if exists
+        clearScreenTimeErrors()
+        
         // post screentime to backend
         const response = await chromelyRequest('/screentime/add', 'POST', {
             'movie_id': screenTimeForm.get('movie'),
@@ -105,6 +118,13 @@ async function screentimeAddPage() {
         
         if(response.getStatusCode() === 204){
             window.location.href = "/admin/screentime.html";
+        }
+        console.log(response);
+        // display error message by 400
+        if(response.getStatusCode() === 400){
+            response.data.map(error => {
+                displayFieldErrorMessage(error.PropertyName, error.ErrorMessage);
+            })
         }
     }
 
@@ -123,4 +143,12 @@ async function fillMovieDropdown() {
         document.querySelector("#movies_field").innerHTML += 
             `<option value="${movies[movie].Id}">${movies[movie].title}</option>`;
     }
+}
+
+
+/**
+ * clear screentime errors messages
+ */
+function clearScreenTimeErrors() {
+    clearFieldErrorMessage("startTime")
 }
