@@ -116,10 +116,12 @@ function displayFieldErrorMessage(id, message) {
     }
 
     //display error message
-    if (!document.getElementById(id + '-error').classList.contains("invalid-feedback")) {
-        document.getElementById(id + '-error').classList.add("invalid-feedback")
+    if (document.getElementById(id + '-error')) {
+        if (!document.getElementById(id + '-error').classList.contains("invalid-feedback")) {
+            document.getElementById(id + '-error').classList.add("invalid-feedback")
+        }
+        document.getElementById(id + '-error').innerText = message;
     }
-    document.getElementById(id + '-error').innerText = message;
 }
 
 function clearFieldErrorMessage(id) {
@@ -130,9 +132,10 @@ function clearFieldErrorMessage(id) {
         }
     }
     //remove error message
-    if (document.getElementById(id + '-error').classList.contains("invalid-feedback")) {
-        document.getElementById(id + '-error').classList.remove("invalid-feedback")
+    if (document.getElementById(id + '-error')) {
+        if (document.getElementById(id + '-error').classList.contains("invalid-feedback")) {
+            document.getElementById(id + '-error').classList.remove("invalid-feedback")
+        }
+        document.getElementById(id + '-error').innerText = "";
     }
-    document.getElementById(id + '-error').innerText = "";
-
 }
