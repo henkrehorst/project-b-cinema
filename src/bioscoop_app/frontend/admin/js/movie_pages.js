@@ -65,9 +65,9 @@ async function movieEditPage() {
         const response = await chromelyRequest('/movies#update', 'POST', {
             'id': getIdFromUrl(),
             'title': movieForm.get('title'),
-            'duration': movieForm.get('duration'),
+            'duration': movieForm.get('duration').length > 0 ? movieForm.get('duration') : 0,
             'genre': movieForm.get('genre'),
-            'rating': movieForm.get('rating'),
+            'rating': movieForm.get('rating').length > 0 ? movieForm.get('rating') : 0,
             'samenvatting': movieForm.get('samenvatting'),
             'cover_image': cover_image,
             'kijkwijzers': kijkwijzers,
@@ -121,9 +121,9 @@ async function movieAddPage() {
         // post movie to backend
         const response = await chromelyRequest('/movies/add', 'POST', {
             'title': movieForm.get('title'),
-            'duration': movieForm.get('duration'),
+            'duration': movieForm.get('duration').length > 0 ? movieForm.get('duration') : 0,
             'genre': movieForm.get('genre'),
-            'rating': movieForm.get('rating'),
+            'rating': movieForm.get('rating').length > 0 ? movieForm.get('rating') : 0,
             'samenvatting': movieForm.get('samenvatting'),
             'cover_image': cover_image,
             'kijkwijzers': kijkwijzers,
@@ -134,6 +134,7 @@ async function movieAddPage() {
         if (response.getStatusCode() === 204) {
             window.location.href = "/admin/movie.html"
         }
+        console.log(response);
     }
 
     document.querySelector("body > div > div > div > form > div > button").addEventListener('click', addMovie);
