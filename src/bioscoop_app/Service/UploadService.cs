@@ -70,7 +70,11 @@ namespace bioscoop_app.Service
         /// <param name="filename"></param>
         public void DeleteFile(string filename)
         {
-            File.Delete($"{StorageService.GetUploadPath()}{filename}");
+            //delete file if file exists
+            if (File.Exists($"{StorageService.GetUploadPath()}{filename}"))
+            {
+                File.Delete($"{StorageService.GetUploadPath()}{filename}");
+            }
         }
 
         /// <summary>
