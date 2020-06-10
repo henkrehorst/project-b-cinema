@@ -60,9 +60,9 @@ namespace bioscoop_app.Service
         /// <returns>path of the data folder</returns>
         public static string GetDataSourcePath()
         {
-            string projectPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\..\\"));
+            string projectPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\"));
 
-            return $"{projectPath}\\data\\";
+            return $"{projectPath}\\productionData\\";
         }
 
         /// <summary>
