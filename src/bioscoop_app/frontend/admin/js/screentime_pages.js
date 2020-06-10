@@ -16,8 +16,8 @@ async function screentimeOverviewPage() {
             
         screenTimeTable += `<tr>
                 <td>${movie.title}</td>
-                <td>${new Date(screenTimes[key].startTime).toLocaleString()}</td>
-                <td>${new Date(screenTimes[key].endTime).toLocaleString()}</td>
+                <td>${new Date(screenTimes[key].startTime).toLocaleString('nl')}</td>
+                <td>${new Date(screenTimes[key].endTime).toLocaleString('nl')}</td>
                 <td>${screenTimes[key].roomName}</td>
                 <td><a href='/admin/screentime_edit.html?id=${screenTimes[key].Id}'>Edit</a></td>
             </tr>`;
