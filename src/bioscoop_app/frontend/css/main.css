@@ -395,7 +395,7 @@ p.screen-title {
 .modal {
     display: none;
     position: fixed; 
-    z-index: 99;
+    z-index: 999999;
     padding-top: 100px;
     left: 0;
     top: 0;

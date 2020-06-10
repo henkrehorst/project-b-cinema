@@ -23,6 +23,7 @@
     "useCustomtyle": false
   },
   "commandLineArgs": [
+    
   ],
   "commandLineOptions": [
   ],
@@ -34,6 +35,12 @@
       "host": "",
       "urlSchemeType": "resource",
       "baseUrlStrict": false
+    }
+  ],
+  "customSettings": [
+    {
+      "name": "locale",
+      "value": "nl-NL"
     }
   ]
 }
