@@ -16,7 +16,6 @@ async function moviesOverviewPage() {
                 <td>${movies[movie].genre}</td>
                 <td>${movies[movie].duration}</td>
                 <td>${movies[movie].rating}</td>
-                 <td>${movies[movie].samenvatting}</td>
                 <td><a href='/admin/movie_edit.html?id=${movies[movie].Id}'>Edit</a></td>
             </tr>`;
     }
