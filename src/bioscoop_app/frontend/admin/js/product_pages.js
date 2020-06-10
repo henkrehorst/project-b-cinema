@@ -46,6 +46,9 @@ async function productAddPage() {
     async function addProduct() {
         // get data from product form
         const productForm = new FormData(document.querySelector("body > div > div > div > form"));
+
+        // clear error messages if exists
+        clearProductFormErrors();
         
         // post product to backend
         const response = await chromelyRequest('/products#add', 'POST', {
@@ -57,6 +60,12 @@ async function productAddPage() {
         // redirect to overview page if product is created
         if(response.getStatusCode() === 204){
             window.location.href = '/admin/product.html';
+        }
+        // display error message by 400
+        if(response.getStatusCode() === 400){
+            response.data.map(error => {
+                displayFieldErrorMessage(error.PropertyName, error.ErrorMessage);
+            })
         }
     }
 
@@ -72,7 +81,7 @@ async function productEditPage() {
     //fill product form with data
     const productResponse = await chromelyRequest('/product#id', 'POST', {'id': getIdFromUrl()});
     let product = productResponse.getData();
-    document.getElementById('name_field').value = product.name;
+    document.getElementById('name').value = product.name;
     document.getElementById('price_field').value = product.price.toFixed(2);
     let typeDropdown = document.querySelector("#product-type-field");
     for(key in typeDropdown.options){
@@ -88,6 +97,9 @@ async function productEditPage() {
         // get data from product form
         const productForm = new FormData(document.querySelector("body > div > div > div > form"));
 
+        // clear error messages if exists
+        clearProductFormErrors();
+        
         // update product in backend
         const response = await chromelyRequest('/products#update', 'POST', {
             'Id': getIdFromUrl(),
@@ -99,6 +111,12 @@ async function productEditPage() {
         // redirect to overview page if product is created
         if(response.getStatusCode() === 204){
             window.location.href = '/admin/product.html';
+        }
+        // display error message by 400
+        if(response.getStatusCode() === 400){
+            response.data.map(error => {
+                displayFieldErrorMessage(error.PropertyName, error.ErrorMessage);
+            })
         }
     }
 
@@ -120,4 +138,11 @@ async function updateTicketPrice() {
     if(response.getStatusCode() === 204){
         window.location.href = '/admin/product.html'
     }
+}
+
+/**
+ * clear error messages in product forms
+ */
+function clearProductFormErrors() {
+    clearFieldErrorMessage("name");
 }
