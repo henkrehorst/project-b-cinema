@@ -20,7 +20,7 @@ namespace bioscoop_app.Validators
             RuleFor(movie => movie.kijkwijzer).NotNull().Must(list => list.Length > 0);
             RuleFor(movie => movie.rating).GreaterThanOrEqualTo(0).LessThanOrEqualTo(5);
             RuleFor(movie => movie.title).NotNull().NotEmpty();
-            RuleFor(movie => movie.samenvatting).NotNull().NotEmpty().Length(20, 400);
+            RuleFor(movie => movie.samenvatting).NotNull().NotEmpty().Length(20, 2000);
         }
     }
 }
