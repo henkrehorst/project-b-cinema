@@ -23,16 +23,13 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="start_time">Start tijd</label>
-                    <input name="start_time" type="datetime-local" class="form-control" id="start_time">
-                </div>
-                <div class="form-group">
-                    <label for="end_time">Eind tijd</label>
-                    <input name="end_time" type="datetime-local" class="form-control" id="end_time">
+                    <label for="startTime">Start tijd</label>
+                    <input name="start_time" type="datetime-local" class="form-control" id="startTime">
+                    <div id="startTime-error"></div>
                 </div>
                 <div class="form-group">
                     <label for="room_name">Auditorium</label>
-                    <select id="room_name" name="room_name">
+                    <select id="room_name" name="room_name" class="form-control">
                         <option value="auditorium1">Auditorium 1</option>
                         <option value="auditorium2">Auditorium 2</option>
                         <option value="auditorium3">Auditorium 3</option>

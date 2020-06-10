@@ -17,9 +17,16 @@ namespace bioscoop_app.Service
         /// Initializes an uploadservice object for one image.
         /// </summary>
         /// <param name="base64FileString">the image in base 64 string</param>
+        /// <exception cref="ArgumentNullException">When argument is null</exception>
         public UploadService(string base64FileString)
         {
-            this._base64FileString = base64FileString;
+            if (base64FileString is object && base64FileString.Length > 0)
+            {
+                _base64FileString = base64FileString;
+            } else
+            {
+                throw new ArgumentNullException();
+            }
         }
 
         /// <returns>True iff the file is an image.</returns>
@@ -58,7 +65,7 @@ namespace bioscoop_app.Service
         public void CreateFileInUploadFolder()
         {
             //convert base64
-            string convertBase64 = this._base64FileString.Replace($"data:{GetMimeType()};base64,", String.Empty);
+            string convertBase64 = _base64FileString.Replace($"data:{GetMimeType()};base64,", string.Empty);
 
             File.WriteAllBytes($"{StorageService.GetUploadPath()}{GetFileName()}",
                 Convert.FromBase64String(convertBase64));
@@ -70,7 +77,11 @@ namespace bioscoop_app.Service
         /// <param name="filename"></param>
         public void DeleteFile(string filename)
         {
-            File.Delete($"{StorageService.GetUploadPath()}{filename}");
+            //delete file if file exists
+            if (File.Exists($"{StorageService.GetUploadPath()}{filename}"))
+            {
+                File.Delete($"{StorageService.GetUploadPath()}{filename}");
+            }
         }
 
         /// <summary>
@@ -79,12 +90,12 @@ namespace bioscoop_app.Service
         /// <returns>the filename</returns>
         public string GetFileName()
         {
-            if (String.IsNullOrEmpty(this._fileName))
+            if (string.IsNullOrEmpty(this._fileName))
             {
-                this._fileName = $"{Guid.NewGuid().ToString()}.{GetFileExtension()}";
+                _fileName = $"{Guid.NewGuid()}.{GetFileExtension()}";
             }
 
-            return this._fileName;
+            return _fileName;
         }
     }
 }

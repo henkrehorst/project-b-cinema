@@ -1,4 +1,5 @@
 ﻿using Chromely.Core.Network;
+using FluentValidation;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,49 @@ namespace bioscoop_app.Helper
         /// The data in json string.
         /// </summary>
         public string data;
+
+        /// <summary>
+        /// Lambda function to generate a ChromelyResponse when the JSON input could not be parsed.
+        /// </summary>
+        public static Func<string, ChromelyResponse> ParseError = id =>
+        {
+            return new Response
+            {
+                status = 400,
+                statusText = "Failed to parse request"
+            }.ChromelyWrapper(id);
+        };
+        /// <summary>
+        /// Lambda function to generate a ChromelyResponse for when the validation on the sent data has failed.
+        /// </summary>
+        public static Func<string, ValidationException, ChromelyResponse> ValidationError = (id, exception) =>
+        {
+            return new Response
+            {
+                status = 400,
+                statusText = "Bad input",
+                data = JsonConvert.SerializeObject(exception.Errors)
+            }.ChromelyWrapper(id);
+        };
+        /// <summary>
+        /// Lambda function to generate a ChromelyResponse for when a closed Repository is used.
+        /// </summary>
+        public static Func<string, ChromelyResponse> TransactionProtocolViolation = id =>
+        {
+            return new Response
+            {
+                status = 500,
+                statusText = "Transaction Protocol Violation: Unsafe data update detected."
+            }.ChromelyWrapper(id);
+        };
+        public static Func<string, string, ChromelyResponse> IllegalUpdate = (id, msg) =>
+        {
+            return new Response
+            {
+                status = 400,
+                statusText = msg
+            }.ChromelyWrapper(id);
+        };
 
         /// <summary>
         /// Converts current instance to a ChromelyResponse.

@@ -22,29 +22,11 @@ namespace bioscoop_app.Service
             CreateDataSourceDirectory();
             CreateUploadDirectory();
 
-            // Get list of repository classes
-            var repositoryList = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.Namespace == "bioscoop_app.Repository")
-                .ToList();
-
-            // Call dynamic the SetupDataSource method for each repository class
-            foreach (Type repository in repositoryList)
-            {
-                if (repository.Name != "Repository`1")
-                {
-                    var setupMethod = repository.GetMethod("SetupDataSource",
-                        BindingFlags.FlattenHierarchy
-                        | BindingFlags.Public
-                        | BindingFlags.Static
-                    );
-                    
-                    if (setupMethod != null) setupMethod.Invoke(repository, null);
-                }
-            }
-            
-            //setup data source orders
+            //setup data sources
+            Repository<Movie>.SetupDataSource();
+            Repository<Product>.SetupDataSource();
+            Repository<ScreenTime>.SetupDataSource();
             Repository<Order>.SetupDataSource();
-            //setup data source kijkwijzers
             Repository<Kijkwijzer>.SetupDataSource();
         }
 

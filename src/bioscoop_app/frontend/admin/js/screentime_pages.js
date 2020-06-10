@@ -16,8 +16,8 @@ async function screentimeOverviewPage() {
             
         screenTimeTable += `<tr>
                 <td>${movie.title}</td>
-                <td>${new Date(screenTimes[key].startTime).toLocaleString()}</td>
-                <td>${new Date(screenTimes[key].endTime).toLocaleString()}</td>
+                <td>${new Date(screenTimes[key].startTime).toLocaleString('nl')}</td>
+                <td>${new Date(screenTimes[key].endTime).toLocaleString('nl')}</td>
                 <td>${screenTimes[key].roomName}</td>
                 <td><a href='/admin/screentime_edit.html?id=${screenTimes[key].Id}'>Edit</a></td>
             </tr>`;
@@ -46,8 +46,7 @@ async function screentimeEditPage() {
         }
     }
     
-    document.querySelector("#start_time").value = screenTime.startTime;
-    document.querySelector("#end_time").value = screenTime.endTime;
+    document.querySelector("#startTime").value = screenTime.startTime;
     let roomDropdown = document.querySelector("#room_name");
     for (key in roomDropdown.options) {
         if (roomDropdown.options[key].value === screenTime.roomName) {
@@ -55,7 +54,7 @@ async function screentimeEditPage() {
             break;
         }
     }
-
+    
     /**
      * function for updating screentime in backend
      */
@@ -63,21 +62,30 @@ async function screentimeEditPage() {
         // get screentime form data
         const screenTimeForm = new FormData(document.querySelector("body > div > div > div > form"));
 
+        //clear screentime errors if exists
+        clearScreenTimeErrors()
+
         // post screentime to backend
         const response = await chromelyRequest('/screentime#update', 'POST', {
             'id': getIdFromUrl(),
             'movie_id': screenTimeForm.get('movie'),
-            'start_time': screenTimeForm.get('start_time'),
-            'end_time': screenTimeForm.get('end_time'),
+            'start_time': screenTimeForm.get('start_time').length > 0? screenTimeForm.get('start_time'): new Date(1999, 1, 1, 1, 1, 1),
             'room_name': screenTimeForm.get('room_name')
         })
         
         if(response.getStatusCode() === 204){
             window.location.href = "/admin/screentime.html";
         }
+
+        // display error message by 400
+        if(response.getStatusCode() === 400){
+            response.data.map(error => {
+                displayFieldErrorMessage(error.PropertyName, error.ErrorMessage);
+            })
+        }
     }
 
-    document.querySelector("body > div > div > div > form > div:nth-child(5) > button").addEventListener('click', updateScreenTime);
+    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', updateScreenTime);
 }
 
 /**
@@ -95,20 +103,29 @@ async function screentimeAddPage() {
         // get screentime form data
         const screenTimeForm = new FormData(document.querySelector("body > div > div > div > form"));
         
+        //clear screentime errors if exists
+        clearScreenTimeErrors()
+        
         // post screentime to backend
         const response = await chromelyRequest('/screentime/add', 'POST', {
             'movie_id': screenTimeForm.get('movie'),
-            'start_time': screenTimeForm.get('start_time'),
-            'end_time': screenTimeForm.get('end_time'),
+            'start_time': screenTimeForm.get('start_time').length > 0? screenTimeForm.get('start_time'): new Date(1999, 1, 1, 1, 1, 1),
             'room_name': screenTimeForm.get('room_name')
         })
         
         if(response.getStatusCode() === 204){
             window.location.href = "/admin/screentime.html";
         }
+        console.log(response);
+        // display error message by 400
+        if(response.getStatusCode() === 400){
+            response.data.map(error => {
+                displayFieldErrorMessage(error.PropertyName, error.ErrorMessage);
+            })
+        }
     }
 
-    document.querySelector("body > div > div > div > form > div:nth-child(5) > button").addEventListener('click', addScreenTime);
+    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', addScreenTime);
 }
 
 
@@ -123,4 +140,12 @@ async function fillMovieDropdown() {
         document.querySelector("#movies_field").innerHTML += 
             `<option value="${movies[movie].Id}">${movies[movie].title}</option>`;
     }
+}
+
+
+/**
+ * clear screentime errors messages
+ */
+function clearScreenTimeErrors() {
+    clearFieldErrorMessage("startTime")
 }
