@@ -42,7 +42,6 @@ namespace bioscoop_app.Controller
                 new Repository<ScreenTime>().AddThenWrite(new ScreenTime(
                     data["movie_id"].Value<int>(),
                     data["start_time"].Value<DateTime>(),
-                    data["end_time"].Value<DateTime>(),
                     data["room_name"].Value<string>()
                 ));
             } catch (FormatException)
