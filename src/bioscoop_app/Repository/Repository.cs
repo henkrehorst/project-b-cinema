@@ -168,10 +168,10 @@ namespace bioscoop_app.Repository
         /// <exception cref="ValidationException">Thrown when the new data does not match validator rules.</exception>
         private void ValidateT(T obj)
         {
-            string identifier = obj.GetType().Name + "Validator";
-            Type type = Type.GetType(obj.GetType().Name + "Validator");
-            ((AbstractValidator<T>)Type.GetType(obj.GetType().Name + "Validator")
-                .GetConstructors()[0].Invoke(new object[0])).ValidateAndThrow(obj);
+            Type type = Type.GetType($"bioscoop_app.Validators.{obj.GetType().Name}Validator");
+            ConstructorInfo con = type.GetConstructors()[0];
+            ((AbstractValidator<T>)type.GetConstructors()[0].Invoke(null))
+                .ValidateAndThrow(obj);
         }
     }
 }
