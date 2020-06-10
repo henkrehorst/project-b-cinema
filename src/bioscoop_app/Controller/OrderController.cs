@@ -123,20 +123,33 @@ namespace bioscoop_app.Controller
                     data["cust_name"].Value<string>(),
                     data["cust_email"].Value<string>()
                 );
+                Repository<ScreenTime> subtransaction = new Repository<ScreenTime>();
                 try
                 {
-                    SetSeatsAvailability(order.tickets, false);
+                    SetSeatsAvailability(order.tickets, false, ref subtransaction);
                 }
                 catch (InvalidOperationException err)
                 {
-                    return new Response
+                    if (err.Source.Contains("ScreenTime"))
                     {
-                        status = 409,
-                        statusText = err.Message
-                    }.ChromelyWrapper(req.Id);
+                        return new Response
+                        {
+                            status = 409,
+                            statusText = err.Message
+                        }.ChromelyWrapper(req.Id);
+                    } else
+                    {
+                        return Response.TransactionProtocolViolation(req.Id);
+                    }
                 }
-
-                new Repository<Order>().AddThenWrite(order);
+                try
+                {
+                    subtransaction.SaveChangesThenDiscard();
+                    new Repository<Order>().AddThenWrite(order);
+                } catch (InvalidOperationException)
+                {
+                    return Response.TransactionProtocolViolation(req.Id);
+                }
                 return new Response
                 {
                     status = 200,
@@ -245,7 +258,6 @@ namespace bioscoop_app.Controller
             if (Validator.IsEmail(data["cust_email"].Value<string>()) &&
                 Validator.IsName(data["cust_name"].Value<string>()))
             {
-                Repository<Order> repository = new Repository<Order>();
                 int orderId = -1;
                 try
                 {
@@ -260,10 +272,11 @@ namespace bioscoop_app.Controller
                     }.ChromelyWrapper(req.Id);
                 }
 
+                Repository<Order> orderRepository = new Repository<Order>();
                 string orderCode = null;
                 try
                 {
-                    orderCode = repository.Data[orderId].code;
+                    orderCode = orderRepository.Data[orderId].code;
                 }
                 catch (KeyNotFoundException)
                 {
@@ -274,7 +287,7 @@ namespace bioscoop_app.Controller
                     }.ChromelyWrapper(req.Id);
                 }
 
-                if (!repository.Data[orderId].redeemable)
+                if (!orderRepository.Data[orderId].redeemable)
                 {
                     return new Response
                     {
@@ -317,20 +330,21 @@ namespace bioscoop_app.Controller
                         SetSeatsAvailability(cancel, false);
                     }
                 }*/
-                if (input.tickets.Any() && repository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
+                Repository<ScreenTime> screenTimeRepository = new Repository<ScreenTime>();
+                if (input.tickets.Any() && orderRepository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
                     !input.tickets.OrderBy(t => t.Id)
-                        .SequenceEqual(repository.Data[orderId].tickets.OrderBy(p => p.Id)))
+                        .SequenceEqual(orderRepository.Data[orderId].tickets.OrderBy(p => p.Id)))
                 {
                     //fix ticket difference in data
-                    List<Ticket> reserve = input.tickets.Except(repository.Data[orderId].tickets).ToList(); //A - B
-                    List<Ticket> cancel = repository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
-                    SetSeatsAvailability(reserve, false);
-                    SetSeatsAvailability(cancel, true);
+                    List<Ticket> reserve = input.tickets.Except(orderRepository.Data[orderId].tickets).ToList(); //A - B
+                    List<Ticket> cancel = orderRepository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
+                    SetSeatsAvailability(reserve, false, ref screenTimeRepository);
+                    SetSeatsAvailability(cancel, true, ref screenTimeRepository);
                 }
 
                 try
                 {
-                    repository.Update(
+                    orderRepository.Update(
                         orderId,
                         input
                     );
@@ -343,8 +357,8 @@ namespace bioscoop_app.Controller
                         statusText = except.Message
                     }.ChromelyWrapper(req.Id);
                 }
-
-                repository.SaveChangesThenDiscard();
+                screenTimeRepository.SaveChangesThenDiscard();
+                orderRepository.SaveChangesThenDiscard();
                 return new Response
                 {
                     status = 200,
@@ -427,9 +441,10 @@ namespace bioscoop_app.Controller
                     statusText = "Order can't be cancelled because it has already been collected."
                 }.ChromelyWrapper(req.Id);
             }
-
-            SetSeatsAvailability(repository.Data[order.Id].tickets, true);
+            Repository<ScreenTime> screenTimeRepository = new Repository<ScreenTime>();
+            SetSeatsAvailability(repository.Data[order.Id].tickets, true, ref screenTimeRepository);
             repository.Data.Remove(order.Id);
+            screenTimeRepository.SaveChangesThenDiscard();
             repository.SaveChangesThenDiscard();
             return new Response
             {
@@ -442,15 +457,13 @@ namespace bioscoop_app.Controller
         /// </summary>
         /// <param name="tickets">Ticket containing the seat and screentime id</param>
         /// <param name="value">The value to set the availability to.</param>
-        private void SetSeatsAvailability(List<Ticket> tickets, bool value)
+        /// <exception cref="InvalidOperationException"
+        private void SetSeatsAvailability(List<Ticket> tickets, bool value, ref Repository<ScreenTime> repo)
         {
-            Repository<ScreenTime> repo = new Repository<ScreenTime>();
             foreach (Ticket ticket in tickets)
             {
                 repo.Data[ticket.screenTime].SetSeatAvailability(ticket, value);
             }
-
-            repo.SaveChangesThenDiscard();
         }
 
         /// <summary>
