@@ -50,7 +50,7 @@ async function productAddPage() {
         // post product to backend
         const response = await chromelyRequest('/products#add', 'POST', {
             'name': productForm.get('name'),
-            'price': productForm.get('price'),
+            'price': productForm.get('price').length > 0 ? productForm.get('price') : 0,
             'type': productForm.get('product-type')
         })
         
@@ -92,7 +92,7 @@ async function productEditPage() {
         const response = await chromelyRequest('/products#update', 'POST', {
             'Id': getIdFromUrl(),
             'name': productForm.get('name'),
-            'price': productForm.get('price'),
+            'price': productForm.get('price').length > 0 ? productForm.get('price') : 0,
             'type': productForm.get('product-type')
         })
 

@@ -67,8 +67,8 @@ async function screentimeEditPage() {
         const response = await chromelyRequest('/screentime#update', 'POST', {
             'id': getIdFromUrl(),
             'movie_id': screenTimeForm.get('movie'),
-            'start_time': screenTimeForm.get('start_time'),
-            'end_time': screenTimeForm.get('end_time'),
+            'start_time': screenTimeForm.get('start_time').length > 0? screenTimeForm.get('start_time'): new Date(1999, 1, 1, 1, 1, 1),
+            'end_time': screenTimeForm.get('end_time').length > 0? screenTimeForm.get('end_time'): new Date(1999, 1, 1, 1, 1, 1),
             'room_name': screenTimeForm.get('room_name')
         })
         
@@ -98,8 +98,8 @@ async function screentimeAddPage() {
         // post screentime to backend
         const response = await chromelyRequest('/screentime/add', 'POST', {
             'movie_id': screenTimeForm.get('movie'),
-            'start_time': screenTimeForm.get('start_time'),
-            'end_time': screenTimeForm.get('end_time'),
+            'start_time': screenTimeForm.get('start_time').length > 0? screenTimeForm.get('start_time'): new Date(1999, 1, 1, 1, 1, 1),
+            'end_time': screenTimeForm.get('end_time').length > 0? screenTimeForm.get('end_time'): new Date(1999, 1, 1, 1, 1, 1),
             'room_name': screenTimeForm.get('room_name')
         })
         
