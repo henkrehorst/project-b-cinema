@@ -21,7 +21,7 @@ async function showMovieDetail() {
     //change time format to nl
     moment.locale('nl-nl');
     document.getElementById("movieTime").innerText =
-        moment(new Date(getReservationCookieValue().screentime.startTime)).format('dddd d MMMM yyyy') +
+        moment(new Date(getReservationCookieValue().screentime.startTime)).format('dddd D MMMM yyyy') +
         " | " + moment(new Date(getReservationCookieValue().screentime.startTime)).format('LT') +
         " - " + moment(new Date(getReservationCookieValue().screentime.endTime)).format('LT');
 }

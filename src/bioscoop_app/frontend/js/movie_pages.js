@@ -81,7 +81,7 @@ async function movieDetailPage() {
 
         for (time in screenTimes) {
             screentimeTable += `<tr>
-                <td>${moment(new Date(screenTimes[time].startTime)).format('dddd d MMMM yyyy')}</td>
+                <td>${moment(new Date(screenTimes[time].startTime)).format('dddd D MMMM yyyy')}</td>
                 <td>${moment(new Date(screenTimes[time].startTime)).format('LT')} - ${moment(new Date(screenTimes[time].endTime)).format('LT')}</td>
                 <td><a class="btn-block btn-success btn" href="/reservation_step_one.html?id=${screenTimes[time].Id}">Reserveren</a></td>
             </tr>`;
