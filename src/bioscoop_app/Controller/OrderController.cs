@@ -370,44 +370,12 @@ namespace bioscoop_app.Controller
                 {
                     return Response.ParseError(req.Id);
                 }
-                /*if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
-                {
-                    //Backend magic to change availability of items
-                    List<Ticket> inputTickets = filterTickets(input.items);
-                    List<Ticket> existingTickets = filterTickets(repository.Data[orderId].items);
-                    if (inputTickets.Any() && !existingTickets.Any())
-                    {
-                        //Reserve tickets
-                        SetSeatsAvailability(inputTickets, false);
-                    }
-                    if (!inputTickets.Any() && existingTickets.Any())
-                    {
-                        // Cancel ticket reservation
-                        SetSeatsAvailability(existingTickets, true);
-                    }
-                    if (inputTickets.Any() && existingTickets.Any() &&
-                        !inputTickets.OrderBy(t => t.Id).SequenceEqual(existingTickets.OrderBy(t => t.Id)))
-                    {
-                        //fix ticket difference in data
-                        List<Ticket> reserve = inputTickets.Except(existingTickets).ToList(); //A - B
-                        List<Ticket> cancel = existingTickets.Except(inputTickets).ToList(); // B - A
-                        SetSeatsAvailability(reserve, true);
-                        SetSeatsAvailability(cancel, false);
-                    }
-                }*/
+
                 Repository<ScreenTime> screenTimeRepository = new Repository<ScreenTime>();
                 try
                 {
-                    if (input.tickets.Any() && orderRepository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
-                        !input.tickets.OrderBy(t => t.Id)
-                            .SequenceEqual(orderRepository.Data[orderId].tickets.OrderBy(p => p.Id)))
-                    {
-                        //fix ticket difference in data
-                        List<Ticket> reserve = input.tickets.Except(orderRepository.Data[orderId].tickets).ToList(); //A - B
-                        List<Ticket> cancel = orderRepository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
-                        SetSeatsAvailability(reserve, false, ref screenTimeRepository);
-                        SetSeatsAvailability(cancel, true, ref screenTimeRepository);
-                    }
+                    SetSeatsAvailability(orderRepository.Data[orderId].tickets, true, ref screenTimeRepository);
+                    SetSeatsAvailability(input.tickets, false, ref screenTimeRepository);
                 }
                 catch (InvalidOperationException)
                 {
