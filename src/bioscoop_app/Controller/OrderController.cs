@@ -3,11 +3,13 @@ using bioscoop_app.Model;
 using bioscoop_app.Repository;
 using Chromely.Core.Network;
 using Chromely.Windows;
+using FluentValidation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
@@ -113,16 +115,33 @@ namespace bioscoop_app.Controller
         public ChromelyResponse CreateOrder(ChromelyRequest req)
         {
             var data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
-            //List<Product> products = ParseItems(data["items"].Value<JArray>());
-            if (Validator.IsEmail(data["cust_email"].Value<string>()) &&
-                Validator.IsName(data["cust_name"].Value<string>()))
+            string email;
+            string name;
+            try
             {
-                Order order = new Order(
-                    ParseItems(data["items"].Value<JArray>()),
-                    ParseTickets(data["tickets"].Value<JArray>()),
-                    data["cust_name"].Value<string>(),
-                    data["cust_email"].Value<string>()
-                );
+                email = data["cust_email"].Value<string>();
+                name = data["cust_name"].Value<string>();
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
+            //List<Product> products = ParseItems(data["items"].Value<JArray>());
+            if (Validator.IsEmail(email) &&
+                Validator.IsName(name))
+            {
+                Order order;
+                try
+                {
+                    order = new Order(
+                        ParseItems(data["items"].Value<JArray>()),
+                        ParseTickets(data["tickets"].Value<JArray>()),
+                        data["cust_name"].Value<string>(),
+                        data["cust_email"].Value<string>()
+                    );
+                } catch (FormatException)
+                {
+                    return Response.ParseError(req.Id);
+                }
                 Repository<ScreenTime> subtransaction = new Repository<ScreenTime>();
                 try
                 {
@@ -149,6 +168,9 @@ namespace bioscoop_app.Controller
                 } catch (InvalidOperationException)
                 {
                     return Response.TransactionProtocolViolation(req.Id);
+                } catch (ValidationException exception)
+                {
+                    return Response.ValidationError(req.Id, exception);
                 }
                 return new Response
                 {
@@ -186,7 +208,14 @@ namespace bioscoop_app.Controller
         public ChromelyResponse CollectOrder(ChromelyRequest req)
         {
             var data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
-            string code = data["code"].Value<string>();
+            string code;
+            try
+            {
+                code = data["code"].Value<string>();
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
             if (code is null)
             {
                 return new Response {status = 400, statusText = "Bad input de code was null"}
@@ -234,9 +263,18 @@ namespace bioscoop_app.Controller
             {
                 matchedOrder.redeemable = false;
             }
-
-            repos.Update(matchedOrder.Id, matchedOrder);
-            repos.SaveChangesThenDiscard();
+            try
+            {
+                repos.Update(matchedOrder.Id, matchedOrder);
+                repos.SaveChangesThenDiscard();
+            } catch (InvalidOperationException err)
+            {
+                if(err.Message is object && err.Message != "")
+                {
+                    return Response.IllegalUpdate(req.Id, err.Message);
+                }
+                return Response.TransactionProtocolViolation(req.Id);
+            }
             return new Response
             {
                 status = 200,
@@ -255,20 +293,34 @@ namespace bioscoop_app.Controller
         {
             //throw new NotImplementedException();
             JObject data = (JObject) JsonConvert.DeserializeObject(req.PostData.ToJson());
-            if (Validator.IsEmail(data["cust_email"].Value<string>()) &&
-                Validator.IsName(data["cust_name"].Value<string>()))
+            string email;
+            string name;
+            try
             {
-                int orderId = -1;
+                email = data["cust_email"].Value<string>();
+                name = data["cust_name"].Value<string>();
+            } catch (FormatException)
+            {
+                return Response.ParseError(req.Id);
+            }
+            if (Validator.IsEmail(email) &&
+                Validator.IsName(name))
+            {
+                int orderId;
                 try
                 {
                     orderId = data["id"].Value<int>();
                 }
-                catch (ArgumentNullException)
+                catch (FormatException)
+                {
+                    return Response.ParseError(req.Id);
+                }
+                if (orderId == 0)
                 {
                     return new Response
                     {
                         status = 400,
-                        statusText = "id was null"
+                        statusText = "id was null or zero"
                     }.ChromelyWrapper(req.Id);
                 }
 
@@ -286,8 +338,15 @@ namespace bioscoop_app.Controller
                         statusText = "No order found for the id provided."
                     }.ChromelyWrapper(req.Id);
                 }
-
-                if (!orderRepository.Data[orderId].redeemable)
+                bool negRedeem;
+                try
+                {
+                    negRedeem = !orderRepository.Data[orderId].redeemable;
+                } catch (InvalidOperationException)
+                {
+                    return Response.TransactionProtocolViolation(req.Id);
+                }
+                if (negRedeem)
                 {
                     return new Response
                     {
@@ -295,16 +354,22 @@ namespace bioscoop_app.Controller
                         statusText = "Can't modify an order that has already been collected."
                     }.ChromelyWrapper(req.Id);
                 }
-
-                Order input = new Order(
-                    orderId,
-                    ParseItems(data["items"].Value<JArray>()),
-                    ParseTickets(data["tickets"].Value<JArray>()),
-                    orderCode,
-                    data["cust_name"].Value<string>(),
-                    data["cust_email"].Value<string>(),
-                    true
-                );
+                Order input;
+                try
+                {
+                    input = new Order(
+                        orderId,
+                        ParseItems(data["items"].Value<JArray>()),
+                        ParseTickets(data["tickets"].Value<JArray>()),
+                        orderCode,
+                        data["cust_name"].Value<string>(),
+                        data["cust_email"].Value<string>(),
+                        true
+                    );
+                } catch (FormatException)
+                {
+                    return Response.ParseError(req.Id);
+                }
                 /*if (!input.items.OrderBy(p => p.Id).SequenceEqual(repository.Data[orderId].items.OrderBy(p => p.Id)))
                 {
                     //Backend magic to change availability of items
@@ -330,17 +395,6 @@ namespace bioscoop_app.Controller
                         SetSeatsAvailability(cancel, false);
                     }
                 }*/
-                Repository<ScreenTime> screenTimeRepository = new Repository<ScreenTime>();
-                if (input.tickets.Any() && orderRepository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
-                    !input.tickets.OrderBy(t => t.Id)
-                        .SequenceEqual(orderRepository.Data[orderId].tickets.OrderBy(p => p.Id)))
-                {
-                    //fix ticket difference in data
-                    List<Ticket> reserve = input.tickets.Except(orderRepository.Data[orderId].tickets).ToList(); //A - B
-                    List<Ticket> cancel = orderRepository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
-                    SetSeatsAvailability(reserve, false, ref screenTimeRepository);
-                    SetSeatsAvailability(cancel, true, ref screenTimeRepository);
-                }
 
                 try
                 {
@@ -348,17 +402,31 @@ namespace bioscoop_app.Controller
                         orderId,
                         input
                     );
-                }
-                catch (InvalidOperationException except)
-                {
-                    return new Response
+                    Repository<ScreenTime> screenTimeRepository = new Repository<ScreenTime>();
+                    try
                     {
-                        status = 400,
-                        statusText = except.Message
-                    }.ChromelyWrapper(req.Id);
+                        if (input.tickets.Any() && orderRepository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
+                            !input.tickets.OrderBy(t => t.Id)
+                                .SequenceEqual(orderRepository.Data[orderId].tickets.OrderBy(p => p.Id)))
+                        {
+                            //fix ticket difference in data
+                            List<Ticket> reserve = input.tickets.Except(orderRepository.Data[orderId].tickets).ToList(); //A - B
+                            List<Ticket> cancel = orderRepository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
+                            SetSeatsAvailability(reserve, false, ref screenTimeRepository);
+                            SetSeatsAvailability(cancel, true, ref screenTimeRepository);
+                        }
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        return Response.TransactionProtocolViolation(req.Id);
+                    }
+                    screenTimeRepository.SaveChangesThenDiscard();
+                    orderRepository.SaveChangesThenDiscard();
                 }
-                screenTimeRepository.SaveChangesThenDiscard();
-                orderRepository.SaveChangesThenDiscard();
+                catch (InvalidOperationException)
+                {
+                    return Response.TransactionProtocolViolation(req.Id);
+                }
                 return new Response
                 {
                     status = 200,
@@ -408,10 +476,10 @@ namespace bioscoop_app.Controller
                 return Response.ParseError(req.Id);
             }
             Order order;
-            Repository<Order> repository = new Repository<Order>();
+            Repository<Order> orderRepository = new Repository<Order>();
             try
             {
-                order = QueryByCode(repository, code);
+                order = QueryByCode(orderRepository, code);
             }
             catch (InvalidOperationException)
             {
@@ -442,10 +510,16 @@ namespace bioscoop_app.Controller
                 }.ChromelyWrapper(req.Id);
             }
             Repository<ScreenTime> screenTimeRepository = new Repository<ScreenTime>();
-            SetSeatsAvailability(repository.Data[order.Id].tickets, true, ref screenTimeRepository);
-            repository.Data.Remove(order.Id);
-            screenTimeRepository.SaveChangesThenDiscard();
-            repository.SaveChangesThenDiscard();
+            try
+            {
+                SetSeatsAvailability(orderRepository.Data[order.Id].tickets, true, ref screenTimeRepository);
+                orderRepository.Data.Remove(order.Id);
+                screenTimeRepository.SaveChangesThenDiscard();
+                orderRepository.SaveChangesThenDiscard();
+            } catch (InvalidOperationException)
+            {
+                return Response.TransactionProtocolViolation(req.Id);
+            }
             return new Response
             {
                 status = 200
@@ -457,7 +531,7 @@ namespace bioscoop_app.Controller
         /// </summary>
         /// <param name="tickets">Ticket containing the seat and screentime id</param>
         /// <param name="value">The value to set the availability to.</param>
-        /// <exception cref="InvalidOperationException"
+        /// <exception cref="InvalidOperationException">If the repository is closed (Source Repository) or the seat availability can't be set (Source ScreenTime)</exception>
         private void SetSeatsAvailability(List<Ticket> tickets, bool value, ref Repository<ScreenTime> repo)
         {
             foreach (Ticket ticket in tickets)

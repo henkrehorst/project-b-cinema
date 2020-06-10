@@ -156,6 +156,7 @@ namespace bioscoop_app.Repository
         /// Adds an entry to the data sequence, then writes the current state of the data to the storage file.
         /// </summary>
         /// <exception cref="InvalidOperationException">When the Repository is closed.</exception>
+        /// <exception cref="ValidationException">Thrown when the new data does not match validator rules.</exception>
         public void AddThenWrite(T entry)
         {
             Add(entry);
