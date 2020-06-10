@@ -228,6 +228,111 @@
     <None Update="frontend\seat_overview.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="frontend\uploads\1bbb4fac-6be3-464a-96a5-4a541b85709d.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\20249057-2259-4b1c-bd68-8dce5fa3029b.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\276504bc-0d48-4faf-8eb9-bb36320a727d.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\287934d2-31b6-4e6a-ad1f-5f1bf65349c7.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\288ab93d-afbd-43a1-9847-20cd0dde2162.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\39236676-98d2-487d-8710-d4c245935080.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\4e190e15-4bae-4e69-85cd-47a7b255f3ed.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\4edb4d6f-fe09-42ec-adc4-1163648c6bf8.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\56857b61-df77-4929-a840-1d17f8b92307.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\59642cc2-4493-4208-9123-59299656aa70.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\62c434b2-2c50-416c-9af4-3d8eba6ee4ef.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\67c0b4ea-2d75-4308-8104-07a76279c20e.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\7a1925aa-ef52-4c06-836a-1eda09c6bb8f.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\80823e4f-d026-43ea-ba7e-076cbe221a8a.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\8a46b1db-3816-42fb-9d01-301b90e3ab7c.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\8c03735e-581a-43f3-8efc-8691a582d7bd.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\8ff1b57c-963c-4682-8398-ac7a21db9cbe.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\93253432-20be-4a38-bb24-3a76b952f6c7.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\95903dc1-2078-442c-ac3c-88302d7bb606.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\9988e443-d30e-4253-b7b1-23183908edd1.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\a1e05fd4-dc2d-49c4-84d8-8fe1148a493c.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\b00333b8-6c60-4886-abba-29f92d3c8320.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\b42e3d79-8424-4ad6-a669-dde592fd1514.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\b989fa6d-3699-42f1-918e-f8cac6133e93.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\cac2882c-39fb-46f2-92b9-0857c814f971.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\cb2ff223-db4d-4a14-9557-b3483a61ed1c.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\d2aeac46-65e3-4335-b378-452ceab99f86.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\d2ff71b8-0e22-4ea1-b121-1040ee115000.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\dd02bfaf-4e2c-4f6e-87e9-ab71fdaac0f4.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\e1f335de-c6ec-4cbe-a452-83ca4bad3d69.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\e9d064cd-e7a9-48a9-97fb-4bc328316506.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\ee68b219-2713-4336-a2c8-db0cac6ed9d9.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\f985ec3a-b6f0-4fa7-97dd-4a972a19d05a.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\fa288f07-83e2-431a-96f3-04a55f85f900.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\fa3e75cd-49ca-48ed-94c7-1eef6225743a.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="productionData\Kijkwijzer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
