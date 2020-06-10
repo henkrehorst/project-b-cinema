@@ -32,15 +32,22 @@ namespace bioscoop_app.Controller
         /// Performs a linq query on the order data, searching for the order with the code in the request postdata.
         /// </summary>
         /// <param name="req">Request containing the code as postdata.</param>
-        /// <returns>The order matching the code.</returns>
-        /// <exception cref="InvalidOperationException">If no order matched the code.</exception>
+        /// <returns>The order matching the code, null if no match.</returns>
+        /// <exception cref="InvalidOperationException">If the repository is closed.</exception>
+        /// <exception cref="ArgumentNullException">If repository.Data.Values is null.</exception>
         private Order QueryByCode(Repository<Order> repository, string code)
         {
             var orders = repository.Data.Values.AsQueryable();
             IEnumerable<Order> queryResult = from order in orders
                 where order.code == code
                 select order;
-            return queryResult.First();
+            try
+            {
+                return queryResult.First();
+            } catch (InvalidOperationException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -69,12 +76,22 @@ namespace bioscoop_app.Controller
             try
             {
                 order = QueryByCode(new Repository<Order>(), code);
-            }
-            catch (InvalidOperationException)
+            } catch (InvalidOperationException)
+            {
+                return Response.TransactionProtocolViolation(req.Id);
+            } catch (ArgumentNullException)
             {
                 return new Response
                 {
-                    status = 204,
+                    status = 500,
+                    statusText = "The server does not possess the data for this request."
+                }.ChromelyWrapper(req.Id);
+            }
+            if(order is null)
+            {
+                return new Response
+                {
+                    status = 400,
                     statusText = "No order was found for the given code."
                 }.ChromelyWrapper(req.Id);
             }
@@ -164,7 +181,19 @@ namespace bioscoop_app.Controller
             }
 
             var repos = new Repository<Order>();
-            var orders = repos.Data.Values.AsQueryable();
+            IQueryable<Order> orders;
+            try
+            {
+                orders = repos.Data.Values.AsQueryable();
+            }
+            catch (ArgumentNullException)
+            {
+                return new Response
+                {
+                    status = 500,
+                    statusText = "The server does not possess the data for this request."
+                }.ChromelyWrapper(req.Id);
+            }
             var result = from order in orders where order.code == code select order;
             Order matchedOrder = null;
             try
@@ -175,7 +204,7 @@ namespace bioscoop_app.Controller
             {
                 return new Response
                 {
-                    status = 204,
+                    status = 400,
                     statusText = "No order matching the input code was found."
                 }.ChromelyWrapper(req.Id);
             }
@@ -184,7 +213,7 @@ namespace bioscoop_app.Controller
             {
                 return new Response
                 {
-                    status = 400,
+                    status = 409,
                     statusText = "Order has been redeemed before."
                 }.ChromelyWrapper(req.Id);
             }
@@ -372,13 +401,24 @@ namespace bioscoop_app.Controller
             }
             catch (InvalidOperationException)
             {
+                return Response.TransactionProtocolViolation(req.Id);
+            }
+            catch (ArgumentNullException)
+            {
                 return new Response
                 {
-                    status = 204,
+                    status = 500,
+                    statusText = "The server does not possess the data for this request."
+                }.ChromelyWrapper(req.Id);
+            }
+            if (order is null)
+            {
+                return new Response
+                {
+                    status = 400,
                     statusText = "Order was not cancelled because it was not found."
                 }.ChromelyWrapper(req.Id);
             }
-
             if (!order.redeemable)
             {
                 return new Response
