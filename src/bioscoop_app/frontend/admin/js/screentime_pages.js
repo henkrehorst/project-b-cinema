@@ -47,7 +47,6 @@ async function screentimeEditPage() {
     }
     
     document.querySelector("#startTime").value = screenTime.startTime;
-    document.querySelector("#end_time").value = screenTime.endTime;
     let roomDropdown = document.querySelector("#room_name");
     for (key in roomDropdown.options) {
         if (roomDropdown.options[key].value === screenTime.roomName) {
@@ -71,7 +70,6 @@ async function screentimeEditPage() {
             'id': getIdFromUrl(),
             'movie_id': screenTimeForm.get('movie'),
             'start_time': screenTimeForm.get('start_time').length > 0? screenTimeForm.get('start_time'): new Date(1999, 1, 1, 1, 1, 1),
-            'end_time': screenTimeForm.get('end_time').length > 0? screenTimeForm.get('end_time'): new Date(1999, 1, 1, 1, 1, 1),
             'room_name': screenTimeForm.get('room_name')
         })
         
@@ -112,7 +110,6 @@ async function screentimeAddPage() {
         const response = await chromelyRequest('/screentime/add', 'POST', {
             'movie_id': screenTimeForm.get('movie'),
             'start_time': screenTimeForm.get('start_time').length > 0? screenTimeForm.get('start_time'): new Date(1999, 1, 1, 1, 1, 1),
-            'end_time': screenTimeForm.get('end_time').length > 0? screenTimeForm.get('end_time'): new Date(1999, 1, 1, 1, 1, 1),
             'room_name': screenTimeForm.get('room_name')
         })
         
