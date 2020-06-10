@@ -8,6 +8,7 @@ using bioscoop_app.Model;
 using bioscoop_app.Service;
 using System.Reflection;
 using FluentValidation;
+using Xilium.CefGlue;
 
 namespace bioscoop_app.Repository
 {
@@ -170,7 +171,15 @@ namespace bioscoop_app.Repository
         {
             Type type = Type.GetType($"bioscoop_app.Validators.{obj.GetType().Name}Validator");
             ConstructorInfo con = type.GetConstructors()[0];
-            ((AbstractValidator<T>)type.GetConstructors()[0].Invoke(null))
+            ParameterInfo[] parinf = con.GetParameters();
+            object[] values = new object[0];
+            if (parinf.Any())
+            {
+                List<object> val = new List<object>();
+                Array.ForEach(parinf, param => { val.Add(param.DefaultValue); });
+                values = val.ToArray<object>();
+            }
+            ((AbstractValidator<T>)con.Invoke(values))
                 .ValidateAndThrow(obj);
         }
     }
