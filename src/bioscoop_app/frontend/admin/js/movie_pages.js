@@ -61,13 +61,15 @@ async function movieEditPage() {
         let kijkwijzers = Object.values(document.querySelectorAll("#kijkwijzerFields > li > input:checked"))
             .map(item => {return parseInt(item.value)})
 
+        //clear fields if exists
+        clearFieldErrorMovieForm();
         // post movie to backend
         const response = await chromelyRequest('/movies#update', 'POST', {
             'id': getIdFromUrl(),
             'title': movieForm.get('title'),
             'duration': movieForm.get('duration').length > 0 ? movieForm.get('duration') : 0,
             'genre': movieForm.get('genre'),
-            'rating': movieForm.get('rating').length > 0 ? movieForm.get('rating') : 0,
+            'rating': movieForm.get('rating').length > 0 ? movieForm.get('rating') : -1,
             'samenvatting': movieForm.get('samenvatting'),
             'cover_image': cover_image,
             'kijkwijzers': kijkwijzers,
@@ -77,6 +79,13 @@ async function movieEditPage() {
         // if response = 200: redirect to movie overview page
         if (response.getStatusCode() === 200) {
             window.location.href = "/admin/movie.html"
+        }
+
+        // display error message by 400
+        if(response.getStatusCode() === 400){
+            response.data.map(error => {
+                displayFieldErrorMessage(error.PropertyName, error.ErrorMessage);
+            })
         }
     }
 
@@ -118,12 +127,15 @@ async function movieAddPage() {
         let kijkwijzers = Object.values(document.querySelectorAll("#kijkwijzerFields > li > input:checked"))
             .map(item => {return parseInt(item.value)})
 
+        //clear fields if exists
+        clearFieldErrorMovieForm();
+        
         // post movie to backend
         const response = await chromelyRequest('/movies/add', 'POST', {
             'title': movieForm.get('title'),
             'duration': movieForm.get('duration').length > 0 ? movieForm.get('duration') : 0,
             'genre': movieForm.get('genre'),
-            'rating': movieForm.get('rating').length > 0 ? movieForm.get('rating') : 0,
+            'rating': movieForm.get('rating').length > 0 ? movieForm.get('rating') : -1,
             'samenvatting': movieForm.get('samenvatting'),
             'cover_image': cover_image,
             'kijkwijzers': kijkwijzers,
@@ -134,7 +146,13 @@ async function movieAddPage() {
         if (response.getStatusCode() === 204) {
             window.location.href = "/admin/movie.html"
         }
-        console.log(response);
+        
+        // display error message by 400
+        if(response.getStatusCode() === 400){
+            response.data.map(error => {
+                displayFieldErrorMessage(error.PropertyName, error.ErrorMessage);
+            })
+        }
     }
 
     document.querySelector("body > div > div > div > form > div > button").addEventListener('click', addMovie);
@@ -212,4 +230,19 @@ async function thumbnailImagePreview() {
 async function getKijkwijzers() {
     const KijkwijzerResponse = await chromelyRequest('/kijkwijzer');
     return KijkwijzerResponse.getData();
+}
+
+/**
+ * remove all field errors in movie form
+ */
+function clearFieldErrorMovieForm() {
+    clearFieldErrorMessage("title");
+    clearFieldErrorMessage("genre");
+    clearFieldErrorMessage("duration");
+    clearFieldErrorMessage("rating");
+    clearFieldErrorMessage("samenvatting");
+    clearFieldErrorMessage("kijkwijzer");
+    clearFieldErrorMessage("coverImage");
+    clearFieldErrorMessage("thumbnailImage");
+    
 }

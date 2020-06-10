@@ -80,7 +80,7 @@ class chromelyResponse {
         //convert json data string to object
         try {
             this.data = JSON.parse(data)
-        }catch (e) {
+        } catch (e) {
             this.data = "";
         }
     }
@@ -88,21 +88,51 @@ class chromelyResponse {
     /**
      * @returns number
      */
-    getStatusCode(){
+    getStatusCode() {
         return this.status;
     }
 
     /**
      * @returns {*}
      */
-    getData(){
+    getData() {
         return this.data;
     }
 
     /**
      * @returns string
      */
-    getStatusText(){
+    getStatusText() {
         return this.statusText;
     }
+}
+
+function displayFieldErrorMessage(id, message) {
+    //added red error border on field
+    if (document.getElementById(id)) {
+        if (!document.getElementById(id).classList.contains("is-invalid")) {
+            document.getElementById(id).classList.add("is-invalid")
+        }
+    }
+
+    //display error message
+    if (!document.getElementById(id + '-error').classList.contains("invalid-feedback")) {
+        document.getElementById(id + '-error').classList.add("invalid-feedback")
+    }
+    document.getElementById(id + '-error').innerText = message;
+}
+
+function clearFieldErrorMessage(id) {
+    //remove error styling from field
+    if (document.getElementById(id)) {
+        if (document.getElementById(id).classList.contains("is-invalid")) {
+            document.getElementById(id).classList.remove("is-invalid")
+        }
+    }
+    //remove error message
+    if (document.getElementById(id + '-error').classList.contains("invalid-feedback")) {
+        document.getElementById(id + '-error').classList.remove("invalid-feedback")
+    }
+    document.getElementById(id + '-error').innerText = "";
+
 }
