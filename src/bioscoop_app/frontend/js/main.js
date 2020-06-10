@@ -76,7 +76,7 @@ addSecurityModel()
 function fillNavbar() {
     document.querySelector("body > nav > div").innerHTML =
         `<ul>
-           <li><a href=\"/\">De kijkdoos</a></li>
+           <li><a href=\"/index.html\">De kijkdoos</a></li>
         </ul>
         <ul>
           <li class=\"menu-item\"><a href="./index.html">Films</a></li>

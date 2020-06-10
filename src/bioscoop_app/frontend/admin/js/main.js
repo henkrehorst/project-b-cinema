@@ -4,7 +4,7 @@
 function fillNavbar() {
     document.querySelector("body > nav > div").innerHTML =
         `<ul>
-          <li><a href="/">De kijkdoos</a></li>
+          <li><a href="../index.html">De kijkdoos</a></li>
         </ul>
         <ul>
           <li><a href="../index.html">Klant applicatie</a></li>
