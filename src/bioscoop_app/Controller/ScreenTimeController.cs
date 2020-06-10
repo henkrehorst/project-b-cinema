@@ -110,7 +110,6 @@ namespace bioscoop_app.Controller
                 screenTimeRepository.Update(data["id"].Value<int>(), new ScreenTime(
                     data["movie_id"].Value<int>(),
                     data["start_time"].Value<DateTime>(),
-                    data["end_time"].Value<DateTime>(),
                     data["room_name"].Value<string>()
                 ));
                 screenTimeRepository.SaveChangesThenDiscard();
