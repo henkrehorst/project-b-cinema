@@ -85,7 +85,7 @@ async function screentimeEditPage() {
         }
     }
 
-    document.querySelector("body > div > div > div > form > div:nth-child(5) > button").addEventListener('click', updateScreenTime);
+    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', updateScreenTime);
 }
 
 /**
@@ -125,7 +125,7 @@ async function screentimeAddPage() {
         }
     }
 
-    document.querySelector("body > div > div > div > form > div:nth-child(5) > button").addEventListener('click', addScreenTime);
+    document.querySelector("body > div > div > div > form > div:nth-child(4) > button").addEventListener('click', addScreenTime);
 }
 
 
