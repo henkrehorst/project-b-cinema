@@ -395,6 +395,24 @@ namespace bioscoop_app.Controller
                         SetSeatsAvailability(cancel, false);
                     }
                 }*/
+                Repository<ScreenTime> screenTimeRepository = new Repository<ScreenTime>();
+                try
+                {
+                    if (input.tickets.Any() && orderRepository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
+                        !input.tickets.OrderBy(t => t.Id)
+                            .SequenceEqual(orderRepository.Data[orderId].tickets.OrderBy(p => p.Id)))
+                    {
+                        //fix ticket difference in data
+                        List<Ticket> reserve = input.tickets.Except(orderRepository.Data[orderId].tickets).ToList(); //A - B
+                        List<Ticket> cancel = orderRepository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
+                        SetSeatsAvailability(reserve, false, ref screenTimeRepository);
+                        SetSeatsAvailability(cancel, true, ref screenTimeRepository);
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    return Response.TransactionProtocolViolation(req.Id);
+                }
 
                 try
                 {
@@ -402,24 +420,6 @@ namespace bioscoop_app.Controller
                         orderId,
                         input
                     );
-                    Repository<ScreenTime> screenTimeRepository = new Repository<ScreenTime>();
-                    try
-                    {
-                        if (input.tickets.Any() && orderRepository.Data[orderId].items.OrderBy(p => p.Id).Any() &&
-                            !input.tickets.OrderBy(t => t.Id)
-                                .SequenceEqual(orderRepository.Data[orderId].tickets.OrderBy(p => p.Id)))
-                        {
-                            //fix ticket difference in data
-                            List<Ticket> reserve = input.tickets.Except(orderRepository.Data[orderId].tickets).ToList(); //A - B
-                            List<Ticket> cancel = orderRepository.Data[orderId].tickets.Except(input.tickets).ToList(); // B - A
-                            SetSeatsAvailability(reserve, false, ref screenTimeRepository);
-                            SetSeatsAvailability(cancel, true, ref screenTimeRepository);
-                        }
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        return Response.TransactionProtocolViolation(req.Id);
-                    }
                     screenTimeRepository.SaveChangesThenDiscard();
                     orderRepository.SaveChangesThenDiscard();
                 }
