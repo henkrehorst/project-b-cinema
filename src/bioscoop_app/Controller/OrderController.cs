@@ -163,8 +163,10 @@ namespace bioscoop_app.Controller
                 }
                 try
                 {
+                    Repository<Order> transaction = new Repository<Order>();
+                    transaction.Add(order);
                     subtransaction.SaveChangesThenDiscard();
-                    new Repository<Order>().AddThenWrite(order);
+                    transaction.SaveChangesThenDiscard();
                 } catch (InvalidOperationException)
                 {
                     return Response.TransactionProtocolViolation(req.Id);
