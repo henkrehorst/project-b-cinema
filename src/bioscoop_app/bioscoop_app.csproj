@@ -291,6 +291,12 @@
     <None Update="frontend\uploads\a1e05fd4-dc2d-49c4-84d8-8fe1148a493c.jpeg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="frontend\uploads\a6ca5501-57d8-4242-bbed-a1919a74860a.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\uploads\ab7ef2c6-36c0-45fa-a1cc-d81b332848f9.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="frontend\uploads\b00333b8-6c60-4886-abba-29f92d3c8320.jpeg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
