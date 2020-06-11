@@ -17,8 +17,7 @@ namespace bioscoop_app.Model
 			get => _startTime;
 			set
 			{
-				_startTime = value;
-				_endTime = _startTime.AddMinutes(duration);
+				throw new InvalidOperationException("Use ScreenTime.SetTimes method to modify start and end times");
 			}
 		}
 		public DateTime endTime {
@@ -32,13 +31,12 @@ namespace bioscoop_app.Model
 		public bool[,] availability;
 		public int availableTickets;
 
-		public ScreenTime(int movie, DateTime startTime, DateTime endTime, string roomName)
+		public ScreenTime(int movie, DateTime startTime, string roomName)
 		{
 			this.movie = movie;
 			this.roomName = roomName;
-			duration = new Repository<Movie>().Data[movie].duration;
-			this.startTime = startTime;
-
+			int duration = new Repository<Movie>().Data[movie].duration;
+			SetTimes(startTime, duration);
 			availability = RoomLayoutService.GetInitialAvailability(roomName);
 			foreach (bool val in availability)
 			{
@@ -51,11 +49,22 @@ namespace bioscoop_app.Model
 		{
 			Id = id;
 			this.movie = movie;
-			duration = new Repository<Movie>().Data[movie].duration;
-			this.startTime = startTime;
+			_startTime = startTime;
+			_endTime = endTime;
 			this.roomName = roomName;
 			this.availability = availability;
 			this.availableTickets = availableTickets;
+		}
+
+		/// <summary>
+		/// Setter for start and endtimes
+		/// </summary>
+		/// <param name="startTime">Start time of the ScreenTime</param>
+		/// <param name="duration">Duration of the movie</param>
+		public void SetTimes(DateTime startTime, int duration)
+		{
+			_startTime = startTime;
+			_endTime = startTime.AddMinutes(duration);
 		}
 
 		/// <summary>
