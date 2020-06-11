@@ -34,13 +34,8 @@ function updateOrderText() {
     let orderedText = '';
     let totalPrice = 0;
     let room = rooms[selectedRoom];
-
-    // for (let i = 0; i < selectedSeats.length; i++) {
-    //     orderedText += '\nRij ' + (room.length - selectedSeats[i].row) + ', stoel ' + (selectedSeats[i].seat + 1) + ' (' + selectedSeats[i].type + ' ' + selectedSeats[i].price + '$).';
-    //     totalPrice += selectedSeats[i].price;
-    // }
-
     let seatDescription = (selectedSeats.length) + ' stoel' + (selectedSeats.length != 1 ? 'en ' : ' ') + (selectedSeats.length > 0 ? 'geselecteerd: ' : 'geselecteerd.') + orderedText /* + '\nTotale prijs: \u20AC' + (Math.round(totalPrice * 100) / 100*/;
+
     document.querySelector('.seat-description').innerText = seatDescription;
 }
 
@@ -60,6 +55,7 @@ function loadSeatOverview() {
     for (let column = 0; column < maxColLength; column++) {
         let elSpan = document.createElement('span');
         let txt = document.createTextNode(column + 1);
+        let ftSize = 15;
 
         elSpan.appendChild(txt);
         elSpan.classList.add('grid-number');
@@ -67,7 +63,7 @@ function loadSeatOverview() {
             'width': blockSize + 'px',
             'height': blockSize + 'px',
             'left': (blockSize * column + padding / 2 + blockSize) + 'px',
-            'top': '0px', 'font-size': (15 + blockSize * 3) + '%', 'line-height': blockSize + 'px'
+            'top': '0px', 'font-size': (ftSize + blockSize * 3) + '%', 'line-height': blockSize + 'px'
         });
         gridColumn.appendChild(elSpan);
     }
@@ -83,7 +79,7 @@ function loadSeatOverview() {
             'width': blockSize + 'px',
             'height': blockSize + 'px', 'left': '0px',
             'top': (blockSize * row + blockSize + padding / 2) + 'px',
-            'font-size': (15 + blockSize * 3) + '%',
+            'font-size': (ftSize + blockSize * 3) + '%',
             'line-height': (blockSize) + 'px'
         });
         gridRow.appendChild(elSpan);
@@ -129,14 +125,21 @@ function loadSeatOverview() {
     gridContainer.appendChild(gridColumn);
     gridContainer.appendChild(gridRow);
     gridContainer.appendChild(gridAvailable);
+
     setStyle(container, {
         'width': (blockSize * maxColLength + padding) + 'px',
         'height': (blockSize * room.length + padding) + 'px',
         'top': (blockSize / 1.75 + 8 * (blockSize / 20)) + 'px',
         'left': (blockSize) + 'px'
     });
-    setStyle(document.querySelector('.screen-title'), { 'width': (blockSize * maxColLength + padding) + 'px' });
-    setStyle(document.querySelector('.controls'), { 'margin-left': (blockSize + 15) + 'px' });
+
+    setStyle(document.querySelector('.screen-title'), {
+        'width': (blockSize * maxColLength + padding) + 'px'
+    });
+
+    setStyle(document.querySelector('.controls'), {
+        'margin-left': (blockSize + 15) + 'px'
+    });
 
     // Seat overview
     for (let row = 0; row < room.length; row++) {
@@ -304,17 +307,12 @@ function loadSeatOverview() {
     }
     //select reserved seats in change order flow
     let cookie = getReservationCookieValue();
+
     if (!cookie.newOrder) {
-        //console.log("change flow seat selection");
-        //console.log(cookie.products);
-        //console.log(cookie["products"]);
         for (ticket in cookie.order_tickets) {
-            console.log(ticket);
-            console.log(cookie.order_tickets);
             let tickdata = cookie.order_tickets[ticket];
             let row = tickdata.row;
             let seat = tickdata.seatnr;
-            console.log('.row-' + row + '.seat-' + seat);
             let elSeat = document.querySelector('.seat.row-' + row + '.seat-' + seat);
             let classes = elSeat.classList;
             let type = (classes.contains('vip') ? 3 : classes.contains('luxery') ? 2 : 1);
@@ -439,17 +437,6 @@ let seatTypes = ['normal', 'luxery', 'vip']; // Type of each seat (Can be merged
 let selectedSeats = []; // All newly selected seats will be stored inside this array
 let maxColLength = rooms[selectedRoom][0].length; // Defines the max amount of columns in a row (default row 0)
 let availability = getReservationCookieValue().screentime.availability;
-
-// Test data
-//for (let row = 0; row < rooms[selectedRoom].length; row++) {
-//    for (let col = 0; col < maxColLength; col++) {
-//        if ((row != 3 && row != 8) || col < 10) {
-//            if (row != 3 || col != 2) {
-//                availability[row][col] = false;
-//            }
-//        }
-//    }
-//}
 
 loadSeatOverview();
 
