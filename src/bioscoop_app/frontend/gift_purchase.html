@@ -2,18 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Gift aanschaffen</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/main.css" />
-    <title>Gift aanschaffen</title>
 </head>
-<body>
+<body id="gift-page">
     <nav data-active-item="Films">
-        <div class="container">
-        </div>
+        <div class="container"></div>
     </nav>
     <main class="container">
-        <div class="row">
+        <div class="movie_thumbnail" id="gift-banner">
+            <img src="./assets/img/movie_banner.png" />
+        </div>
 
+        <div class="container bg-white">
+            <form id="gift-form">
+                <div class="form-group mt-4">
+                    <label for="name-field">Kado voucher</label>
+                    <select name="gift-type">
+                        <option value="bronze">5eu Kadobon - Brons</option>
+                        <option value="silver">15eu Kadobon - Silver</option>
+                        <option value="gold">25eu Kadobon - Goud</option>
+                    </select>
+                    <input name="gift-type" type="text" placeholder="Voucher" class="form-control">
+                    <div class="type-field-error"></div>
+                </div>
+                <button id="submit-form">Koop Kortingsbon</button>
+            </form>
         </div>
     </main>
 
