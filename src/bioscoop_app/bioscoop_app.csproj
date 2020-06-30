@@ -165,6 +165,9 @@
     <None Update="frontend\css\main.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="frontend\js\gift_purchase.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="frontend\js\main.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
