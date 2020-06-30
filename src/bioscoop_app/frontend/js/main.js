@@ -79,6 +79,7 @@ function fillNavbar() {
            <li><a href=\"/index.html\">De kijkdoos</a></li>
         </ul>
         <ul>
+          <li class=\"menu-item\"><a href="./gift_purchase.html">Gift Kopen</a></li>
           <li class=\"menu-item\"><a href="./index.html">Films</a></li>
           <li class=\"menu-item\"><a href="./order.html">Reserveringen</a></li>
         </ul>`;

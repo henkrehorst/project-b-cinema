@@ -153,6 +153,9 @@
     <None Update="frontend\css\step.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="frontend\gift_purchase.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="frontend\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
