@@ -11,16 +11,8 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/gift#create")]
         public ChromelyResponse CreateGift(ChromelyRequest request)
         {
-            return new Response
-            {
-                status = 200,
-                data = JsonConvert.SerializeObject(new Repository<Gift>().Data)
-            }.ChromelyWrapper(request.Id);
-        }
+            Gift MyGift = new Gift();
 
-        [HttpGet(Route = "/gift#get")]
-        public ChromelyResponse GetGift(ChromelyRequest request)
-        {
             return new Response
             {
                 status = 200,
