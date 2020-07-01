@@ -15,4 +15,11 @@ loadNav();
 function submitForm() {
     let formData = new FormData(document.getElementById('gift-form'));
     console.log(formData.get('name'), formData.get('email'))
+
+    res = await chromelyRequest('/gift#create', 'POST', order);
+    console.log(res.getData());
 }
+
+document.querySelector('#submit-form').addEventListener('click', () => {
+    submitForm();
+});

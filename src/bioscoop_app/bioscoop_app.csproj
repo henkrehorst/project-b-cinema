@@ -367,7 +367,12 @@
 
   <ItemGroup>
     <Folder Include="frontend\assets\kijkwijzers" />
-    <Folder Include="productionData" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Controller\GiftController.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>
