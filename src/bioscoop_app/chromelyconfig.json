@@ -1,7 +1,7 @@
 ﻿{
   "appName": "hoi",
   "startUrl": {
-    "url": "local://frontend/index.html",
+    "url": "http://localhost:8081",
     "loadType": "localResource"
   },
   "loadCefBinariesIfNotFound": true,
@@ -23,7 +23,7 @@
     "useCustomtyle": false
   },
   "commandLineArgs": [
-    
+
   ],
   "commandLineOptions": [
   ],

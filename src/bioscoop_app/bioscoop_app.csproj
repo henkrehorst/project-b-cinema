@@ -371,7 +371,7 @@
 
   <ItemGroup>
     <Compile Update="Controller\GiftController.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Helper\GiftPrice.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -24,6 +24,8 @@
 }
 
 async function chromelyRequest(route, method = 'GET', postData = {}) {
+    console.log('teest');
+
     return new Promise((resolve, reject) => {
         var request = {
             'method': method,
@@ -35,10 +37,10 @@ async function chromelyRequest(route, method = 'GET', postData = {}) {
             request: JSON.stringify(request),
             onSuccess: function (response) {
                 let result = JSON.parse(JSON.parse(response).Data);
-                console.log(result.data);
-                resolve(new chromelyResponse(result.status, result.statusText, result.data))
+                console.log('SUCCESSSSSSSS! ', result.data);
+                resolve(new chromelyResponse(result.status, result.statusText, result.data));
             }, onFailure: function (err, msg) {
-                reject(err)
+                reject(err);
             }
         });
     }).then(data => data);
@@ -59,11 +61,14 @@ function loadNav() {
 loadNav();
 
 async function submitForm() {
+    console.log("hallloooo");
     let formData = new FormData(document.getElementById('gift-form'));
-    console.log(formData.get('name'), formData.get('email'));
+    console.log('data: ', formData.get('gift-type'), formData.get('gift-voucher'));
 
-    res = await chromelyRequest('/gift#create', 'POST', formData);
+    res = await chromelyRequest('/order#fetch', 'POST', { 'test': true });
     console.log(res.getData());
+
+    console.log('DOOONNEEEEE');
 }
 
 document.querySelector('#submit-form').addEventListener('click', () => {
