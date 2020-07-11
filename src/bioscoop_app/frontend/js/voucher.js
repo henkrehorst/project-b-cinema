@@ -12,23 +12,8 @@
 
 loadNav();
 
-async function submitForm() {
-    let formData = new FormData(document.getElementById('gift-form'));
-    console.log('data: ', formData.get('gift-type'), formData.get('gift-voucher'));
-
-    let res = await chromelyRequest('/gift#create', 'POST', {
-        'gift-email': formData.get('gift-email'),
-        'gift-type': formData.get('gift-type')
-    });
-
-    if (res.getStatusCode() == 200) {
-        window.location.href = "./voucher.html";
-    } else {
-        console.log(res.getStatusCode(), res.getStatusText());
-        document.getElementById('codeError').style.display = "block";
-    }
+function getCookie() {
+    return JSON.parse(localStorage.getItem("voucher-code"));
 }
 
-document.querySelector('#submit-form').addEventListener('click', () => {
-    submitForm();
-});
+document.querySelector('#voucher-code').innerText = getCookie();

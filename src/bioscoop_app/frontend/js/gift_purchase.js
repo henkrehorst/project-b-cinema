@@ -13,16 +13,15 @@
 loadNav();
 
 function setCookie(value) {
-    localStorage.setItem("voucher-code", JSON.stringify(value));
+    localStorage.setItem('voucher-code', JSON.stringify(value));
 }
 
 function getCookie() {
-    return JSON.parse(localStorage.getItem("voucher-code"));
+    return JSON.parse(localStorage.getItem('voucher-code'));
 }
 
 async function submitForm() {
     let formData = new FormData(document.getElementById('gift-form'));
-    console.log('data: ', formData.get('gift-type'), formData.get('gift-voucher'));
 
     let res = await chromelyRequest('/gift#create', 'POST', {
         'gift-email': formData.get('gift-email'),
@@ -30,11 +29,11 @@ async function submitForm() {
     });
 
     if (res.getStatusCode() == 200) {
-        //setCookie();
-        window.location.href = "./voucher.html";
+        setCookie(res.data);
+        window.location.href = './voucher.html';
     } else {
         console.log(res.getStatusCode(), res.getStatusText());
-        document.querySelector('.error-message').style.display = "block";
+        document.querySelector('.error-message').style.display = 'block';
     }
 }
 

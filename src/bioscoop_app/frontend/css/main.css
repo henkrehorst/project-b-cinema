@@ -616,3 +616,19 @@ p.screen-title {
     margin-top: 5px;
     color: red;
 }
+
+#voucher-page h2 {
+    padding-top: 15px;
+}
+
+#voucher-page i {
+    font-size: 12px;
+    line-height: 5px;
+}
+
+#voucher-code {
+    display: inline-block;
+    background-color: #FFFF30;
+    padding: 0 10px;
+    font-size: 32px;
+}
