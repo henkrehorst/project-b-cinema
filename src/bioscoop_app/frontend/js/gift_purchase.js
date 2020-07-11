@@ -61,11 +61,10 @@ function loadNav() {
 loadNav();
 
 async function submitForm() {
-    console.log("hallloooo");
     let formData = new FormData(document.getElementById('gift-form'));
-    console.log('data: ', formData.get('gift-type'), formData.get('gift-voucher'));
+    console.log('data: ', formData.get('gift-type'), formData.get('gift-email'));
 
-    res = await chromelyRequest('/order#fetch', 'POST', { 'test': true });
+    res = await chromelyRequest('/order#fetch', 'POST', { 'email': formData.get('gift-email') });
     console.log(res.getData());
 
     console.log('DOOONNEEEEE');

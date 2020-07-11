@@ -282,7 +282,7 @@ document.querySelector('#submit-form').addEventListener('click', async () => {
     let formData = new FormData(document.getElementById('gift-form'));
     console.log('data: ', formData.get('gift-type'), formData.get('gift-voucher'));
 
-    let res = await chromelyRequest('/gift#create', 'POST', { 'test': true });
+    let res = await chromelyRequest('/gift#create', 'POST', { 'gift-email': formData.get('gift-email') });
 
     console.log('WERK GEWOON KUTDING');
 

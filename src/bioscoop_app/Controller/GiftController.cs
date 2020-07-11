@@ -22,7 +22,32 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/gift#create")]
         public ChromelyResponse CreateGift(ChromelyRequest request)
         {
-            Gift MyGift = new Gift();
+            JObject param = (JObject)JsonConvert.DeserializeObject(request.PostData.ToJson());
+            int validate = 0;
+            string email = param["gift-email"].Value<string>();
+
+            for (int i = 0; i < email.Length; i++)
+            {
+                if ((char)email[i] == '@' && validate == 0)
+                {
+                    validate++;
+                }
+                else if ((char)email[i] == '.')
+                {
+                    validate++;
+                }
+            }
+
+            if (validate != 2)
+            {
+                return new Response
+                {
+                    status = 409,
+                    statusText = "This is not a valid email!"
+                }.ChromelyWrapper(request.Id);
+            }
+
+            Gift MyGift = new Gift(email);
             Repository<Gift> repos = new Repository<Gift>();
             repos.Add(MyGift);
             repos.SaveChangesThenDiscard();
