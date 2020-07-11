@@ -8,7 +8,8 @@ namespace bioscoop_app.Model
     public class Gift : DataType
     {
         public static GiftPrice Prices;
-        private readonly string Code;
+        public readonly string Code;
+        public readonly string Email;
 
         public Gift()
         {
@@ -24,6 +25,32 @@ namespace bioscoop_app.Model
             }
 
             Code = newCode;
+        }
+
+        public Gift(string email) : this()
+        {
+            int validate = 0;
+
+            for(int i = 0; i < email.Length; i++)
+            {
+                if((char)email[i] == '@' && validate == 0)
+                {
+                    validate++;
+                }
+                else if((char)email[i] == '.')
+                {
+                    validate++;
+                }
+            }
+
+            if(validate != 2)
+            {
+                Email = null;
+            }
+            else
+            {
+                Email = email;
+            }
         }
 
         public string GetCode()

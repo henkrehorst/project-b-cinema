@@ -23,6 +23,9 @@ namespace bioscoop_app.Controller
         public ChromelyResponse CreateGift(ChromelyRequest request)
         {
             Gift MyGift = new Gift();
+            Repository<Gift> repos = new Repository<Gift>();
+            repos.Add(MyGift);
+            repos.SaveChangesThenDiscard();
 
             return new Response
             {
