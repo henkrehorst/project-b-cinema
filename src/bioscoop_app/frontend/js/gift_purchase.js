@@ -12,6 +12,14 @@
 
 loadNav();
 
+function setCookie(value) {
+    localStorage.setItem("voucher-code", JSON.stringify(value));
+}
+
+function getCookie() {
+    return JSON.parse(localStorage.getItem("voucher-code"));
+}
+
 async function submitForm() {
     let formData = new FormData(document.getElementById('gift-form'));
     console.log('data: ', formData.get('gift-type'), formData.get('gift-voucher'));
@@ -22,10 +30,11 @@ async function submitForm() {
     });
 
     if (res.getStatusCode() == 200) {
+        //setCookie();
         window.location.href = "./voucher.html";
     } else {
         console.log(res.getStatusCode(), res.getStatusText());
-        document.getElementById('codeError').style.display = "block";
+        document.querySelector('.error-message').style.display = "block";
     }
 }
 

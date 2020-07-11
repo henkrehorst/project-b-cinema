@@ -610,3 +610,9 @@ p.screen-title {
 #gift-banner, #gift-banner img {
     height: 250px;
 }
+
+#gift-page .error-message {
+    display: none;
+    margin-top: 5px;
+    color: red;
+}

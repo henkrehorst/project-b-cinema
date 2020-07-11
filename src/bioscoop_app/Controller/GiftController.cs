@@ -43,7 +43,7 @@ namespace bioscoop_app.Controller
                 return new Response
                 {
                     status = 409,
-                    statusText = "This is not a valid email!"
+                    statusText = "Dit is geen geldige email!"
                 }.ChromelyWrapper(request.Id);
             }
 
@@ -55,7 +55,7 @@ namespace bioscoop_app.Controller
             return new Response
             {
                 status = 200,
-                data = JsonConvert.SerializeObject(new Repository<Gift>().Data)
+                data = JsonConvert.SerializeObject(MyGift.Code)
             }.ChromelyWrapper(request.Id);
         }
     }
