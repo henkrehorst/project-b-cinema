@@ -588,6 +588,25 @@ p.screen-title {
     background-color: #060b0e;
 }
 
+#gift-page label {
+    font-size: 18px;
+}
+
+#gift-page .container {
+    padding-top: 5px;
+}
+
+#gift-page label {
+    margin-right: 5px;
+}
+
+#gift-page .f-button {
+    display: inline-block;
+    padding: 15px;
+    background-color: #77ff77;
+    font-size: 18px;
+}
+
 #gift-banner, #gift-banner img {
     height: 250px;
 }

@@ -277,21 +277,22 @@ function clearFieldErrorMessage(id) {
 
 }
 
-document.querySelector('#submit-form').addEventListener('click', async () => {
-    console.log("hallloooo");
-    let formData = new FormData(document.getElementById('gift-form'));
-    console.log('data: ', formData.get('gift-type'), formData.get('gift-voucher'));
+//document.querySelector('#submit-form').addEventListener('click', async () => {
+//    console.log("hallloooo");
+//    let formData = new FormData(document.getElementById('gift-form'));
+//    console.log('data: ', formData.get('gift-type'), formData.get('gift-voucher'));
 
-    let res = await chromelyRequest('/gift#create', 'POST', { 'gift-email': formData.get('gift-email') });
+//    let res = await chromelyRequest('/gift#create', 'POST', {
+//        'gift-email': formData.get('gift-email'),
+//        'gift-type': formData.get('gift-type')
+//    });
 
-    console.log('WERK GEWOON KUTDING');
+//    if (res.getStatusCode() == 200) {
+//        window.location.href = "./reservation_overview.html";
+//    } else {
+//        console.log(res.getStatusCode(), res.getStatusText());
+//        document.getElementById('codeError').style.display = "block";
+//    }
 
-    if (res.getStatusCode() == 200) {
-        window.location.href = "./reservation_overview.html";
-    } else {
-        console.log(res.getStatusCode(), res.getStatusText());
-        document.getElementById('codeError').style.display = "block";
-    }
-
-    console.log(res.getData());
-});
+//    console.log(res.getData());
+//});

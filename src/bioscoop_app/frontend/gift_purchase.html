@@ -18,21 +18,22 @@
         <div class="container bg-white">
             <form id="gift-form">
                 <div class="form-group mt-4">
-                    <label for="name-field">Kado voucher</label>
+                    <label for="gift-type">Selecteer uw kadobon:</label>
                     <select name="gift-type">
-                        <option value="bronze">5eu Kadobon - Brons</option>
-                        <option value="silver">15eu Kadobon - Silver</option>
-                        <option value="gold">25eu Kadobon - Goud</option>
+                        <option value="bronze">Kadobon - Brons</option>
+                        <option value="silver">Kadobon - Silver</option>
+                        <option value="gold">Kadobon - Goud</option>
                     </select>
-                    <input name="gift-email" type="text" placeholder="Your email" class="form-control">
+                    <hr />
+                    <label for="gift-email">Voer hieronder uw email in <a href="">(Hoe werkt dit?)</a>:</label>
+                    <input name="gift-email" type="text" placeholder="Uw email" class="form-control">
                     <div class="type-field-error"></div>
                 </div>
-                <div id="submit-form">Koop Kortingsbon</div>
+                <div id="submit-form" class="btn-block btn-success btn">Koop Kortingsbon</div>
             </form>
         </div>
     </main>
 
-    <!--<script src="./js/gift_purchase.js"></script>-->
-    <script src="js/main.js"></script>
+    <script src="./js/gift_purchase.js"></script>
 </body>
 </html>

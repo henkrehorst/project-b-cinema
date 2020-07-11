@@ -24,8 +24,6 @@
 }
 
 async function chromelyRequest(route, method = 'GET', postData = {}) {
-    console.log('teest');
-
     return new Promise((resolve, reject) => {
         var request = {
             'method': method,
@@ -62,12 +60,19 @@ loadNav();
 
 async function submitForm() {
     let formData = new FormData(document.getElementById('gift-form'));
-    console.log('data: ', formData.get('gift-type'), formData.get('gift-email'));
+    console.log('data: ', formData.get('gift-type'), formData.get('gift-voucher'));
 
-    res = await chromelyRequest('/order#fetch', 'POST', { 'email': formData.get('gift-email') });
-    console.log(res.getData());
+    let res = await chromelyRequest('/gift#create', 'POST', {
+        'gift-email': formData.get('gift-email'),
+        'gift-type': formData.get('gift-type')
+    });
 
-    console.log('DOOONNEEEEE');
+    if (res.getStatusCode() == 200) {
+        window.location.href = "./voucher.html";
+    } else {
+        console.log(res.getStatusCode(), res.getStatusText());
+        document.getElementById('codeError').style.display = "block";
+    }
 }
 
 document.querySelector('#submit-form').addEventListener('click', () => {
