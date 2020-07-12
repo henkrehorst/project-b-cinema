@@ -47,7 +47,7 @@ namespace bioscoop_app.Controller
                 }.ChromelyWrapper(request.Id);
             }
 
-            Gift MyGift = new Gift(email);
+            Gift MyGift = new Gift(email, param["gift-type"].Value<string>());
             Repository<Gift> repos = new Repository<Gift>();
             repos.Add(MyGift);
             repos.SaveChangesThenDiscard();
@@ -62,11 +62,27 @@ namespace bioscoop_app.Controller
         [HttpPost(Route = "/gift#fetch")]
         public ChromelyResponse FetchGift(ChromelyRequest request, string code)
         {
-            return new Response
+            Repository<Gift> repository = new Repository<Gift>();
+            Dictionary<int, Gift> reposData = repository.Data;
+
+            IQueryable<Gift> allGifts = reposData.Values.AsQueryable();
+            IEnumerable<Gift> queryResult = from gift in allGifts where gift.Code == code select gift;
+
+            if(queryResult.Any())
             {
-                status = 200,
-                data = JsonConvert.SerializeObject(code)
-            }.ChromelyWrapper(request.Id);
+                return new Response
+                {
+                    status = 200,
+                    data = JsonConvert.SerializeObject(queryResult.First().Type)
+                }.ChromelyWrapper(request.Id);
+            }
+            else {
+                return new Response
+                {
+                    status = 409,
+                    statusText = "Er is geen gift gevonden van deze code!"
+                }.ChromelyWrapper(request.Id);
+            }
         }
     }
 }

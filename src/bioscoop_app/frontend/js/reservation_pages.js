@@ -536,19 +536,21 @@ function fillProductControls() {
     }
 }
 
-document.querySelector('#voucer-input').addEventListener('click', async () => {
-    let inpData = document.querySelector('#voucher-input').value;
+if (document.querySelectorAll('#voucher-input').length > 0) {
+    document.querySelector('#voucher-input').addEventListener('click', async () => {
+        let inpData = document.querySelector('#voucher-input').value;
 
-    console.log('BAAA: ', data);
+        console.log('BAAA: ', inpData);
 
-    let res = await chromelyRequest('/gift#fetch', 'POST', {
-        'gift-code': inpData
+        let res = await chromelyRequest('/gift#fetch', 'POST', {
+            'gift-code': inpData
+        });
+
+        if (res.getStatusCode() == 200) {
+            alert('Request is succesful!');
+        } else {
+            console.log(res.getStatusCode(), res.getStatusText());
+            document.querySelector('.error-message').style.display = 'block';
+        }
     });
-
-    if (res.getStatusCode() == 200) {
-        alert('Request is succesful!');
-    } else {
-        console.log(res.getStatusCode(), res.getStatusText());
-        document.querySelector('.error-message').style.display = 'block';
-    }
-});
+}

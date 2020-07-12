@@ -10,6 +10,7 @@ namespace bioscoop_app.Model
         public static GiftPrice Prices;
         public readonly string Code;
         public readonly string Email;
+        public readonly string Type;
 
         public Gift()
         {
@@ -27,14 +28,10 @@ namespace bioscoop_app.Model
             Code = newCode;
         }
 
-        public Gift(string email) : this()
+        public Gift(string email, string type) : this()
         {
             Email = email;
-        }
-
-        public string GetCode()
-        {
-            return Code;
+            Type = type;
         }
     }
 }
