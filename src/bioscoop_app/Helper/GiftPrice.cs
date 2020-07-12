@@ -6,7 +6,7 @@ namespace bioscoop_app.Helper
 {
     public enum GiftPrice
     {
-        Bronze = 5,
+        Bronze = 8,
         Silver = 15,
         Gold = 25
     }

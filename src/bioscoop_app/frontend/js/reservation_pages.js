@@ -136,6 +136,9 @@ async function stepThree() {
         clearFieldErrorMessage("email-field");
 
         let cookieval = getReservationCookieValue();
+
+        await chromelyRequest('/gift#use', 'POST', cookieval['voucher-code']);
+
         let res;
         if (cookieval.newOrder) {
             console.log("create route for order");
@@ -276,7 +279,9 @@ async function prepareReservationCookie(ticketProducts, upsells) {
         'upsell': {},
         'screentime': screentimeResponse.getData(),
         'newOrder': true,
-        'tickets': []
+        'tickets': [],
+        'discount': 0,
+        'voucher-code': ''
     };
 
     updateCreateReservationCookie(cookieValue);
@@ -343,15 +348,16 @@ function showOrUpdateReservationCart() {
 
     document.getElementById('upsell_cart').innerHTML = upsellView;
     //display total price
+    let disc = getReservationCookieValue()['discount'];
     let nettoTotal = totalCost.toFixed(2).replace('.', ',');
-    let netto = (totalCost - discount);
+    let netto = (totalCost - disc);
 
     if (netto < 0) {
         netto = 0;
     }
 
-    if (discount > 0) {
-        document.getElementById('total_cost').innerText = `€ ${nettoTotal}\n- ${discount.toFixed(2).replace('.', ',')}\n€ ${netto.toFixed(2).replace('.', ',')}`;
+    if (disc > 0) {
+        document.getElementById('total_cost').innerText = `€ ${nettoTotal}\n- ${disc.toFixed(2).replace('.', ',')}\n€ ${netto.toFixed(2).replace('.', ',')}`;
     }
     else {
         document.getElementById('total_cost').innerText = `€ ${nettoTotal}`;
@@ -548,8 +554,6 @@ function fillProductControls() {
     }
 }
 
-let discount = 0;
-
 async function submitVoucherCode() {
     let form = new FormData(document.getElementById('voucher-form'));
     let inpData = form.get('voucher-input');
@@ -564,11 +568,23 @@ async function submitVoucherCode() {
     elMsg.classList.remove('success');
     elMsg.classList.remove('error');
 
+    console.log(res);
+
     if (res.getStatusCode() == 200) {
         elMsg.innerText = 'Kortingscode is toegepast!';
         elMsg.classList.add('success');
         document.querySelector('#voucher-input').disabled = true;
-        discount = 10;
+
+        let cookieValue = getReservationCookieValue();
+        let type = res.data['Type'];
+        let disc = (type == 'gold' ? 25 : (type == 'silver' ? 15 : 8))
+
+        alert(type);
+
+        cookieValue['discount'] = disc;
+        cookieValue['voucher-code'] = inpData;
+
+        updateCreateReservationCookie(cookieValue);
 
         showOrUpdateReservationCart();
     } else if(res.getStatusCode() == 409) {
@@ -583,7 +599,7 @@ async function submitVoucherCode() {
 
 if (document.querySelectorAll('#submit-voucher').length > 0) {
     document.querySelector('#submit-voucher').addEventListener('click', () => {
-        if (discount == 0) {
+        if (getReservationCookieValue()['discount'] == 0) {
             submitVoucherCode();
         }
     });
