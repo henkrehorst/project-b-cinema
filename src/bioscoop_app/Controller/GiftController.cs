@@ -75,11 +75,22 @@ namespace bioscoop_app.Controller
             {
                 Gift result = queryResult.First();
 
-                return new Response
+                if (result.IsValid)
                 {
-                    status = 200,
-                    data = JsonConvert.SerializeObject(result)
-                }.ChromelyWrapper(request.Id);
+                    return new Response
+                    {
+                        status = 200,
+                        data = JsonConvert.SerializeObject(result)
+                    }.ChromelyWrapper(request.Id);
+                }
+                else
+                {
+                    return new Response
+                    {
+                        status = 204,
+                        statusText = "Deze code is al verzilverd!"
+                    }.ChromelyWrapper(request.Id);
+                }
             }
             else {
                 return new Response

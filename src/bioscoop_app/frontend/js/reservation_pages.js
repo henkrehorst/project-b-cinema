@@ -343,7 +343,19 @@ function showOrUpdateReservationCart() {
 
     document.getElementById('upsell_cart').innerHTML = upsellView;
     //display total price
-    document.getElementById('total_cost').innerHTML = `&euro; ${totalCost.toFixed(2).replace('.', ',')}`;
+    let nettoTotal = totalCost.toFixed(2).replace('.', ',');
+    let netto = (totalCost - discount);
+
+    if (netto < 0) {
+        netto = 0;
+    }
+
+    if (discount > 0) {
+        document.getElementById('total_cost').innerText = `€ ${nettoTotal}\n- ${discount.toFixed(2).replace('.', ',')}\n€ ${netto.toFixed(2).replace('.', ',')}`;
+    }
+    else {
+        document.getElementById('total_cost').innerText = `€ ${nettoTotal}`;
+    }
 }
 
 /**
@@ -536,35 +548,43 @@ function fillProductControls() {
     }
 }
 
+let discount = 0;
+
 async function submitVoucherCode() {
     let form = new FormData(document.getElementById('voucher-form'));
     let inpData = form.get('voucher-input');
-
-    console.log('BAAA: ', inpData);
 
     let res = await chromelyRequest('/gift#fetch', 'POST', {
         'gift-code': inpData
     });
 
-    let elMsg = document.querySelector('.feedback-msg')
+    let elMsg = document.querySelector('.feedback-msg');
 
     elMsg.style.display = 'block';
     elMsg.classList.remove('success');
     elMsg.classList.remove('error');
 
-    console.log('the result is: ', res);
-
     if (res.getStatusCode() == 200) {
-        elMsg.innerText = 'Deze kortingbon is nu versilverd!';
+        elMsg.innerText = 'Kortingscode is toegepast!';
         elMsg.classList.add('success');
-    } else {
+        document.querySelector('#voucher-input').disabled = true;
+        discount = 10;
+
+        showOrUpdateReservationCart();
+    } else if(res.getStatusCode() == 409) {
         elMsg.innerText = 'Dit is geen geldige korting code!';
+        elMsg.classList.add('error');
+    }
+    else if (res.getStatusCode() == 204) {
+        elMsg.innerText = 'Deze code is al verzilverd!';
         elMsg.classList.add('error');
     }
 }
 
 if (document.querySelectorAll('#submit-voucher').length > 0) {
     document.querySelector('#submit-voucher').addEventListener('click', () => {
-        submitVoucherCode();
+        if (discount == 0) {
+            submitVoucherCode();
+        }
     });
 }
