@@ -632,3 +632,28 @@ p.screen-title {
     padding: 0 10px;
     font-size: 32px;
 }
+
+.voucher-container {
+    padding: 15px;
+    text-align: center;
+}
+
+.voucher-container input {
+    width: 200px;
+    padding: 5px 15px;
+    border: 5px solid #080;
+    text-align: center;
+    font-size: 32px;
+}
+
+.voucher-container p {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.voucher-container .btn {
+    width: 50%;
+    margin-top: 15px;
+    font-size: 18px;
+    display: inline-block;
+}
