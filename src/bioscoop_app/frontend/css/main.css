@@ -711,3 +711,23 @@ input[name="gift-email"] {
 #voucher-page .voucher-desc i {
     font-size: 16px;
 }
+
+.disclaimer h3 {
+    margin-top: 35px;
+    text-align: center;
+    font-size: 24px;
+    font-style: italic;
+}
+
+.disclaimer h2 {
+    text-align: center;
+}
+
+.disclaimer p {
+    width: 75%;
+    margin: auto;
+}
+
+.disclaimer {
+    padding: 25px 0;
+}
