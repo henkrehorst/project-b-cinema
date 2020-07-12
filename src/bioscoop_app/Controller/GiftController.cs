@@ -58,5 +58,15 @@ namespace bioscoop_app.Controller
                 data = JsonConvert.SerializeObject(MyGift.Code)
             }.ChromelyWrapper(request.Id);
         }
+
+        [HttpPost(Route = "/gift#fetch")]
+        public ChromelyResponse FetchGift(ChromelyRequest request, string code)
+        {
+            return new Response
+            {
+                status = 200,
+                data = JsonConvert.SerializeObject(code)
+            }.ChromelyWrapper(request.Id);
+        }
     }
 }

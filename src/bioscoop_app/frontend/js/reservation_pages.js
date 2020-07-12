@@ -535,3 +535,20 @@ function fillProductControls() {
         }
     }
 }
+
+document.querySelector('#voucer-input').addEventListener('click', async () => {
+    let inpData = document.querySelector('#voucher-input').value;
+
+    console.log('BAAA: ', data);
+
+    let res = await chromelyRequest('/gift#fetch', 'POST', {
+        'gift-code': inpData
+    });
+
+    if (res.getStatusCode() == 200) {
+        alert('Request is succesful!');
+    } else {
+        console.log(res.getStatusCode(), res.getStatusText());
+        document.querySelector('.error-message').style.display = 'block';
+    }
+});
