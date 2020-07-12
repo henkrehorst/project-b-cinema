@@ -177,6 +177,9 @@
     <None Update="frontend\js\reservation_pages.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="frontend\js\review_pages.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="frontend\js\seat_overview.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -208,6 +211,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="frontend\movie_detail.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="frontend\review.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="frontend\order.html">
@@ -351,6 +357,9 @@
     <None Update="productionData\Product.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="productionData\Review.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="productionData\ScreenTime.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -358,7 +367,6 @@
 
   <ItemGroup>
     <Folder Include="frontend\assets\kijkwijzers" />
-    <Folder Include="productionData" />
   </ItemGroup>
 
 </Project>
