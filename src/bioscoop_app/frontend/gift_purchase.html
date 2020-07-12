@@ -10,22 +10,25 @@
     <nav data-active-item="Films">
         <div class="container"></div>
     </nav>
-    <main class="container">
+    <main class="container no-margin">
         <div class="movie_thumbnail" id="gift-banner">
             <img src="./assets/img/movie_banner.png" />
         </div>
 
-        <div class="container bg-white">
+        <div class="container bg-white giftform-container">
+            <h2>De Kijkdoos kortingsbonnen!</h2>
             <form id="gift-form">
                 <div class="form-group mt-4">
                     <label for="gift-type">Selecteer uw kadobon:</label>
                     <select name="gift-type">
                         <option value="bronze">Kadobon - Brons</option>
-                        <option value="silver">Kadobon - Silver</option>
+                        <option value="silver">Kadobon - Zilver</option>
                         <option value="gold">Kadobon - Goud</option>
                     </select>
+                    <p id="gift-description"></p>
                     <hr />
                     <label for="gift-email">Voer hieronder uw email in <a href="./voucher_disclaimer.html">(Hoe werkt dit?)</a>:</label>
+                    <br />
                     <input name="gift-email" type="text" placeholder="Uw email" class="form-control">
                     <p class="error-message">Dit is geen geldige email!</p>
                 </div>

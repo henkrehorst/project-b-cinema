@@ -629,7 +629,7 @@ p.screen-title {
 #voucher-code {
     display: inline-block;
     background-color: #FFFF30;
-    padding: 0 10px;
+    padding: 10px 25px;
     font-size: 32px;
 }
 
@@ -669,3 +669,45 @@ p.screen-title {
     .feedback-msg.error {
         color: #FF4336;
     }
+
+#gift-description {
+    margin-top: 15px;
+    font-style: italic;
+}
+
+#gift-page h2 {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    font-size: 48px;
+}
+
+.giftform-container {
+    padding-bottom: 25px;
+    height: calc(100vh - 70px - 250px - 5px);
+    text-align: center;
+}
+
+.giftform-container hr {
+    margin: 25px 0 25px 0;
+}
+
+    .giftform-container #submit-form {
+        width: 50%;
+        margin: auto;
+        margin-top: 25px;
+    }
+
+.no-margin {
+    margin-bottom: 0;
+}
+
+input[name="gift-email"] {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    font-size: 18px;
+}
+
+#voucher-page .voucher-desc i {
+    font-size: 16px;
+}

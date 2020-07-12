@@ -40,3 +40,28 @@ async function submitForm() {
 document.querySelector('#submit-form').addEventListener('click', () => {
     submitForm();
 });
+
+document.querySelector('#gift-form select[name="gift-type"]').addEventListener('change', (event) => {
+    let description;
+    let el = document.querySelector('#gift-form select[name="gift-type"]');
+
+    //for (let i = 0; i < el.options.length; i++) {
+    //    if (el.options[i].selected) {
+    //        console.log(el.options[i]);
+    //    }
+    //}
+
+    if (el.value == 'bronze') {
+        description = `De BRONS kortingsbon heeft een waarde van 8 euro.\nEen perfecte gift voor iemand die je graag wilt verassen!`;
+    }
+    else if (el.value == 'silver') {
+        description = `De ZILVER kortingsbon heeft een waarde van 15 euro.\nMet z'n flinke korting kan je iedereen blij mee maken!`;
+    }
+    else if (el.value == 'gold') {
+        description = `De GOUD kortingsbon heeft een waarde van 25 euro.\nDit is voor de echte film-fanaat, vooral handig als je met een groep wilt gaan!`;
+    }
+
+    document.querySelector('#gift-description').innerText = description;
+});
+
+document.querySelector('#gift-description').innerText = `De BRONS kortingsbon heeft een waarde van 8 euro.\nEen perfecte gift voor iemand die je graag wilt verassen!`;
