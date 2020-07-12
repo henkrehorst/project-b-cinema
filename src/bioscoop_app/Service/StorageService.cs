@@ -23,6 +23,7 @@ namespace bioscoop_app.Service
             CreateUploadDirectory();
 
             //setup data sources
+            Repository<Gift>.SetupDataSource();
             Repository<Movie>.SetupDataSource();
             Repository<Product>.SetupDataSource();
             Repository<ScreenTime>.SetupDataSource();

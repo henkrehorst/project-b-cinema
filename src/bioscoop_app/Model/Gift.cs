@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using bioscoop_app.Helper;
+using Newtonsoft.Json;
 
 namespace bioscoop_app.Model
 {
@@ -24,6 +25,12 @@ namespace bioscoop_app.Model
             Type = type;
         }
 
+        [JsonConstructor]
+        public Gift(int id, string email, string type) : this(email, type)
+        {
+            Id = id;
+        }
+
         public void GenerateCode()
         {
             int codeLength = 6;
@@ -34,7 +41,13 @@ namespace bioscoop_app.Model
 
             for (int i = 0; i < codeLength; i++)
             {
-                newCode += (char)random.Next(start, end + 1);
+                char piece = ',';
+
+                while (piece == ',' || piece == '\\') {
+                    piece = (char)random.Next(start, end + 1);
+                }
+
+                newCode += piece;
             }
 
             Code = newCode;
