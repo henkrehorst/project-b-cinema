@@ -48,6 +48,7 @@ namespace bioscoop_app.Controller
             }
 
             Gift MyGift = new Gift(email, param["gift-type"].Value<string>());
+            MyGift.GenerateCode();
             Repository<Gift> repos = new Repository<Gift>();
             repos.Add(MyGift);
             repos.SaveChangesThenDiscard();
@@ -60,8 +61,10 @@ namespace bioscoop_app.Controller
         }
 
         [HttpPost(Route = "/gift#fetch")]
-        public ChromelyResponse FetchGift(ChromelyRequest request, string code)
+        public ChromelyResponse FetchGift(ChromelyRequest request)
         {
+            JObject param = (JObject)JsonConvert.DeserializeObject(request.PostData.ToJson());
+            string code = param["gift-code"].Value<string>();
             Repository<Gift> repository = new Repository<Gift>();
             Dictionary<int, Gift> reposData = repository.Data;
 
@@ -70,10 +73,12 @@ namespace bioscoop_app.Controller
 
             if(queryResult.Any())
             {
+                Gift result = queryResult.First();
+
                 return new Response
                 {
                     status = 200,
-                    data = JsonConvert.SerializeObject(queryResult.First().Type)
+                    data = JsonConvert.SerializeObject(result)
                 }.ChromelyWrapper(request.Id);
             }
             else {

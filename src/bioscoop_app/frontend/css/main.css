@@ -657,3 +657,15 @@ p.screen-title {
     font-size: 18px;
     display: inline-block;
 }
+
+.feedback-msg {
+    display: none;
+}
+
+    .feedback-msg.success {
+        color: #28a745;
+    }
+
+    .feedback-msg.error {
+        color: #FF4336;
+    }

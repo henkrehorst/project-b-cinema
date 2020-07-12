@@ -536,21 +536,35 @@ function fillProductControls() {
     }
 }
 
-if (document.querySelectorAll('#voucher-input').length > 0) {
-    document.querySelector('#voucher-input').addEventListener('click', async () => {
-        let inpData = document.querySelector('#voucher-input').value;
+async function submitVoucherCode() {
+    let form = new FormData(document.getElementById('voucher-form'));
+    let inpData = form.get('voucher-input');
 
-        console.log('BAAA: ', inpData);
+    console.log('BAAA: ', inpData);
 
-        let res = await chromelyRequest('/gift#fetch', 'POST', {
-            'gift-code': inpData
-        });
+    let res = await chromelyRequest('/gift#fetch', 'POST', {
+        'gift-code': inpData
+    });
 
-        if (res.getStatusCode() == 200) {
-            alert('Request is succesful!');
-        } else {
-            console.log(res.getStatusCode(), res.getStatusText());
-            document.querySelector('.error-message').style.display = 'block';
-        }
+    let elMsg = document.querySelector('.feedback-msg')
+
+    elMsg.style.display = 'block';
+    elMsg.classList.remove('success');
+    elMsg.classList.remove('error');
+
+    console.log('the result is: ', res);
+
+    if (res.getStatusCode() == 200) {
+        elMsg.innerText = 'Deze kortingbon is nu versilverd!';
+        elMsg.classList.add('success');
+    } else {
+        elMsg.innerText = 'Dit is geen geldige korting code!';
+        elMsg.classList.add('error');
+    }
+}
+
+if (document.querySelectorAll('#submit-voucher').length > 0) {
+    document.querySelector('#submit-voucher').addEventListener('click', () => {
+        submitVoucherCode();
     });
 }

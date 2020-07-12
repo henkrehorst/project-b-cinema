@@ -8,11 +8,23 @@ namespace bioscoop_app.Model
     public class Gift : DataType
     {
         public static GiftPrice Prices;
-        public readonly string Code;
+        public string Code;
         public readonly string Email;
         public readonly string Type;
+        public bool IsValid = true;
 
         public Gift()
+        {
+            
+        }
+
+        public Gift(string email, string type) : this()
+        {
+            Email = email;
+            Type = type;
+        }
+
+        public void GenerateCode()
         {
             int codeLength = 6;
             int start = 65;
@@ -20,18 +32,12 @@ namespace bioscoop_app.Model
             Random random = new Random();
             string newCode = "";
 
-            for(int i = 0; i < codeLength; i++)
+            for (int i = 0; i < codeLength; i++)
             {
                 newCode += (char)random.Next(start, end + 1);
             }
 
             Code = newCode;
-        }
-
-        public Gift(string email, string type) : this()
-        {
-            Email = email;
-            Type = type;
         }
     }
 }
