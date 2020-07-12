@@ -100,5 +100,24 @@ namespace bioscoop_app.Controller
                 }.ChromelyWrapper(request.Id);
             }
         }
+
+        [HttpPost(Route = "/gift#use")]
+        public ChromelyResponse UseGift(ChromelyRequest request)
+        {
+            JObject param = (JObject)JsonConvert.DeserializeObject(request.PostData.ToJson());
+            string code = param["voucher-code"].Value<string>();
+            Repository<Gift> repository = new Repository<Gift>();
+            IQueryable<Gift> allGifts = repository.Data.Values.AsQueryable();
+            IEnumerable<Gift> queryResult = from gift in allGifts where gift.Code == code select gift;
+
+            Gift target = queryResult.First();
+            target.IsValid = false;
+            repository.SaveChangesThenDiscard();
+
+            return new Response
+            {
+                status = 200
+            }.ChromelyWrapper(request.Id);
+        }
     }
 }

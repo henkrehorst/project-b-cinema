@@ -137,8 +137,6 @@ async function stepThree() {
 
         let cookieval = getReservationCookieValue();
 
-        await chromelyRequest('/gift#use', 'POST', cookieval['voucher-code']);
-
         let res;
         if (cookieval.newOrder) {
             console.log("create route for order");
@@ -163,7 +161,10 @@ async function stepThree() {
             console.log("done waiting, " + res.getStatusCode());
             console.log(res.getData());
         }
-        if(res.getStatusCode() === 200) {
+
+        if (res.getStatusCode() === 200) {
+            await chromelyRequest('/gift#use', 'POST', { 'voucher-code': cookieval['voucher-code'] });
+
             let reservationCode = (res.getStatusCode() === 200) ? res.getData() : -1;
             //display reservation code after success
             document.querySelector("body > div > div > div.col-md-8.reservation_boxes > div.reservation_confirm_form").innerHTML =
@@ -577,9 +578,7 @@ async function submitVoucherCode() {
 
         let cookieValue = getReservationCookieValue();
         let type = res.data['Type'];
-        let disc = (type == 'gold' ? 25 : (type == 'silver' ? 15 : 8))
-
-        alert(type);
+        let disc = (type == 'gold' ? 25 : (type == 'silver' ? 15 : 8));
 
         cookieValue['discount'] = disc;
         cookieValue['voucher-code'] = inpData;
